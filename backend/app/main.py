@@ -5,6 +5,8 @@ Run locally:  .venv/Scripts/python -m uvicorn app.main:app --reload --port 8010
 
 from __future__ import annotations
 
+import asyncio
+import contextlib
 import logging
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
@@ -24,6 +26,7 @@ from app.core.middleware import (
     RequestContextMiddleware,
     SecurityHeadersMiddleware,
 )
+from app.jobs import job_loop
 
 API_PREFIX = "/api/v1"
 logger = logging.getLogger("app")
@@ -42,7 +45,16 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     @asynccontextmanager
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         logger.info("Starting %s API (env=%s)", settings.store_name, settings.app_env)
+        jobs = (
+            asyncio.create_task(job_loop(app.state.session_factory, settings))
+            if settings.background_jobs_enabled
+            else None
+        )
         yield
+        if jobs is not None:
+            jobs.cancel()
+            with contextlib.suppress(asyncio.CancelledError):
+                await jobs
         engine.dispose()
 
     show_docs = not settings.is_production

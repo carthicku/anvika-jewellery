@@ -12,12 +12,15 @@ from app.models.catalogue import (
     ProductVariant,
 )
 from app.models.content import ContactEnquiry, ContentPage, NewsletterSubscriber
+from app.models.email import EmailOutbox
+from app.models.identity import Address, User, UserSession, UserToken, WishlistItem
 from app.models.inventory import InventoryLevel, InventoryMovement
 from app.models.pricing import Discount, GoldRate
 from app.models.shipping import ShippingMethod, ShippingZone
 from app.models.system import AuditLog, RateLimitBucket, StoreSetting
 
 __all__ = [
+    "Address",
     "AuditLog",
     "Base",
     "Category",
@@ -26,6 +29,7 @@ __all__ = [
     "ContactEnquiry",
     "ContentPage",
     "Discount",
+    "EmailOutbox",
     "GoldRate",
     "InventoryLevel",
     "InventoryMovement",
@@ -38,4 +42,8 @@ __all__ = [
     "ShippingMethod",
     "ShippingZone",
     "StoreSetting",
+    "User",
+    "UserSession",
+    "UserToken",
+    "WishlistItem",
 ]

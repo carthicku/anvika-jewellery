@@ -68,20 +68,25 @@ export async function ensureCsrfToken(): Promise<string> {
   return csrfPromise;
 }
 
-let refreshPromise: Promise<boolean> | null = null;
+let refreshPromise: Promise<void> | null = null;
 
-async function refreshSession(): Promise<boolean> {
+/**
+ * Ask the backend for fresh session cookies. Whatever the outcome we retry the original request:
+ * success → it now carries a valid session; REFRESH_RACE → another tab already refreshed, so the
+ * cookies are fresh; failure → the backend cleared the dead cookies and the request runs as a guest
+ * (public pages keep working; protected ones get NOT_AUTHENTICATED and redirect to sign-in).
+ */
+async function refreshSession(): Promise<void> {
   refreshPromise ??= (async () => {
     try {
       const token = await ensureCsrfToken();
-      const res = await fetch(`${API_ORIGIN}/api/v1/auth/refresh`, {
+      await fetch(`${API_ORIGIN}/api/v1/auth/refresh`, {
         method: 'POST',
         credentials: 'include',
         headers: { 'X-CSRF-Token': token },
       });
-      return res.ok;
     } catch {
-      return false;
+      /* network failure: the retried request will surface it */
     } finally {
       refreshPromise = null;
     }
@@ -107,7 +112,8 @@ export async function apiFetch(input: Request): Promise<Response> {
     .json()
     .catch(() => undefined)) as Partial<ApiErrorBody> | undefined;
   if (body?.error?.code !== 'SESSION_EXPIRED') return response;
-  return (await refreshSession()) ? send(retryCopy) : response;
+  await refreshSession();
+  return send(retryCopy);
 }
 
 export const api = createClient<paths>({

@@ -129,3 +129,89 @@ def client(raw_client: TestClient) -> TestClient:
 def make_settings() -> object:
     """Factory for tests that need settings variations (e.g. production validation)."""
     return _test_settings
+
+
+# ------------------------------------------------------------------ accounts
+
+PASSWORD = "correct horse battery"
+
+
+@pytest.fixture()
+def make_user(db: Session):  # type: ignore[no-untyped-def]
+    """Create a user directly in the database (role and verification configurable)."""
+    from app.core.security import hash_password
+    from app.models import User
+
+    def factory(
+        email: str = "asha@example.com",
+        password: str = PASSWORD,
+        role: str = "customer",
+        is_active: bool = True,
+        full_name: str = "Asha Rao",
+    ) -> User:
+        user = User(
+            email=email.lower(),
+            password_hash=hash_password(password),
+            full_name=full_name,
+            role=role,
+            is_active=is_active,
+        )
+        db.add(user)
+        db.commit()
+        return user
+
+    return factory
+
+
+def login_client(client: TestClient, email: str, password: str = PASSWORD) -> TestClient:
+    response = client.post("/api/v1/auth/login", json={"email": email, "password": password})
+    assert response.status_code == 200, response.text
+    # Login rotates the CSRF cookie; keep the header in sync like the browser client does.
+    client.headers["X-CSRF-Token"] = client.cookies["csrf_token"]
+    return client
+
+
+@pytest.fixture()
+def other_client(app: FastAPI) -> Iterator[TestClient]:
+    """A second browser (separate cookie jar) against the same app and transaction."""
+    with TestClient(app, base_url="http://testserver") as second:
+        token = second.get("/api/v1/auth/csrf").json()["csrf_token"]
+        second.headers["X-CSRF-Token"] = token
+        yield second
+
+
+@pytest.fixture(autouse=True)
+def _clear_memory_outbox() -> Iterator[None]:
+    from app.services.email import MEMORY_OUTBOX
+
+    MEMORY_OUTBOX.clear()
+    yield
+    MEMORY_OUTBOX.clear()
+
+
+def sync_csrf(client: TestClient) -> None:
+    """Mirror the browser client: always send the current csrf_token cookie as the header."""
+    client.headers["X-CSRF-Token"] = client.cookies["csrf_token"]
+
+
+def replace_cookie(client: TestClient, name: str, value: str, path: str = "/") -> None:
+    """Overwrite a cookie the server set (same domain/path) instead of adding a duplicate."""
+    for cookie in list(client.cookies.jar):
+        if cookie.name == name and cookie.path == path:
+            client.cookies.jar.clear(cookie.domain, cookie.path, cookie.name)
+            client.cookies.set(name, value, domain=cookie.domain, path=path)
+            return
+    client.cookies.set(name, value, path=path)
+
+
+@pytest.fixture(autouse=True, scope="session")
+def _fast_password_hashing() -> Iterator[None]:
+    """Tests hash many passwords; production keeps the library's strong Argon2id defaults."""
+    from argon2 import PasswordHasher
+
+    from app.core import security
+
+    original = security._hasher
+    security._hasher = PasswordHasher(time_cost=1, memory_cost=1024, parallelism=1)
+    yield
+    security._hasher = original
