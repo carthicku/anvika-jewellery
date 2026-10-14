@@ -18,13 +18,13 @@ the test listed**. Update this file whenever a feature changes state.
 | Storefront | Supporting & policy pages (editable) | `/about` … `/refund-policy` | 2/7 | ⚠️ | Pages render from DB (`e2e/smoke.spec.ts` all routes); admin editing is Phase 7 |
 | Storefront | Contact form, newsletter | `/contact`, `/newsletter/*` | 3 | ✅ | `test_content.py` (validation, honeypot, rate limit, idempotency), `storefront.test.tsx` contact form |
 | Storefront | 404 page | `*` | 1 | ✅ | `src/router.test.tsx`, `e2e/smoke.spec.ts` |
-| Accounts | Register / login / logout | `/register`, `/login` | 4 | ⬜ | |
-| Accounts | Email verification | `/verify-email` | 4 | ⬜ | |
-| Accounts | Forgot / reset password | `/forgot-password`, `/reset-password` | 4 | ⬜ | |
-| Accounts | Profile, addresses | `/account/profile`, `/account/addresses` | 4 | ⬜ | |
-| Accounts | Security: change password, sessions | `/account/security` | 4 | ⬜ | |
+| Accounts | Register / login / logout | `/register`, `/login` | 4 | ✅ | `test_auth.py`, `account.test.tsx`, `e2e/account.spec.ts` |
+| Accounts | Email verification | `/verify-email` | 4 | ✅ | `test_register_sends_verification_email_and_verifies` |
+| Accounts | Forgot / reset password | `/forgot-password`, `/reset-password` | 4 | ✅ | `test_forgot_password_never_reveals_accounts`, `test_reset_password_flow`, expiry + single-use tests |
+| Accounts | Profile, addresses | `/account/profile`, `/account/addresses` | 4 | ✅ | `test_account.py`, `account.test.tsx`, `e2e/account.spec.ts` |
+| Accounts | Security: change password, sessions | `/account/security` | 4 | ✅ | `test_change_password_keeps_current_session_only`, `test_list_and_revoke_sessions`, `test_logout_all` |
 | Accounts | Order history & detail with timeline | `/account/orders` | 6 | ⬜ | |
-| Wishlist | Guest (browser) + signed-in + merge | `/wishlist`, `/account/wishlist` | 2/4 | ⚠️ | Guest wishlist ✅ (`storefront.test.tsx`, `e2e/browse.spec.ts`); signed-in + merge in Phase 4 |
+| Wishlist | Guest (browser) + signed-in + merge | `/wishlist`, `/account/wishlist` | 2/4 | ✅ | `test_wishlist_add_remove_and_merge`, `test_wishlists_are_private`, `account.test.tsx` (merge on sign-in, server save), `e2e/browse.spec.ts` |
 | Cart | Server cart, guest cookie, merge on login | `/cart` | 5 | ⬜ | |
 | Pricing | Engine (fixed, weight-based, making, wastage, stones, tax, rounding) | service | 3 | ✅ | `tests/unit/test_pricing.py` (37 tests incl. worked example) |
 | Pricing | Automatic discounts + coupons | `/cart/coupon` | 5 | ⬜ | |
@@ -38,7 +38,7 @@ the test listed**. Update this file whenever a feature changes state.
 | Orders | Cancellation | `/orders/{ref}/cancel` | 6 | ⬜ | |
 | Orders | Returns / exchanges | `/orders/{ref}/returns` | 7 | ⬜ | |
 | Email | Outbox + templates + file sink + SMTP | jobs | 6 | ⬜ | |
-| Admin | Auth, RBAC, audit logs | `/admin/*` | 7 | ⬜ | |
+| Admin | Auth, RBAC, audit logs | `/admin/*` | 4/7 | ⚠️ | Permission map + route guard test + `create-admin` CLI with audit (`test_permissions.py`); admin UI in Phase 7 |
 | Admin | Dashboard | `/admin` | 7 | ⬜ | |
 | Admin | Products, variants, images | `/admin/products` | 7 | ⬜ | |
 | Admin | Categories, collections | `/admin/categories`, `/admin/collections` | 7 | ⬜ | |

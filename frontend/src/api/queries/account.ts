@@ -1,4 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from 'react-router';
 
 import type { components } from '../schema';
 import { api, unwrap } from '../client';
@@ -54,12 +55,18 @@ export function useRegister() {
   });
 }
 
+/**
+ * Sign out, leave the page, THEN forget the user. Clearing first would let the account-page guard
+ * redirect to sign-in before the intended destination is reached.
+ */
 export function useLogout() {
   const client = useQueryClient();
+  const navigate = useNavigate();
   return useMutation({
-    mutationFn: (all: boolean = false) =>
+    mutationFn: ({ all = false }: { all?: boolean; redirectTo: string }) =>
       unwrap(api.POST(all ? '/api/v1/auth/logout-all' : '/api/v1/auth/logout')),
-    onSettled: () => {
+    onSettled: async (_data, _error, { redirectTo }) => {
+      await navigate(redirectTo, { replace: true });
       client.setQueryData(queryKeys.me, null);
       client.removeQueries({ queryKey: ['account'] });
       client.removeQueries({ queryKey: queryKeys.wishlist });

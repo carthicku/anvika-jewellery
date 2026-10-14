@@ -24,6 +24,10 @@ owner. Keep it current. Each item states its impact and the plan.
 
 ## Technical
 * Admin TOTP MFA: planned for Phase 7, not yet implemented.
+* Registration reveals whether an email already has an account (`EMAIL_IN_USE`) — a usability
+  trade-off mitigated by rate limiting. Passwords are not checked against breached-password lists.
+* End-to-end tests run against a backend with `RATE_LIMIT_ENABLED=false` (limits are covered by API
+  tests).
 * Background jobs run in-process. For multiple app instances they are safe (SKIP LOCKED) but
   duplicated; a dedicated scheduler could replace them later.
 * Rate limiting is per IP/email in PostgreSQL. There is no WAF or bot management.

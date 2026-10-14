@@ -5,6 +5,10 @@ All notable changes to this project. Format based on [Keep a Changelog](https://
 ## [Unreleased]
 
 ### Added
+- Phase 4: customer accounts — register, sign in/out (single device or everywhere), email
+  verification, password reset/change, signed-in device list, profile, address book, account
+  wishlist with guest merge; cookie sessions with rotating refresh tokens; email outbox; permission
+  map with admin-route guard; `create-admin` / `deactivate-user` CLI.
 - Phases 2 & 3: catalogue data model with RLS, Decimal pricing engine, public catalogue/search/
   facets/PIN-code/content/contact/newsletter/sitemap APIs, idempotent sample seed with original
   placeholder illustrations; premium storefront (home, listings with URL filters, search, product

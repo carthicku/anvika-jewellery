@@ -41,3 +41,27 @@ test('every storefront route renders without errors', async ({ page }) => {
   }
   expect(errors).toEqual([]);
 });
+
+test('no page scrolls sideways on a phone', async ({ page, isMobile }) => {
+  test.skip(!isMobile, 'Checked on the mobile project');
+  for (const route of [
+    '/',
+    '/collections',
+    '/collections/rings',
+    '/products/everyday-gold-band',
+    '/search?q=ring',
+    '/wishlist',
+    '/contact',
+    '/gold-buying-guide',
+    '/login',
+    '/register',
+  ]) {
+    await page.goto(route);
+    await expect(page.getByRole('heading', { level: 1 }), route).toBeVisible();
+    const [scrollWidth, width] = await page.evaluate(() => [
+      document.documentElement.scrollWidth,
+      window.innerWidth,
+    ]);
+    expect(scrollWidth, `${route} is wider than the screen`).toBeLessThanOrEqual(width);
+  }
+});

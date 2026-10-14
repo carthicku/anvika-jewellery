@@ -30,8 +30,14 @@ npm run test:watch  # re-run on save
 ```
 
 ## End-to-end (Playwright)
-Prerequisites: DB running, migrations applied, seed loaded, backend running with
-`PAYMENT_PROVIDER=simulator`, and Playwright's Chromium installed (`npx playwright install chromium`).
+Prerequisites: DB running, migrations applied, seed loaded, Playwright's Chromium installed
+(`npx playwright install chromium`), and the backend running **with rate limiting switched off** (the
+suite registers and signs in many times; the limits themselves are covered by API tests):
+```bash
+cd backend
+RATE_LIMIT_ENABLED=false PAYMENT_PROVIDER=simulator .venv/Scripts/python -m uvicorn app.main:app --port 8010
+# PowerShell: $env:RATE_LIMIT_ENABLED='false'; .venv/Scripts/python -m uvicorn app.main:app --port 8010
+```
 ```bash
 cd frontend
 npm run e2e          # starts the Vite dev server automatically; backend must already be running

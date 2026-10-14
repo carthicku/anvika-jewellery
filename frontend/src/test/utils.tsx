@@ -19,6 +19,12 @@ type Handler = MockResponse | ((request: Request) => MockResponse | Promise<Mock
 const DEFAULTS: Record<string, Handler> = {
   'GET /api/v1/settings/public': { body: settings },
   'GET /api/v1/categories': { body: home.categories },
+  'GET /api/v1/auth/me': { body: { user: null } },
+  // Like the backend: issue the CSRF cookie that unsafe requests echo back in a header.
+  'GET /api/v1/auth/csrf': () => {
+    document.cookie = 'csrf_token=test-csrf; path=/';
+    return { body: { csrf_token: 'test-csrf' } };
+  },
 };
 
 /**

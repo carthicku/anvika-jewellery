@@ -30,8 +30,12 @@ Decision record: [ADR-0003](ADR/0003-cookie-auth-and-csrf.md).
 `POST /auth/refresh` reads `refresh_token`, finds the session by hash, checks expiry, issues a new
 refresh token (stores the new hash, keeps the old one as `previous_refresh_token_hash`), and issues a
 new access token. If a request presents a token equal to `previous_refresh_token_hash`, the token was
-replayed — the whole session is revoked. The frontend calls refresh automatically once when it
-receives `401 SESSION_EXPIRED`, then retries the original request.
+replayed — the whole session is revoked. Exception: within 20 seconds of a rotation the old token gets
+`409 REFRESH_RACE` instead (two browser tabs refreshing at the same moment); the browser simply
+retries with the cookies the other tab already received. The frontend calls refresh automatically once when it
+receives `401 SESSION_EXPIRED`, then retries the original request whatever the outcome: if the refresh
+failed the backend has cleared the dead cookies, so public pages keep working as a guest and protected
+ones redirect to sign-in.
 
 ### CSRF
 Double-submit: unsafe methods must send header `X-CSRF-Token` equal to the `csrf_token` cookie.
@@ -41,13 +45,14 @@ The middleware also rejects unsafe requests whose `Origin` header is present and
 ## 3. Account flows
 | Flow | Behaviour |
 |------|-----------|
-| Register | Creates `role=customer`. Starts a session. If `EMAIL_VERIFICATION_REQUIRED=true`, checkout is still allowed (guests can check out anyway) but a banner asks the user to verify. A verification email is queued. |
-| Login | Generic `INVALID_CREDENTIALS` for unknown email or wrong password; constant-time-ish (a dummy hash is verified for unknown emails). Rate-limited per IP and per email. |
-| Forgot password | Always `202 Accepted` with the same message. If the account exists, a single-use token valid for 30 min is emailed. |
+| Register | Creates `role=customer`. Starts a session. A verification email is queued and the account area shows a banner until it is confirmed. Registering with an existing email returns `409 EMAIL_IN_USE` (a deliberate usability trade-off: it reveals that the address has an account; limited to 10 registrations per IP per hour). |
+| Login | Generic `INVALID_CREDENTIALS` for unknown email, wrong password or deactivated account; a dummy hash is verified for unknown emails so timing is similar. Rate limits: 30 attempts / 15 min per IP and 10 / 15 min per account. |
+| Forgot password | Always `202 Accepted` with the same message. If the account exists, a single-use token valid for 30 min is emailed; requesting again invalidates older links. Limits: 10 / hour per IP, 3 / hour per email. Outbox rows drop the link once the email is sent. |
 | Reset password | Token must be unused and unexpired; sets password, marks token used, revokes **all** sessions. |
 | Change password | Requires current password; revokes all other sessions. |
 | Verify email | Single-use token valid 48 h. |
-| Logout | Revokes the current session row and clears cookies. |
+| Logout | Revokes the current session row and clears cookies. The browser navigates away first, then forgets the user (so the account-page guard never bounces the customer to sign-in). |
+| Sign in redirect | `?next=` is honoured only for same-site paths (`/…`, never `//host` or absolute URLs) — see `frontend/src/lib/forms.ts`. |
 | Guest → account | On login/registration, the guest cart is merged into the user's cart; the browser wishlist is merged via `/wishlist/merge`. |
 
 ## 4. Roles and permissions

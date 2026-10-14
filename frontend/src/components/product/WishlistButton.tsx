@@ -1,12 +1,12 @@
 import { Heart } from 'lucide-react';
 
 import { useToast } from '@/components/ui/Toaster';
-import { GUEST_WISHLIST_KEY, useLocalList } from '@/hooks/useLocalList';
+import { useWishlist } from '@/api/queries/wishlist';
 import { cn } from '@/lib/cn';
 
 /**
- * Save/unsave a product. Guests: stored in this browser (slugs only). Signed-in customers get a
- * server-side wishlist in Phase 4, merged automatically at sign-in.
+ * Save/unsave a product. Guests: stored in this browser (slugs only). Signed-in customers: saved to
+ * their account (the browser list is merged in at sign-in).
  */
 export function WishlistButton({
   slug,
@@ -19,16 +19,16 @@ export function WishlistButton({
   className?: string;
   variant?: 'icon' | 'full';
 }) {
-  const wishlist = useLocalList(GUEST_WISHLIST_KEY);
+  const wishlist = useWishlist();
   const { notify } = useToast();
   const saved = wishlist.has(slug);
 
   const toggle = () => {
     if (saved) {
-      wishlist.remove(slug);
+      wishlist.toggle(slug, false);
       notify(`Removed ${name} from your wishlist`, 'info');
     } else {
-      wishlist.add(slug, { toFront: true });
+      wishlist.toggle(slug, true);
       notify(`Saved ${name} to your wishlist`);
     }
   };

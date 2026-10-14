@@ -72,6 +72,43 @@ export const routes: RouteObject[] = [
           return { element: <ContentPage key={slug} slug={slug} path={path} /> };
         },
       })),
+      ...(
+        [
+          ['login', 'LoginPage'],
+          ['register', 'RegisterPage'],
+          ['forgot-password', 'ForgotPasswordPage'],
+          ['reset-password', 'ResetPasswordPage'],
+          ['verify-email', 'VerifyEmailPage'],
+        ] as const
+      ).map(([path, name]): RouteObject => ({
+        path,
+        lazy: async () => ({ Component: (await import('@/pages/auth/AuthPages'))[name] }),
+      })),
+      {
+        path: 'account',
+        lazy: async () => ({
+          Component: (await import('@/components/account/AccountLayout')).AccountLayout,
+        }),
+        children: [
+          {
+            index: true,
+            lazy: async () => ({
+              Component: (await import('@/pages/account/AccountPages')).AccountOverviewPage,
+            }),
+          },
+          ...(
+            [
+              ['profile', 'ProfilePage'],
+              ['addresses', 'AddressesPage'],
+              ['wishlist', 'AccountWishlistPage'],
+              ['security', 'SecurityPage'],
+            ] as const
+          ).map(([path, name]): RouteObject => ({
+            path,
+            lazy: async () => ({ Component: (await import('@/pages/account/AccountPages'))[name] }),
+          })),
+        ],
+      },
       { path: '*', element: <NotFoundPage /> },
     ],
   },

@@ -62,3 +62,14 @@ Defects found and fixed during this checkpoint: local PostgreSQL cluster was WIN
 enforced); timestamps returned in local time (sessions forced to UTC); SQLAlchemy 2.1 DISTINCT ON
 deprecation; React Router setSearchParams overwrite when setting two keys; focus moved to <main> on
 first load; focus lost after closing header dialogs; JSON-LD `<` escaping.
+
+### 2026-10-14 — Phase 4 checkpoint (authentication & accounts)
+| Suite | Command | Result |
+|-------|---------|--------|
+| Full static + unit/API + build | `powershell -File scripts/check.ps1` | All checks passed (initial JS 93 kB gzip) |
+| Backend | `pytest -q` | 168 passed (auth 21, account 7, permissions/CLI 5, plus earlier suites) |
+| Frontend unit | `vitest run` | 33 passed (4 files), stable across repeated runs |
+| End-to-end | `playwright test` ×3 (desktop + mobile, backend with `RATE_LIMIT_ENABLED=false`) | 30 passed each run (keyboard test desktop-only, sideways-scroll test mobile-only) |
+
+New E2E coverage: J2 account journey (register → addresses add/edit/delete → sign out → sign in),
+wrong-password message, and "no page scrolls sideways on a phone" for 10 routes.

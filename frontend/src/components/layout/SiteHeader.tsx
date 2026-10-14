@@ -1,11 +1,12 @@
-import { Heart, Menu, Search } from 'lucide-react';
+import { Heart, Menu, Search, UserRound } from 'lucide-react';
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router';
 
+import { useMe } from '@/api/queries/account';
 import { useCategories, usePublicSettings } from '@/api/queries/catalogue';
+import { useWishlist } from '@/api/queries/wishlist';
 import { IconButton } from '@/components/ui/Button';
 import { DialogRoot, SheetContent } from '@/components/ui/Dialog';
-import { GUEST_WISHLIST_KEY, useLocalList } from '@/hooks/useLocalList';
 import { cn } from '@/lib/cn';
 import { env } from '@/lib/env';
 
@@ -50,8 +51,23 @@ function Logo() {
   );
 }
 
+function AccountLink() {
+  const me = useMe();
+  const signedIn = Boolean(me.data);
+  return (
+    <Link
+      to={signedIn ? '/account' : '/login'}
+      className="inline-flex size-11 items-center justify-center rounded-sm hover:bg-surface-muted"
+      aria-label={signedIn ? 'My account' : 'Sign in'}
+      title={signedIn ? 'My account' : 'Sign in'}
+    >
+      <UserRound className="size-5" strokeWidth={1.5} aria-hidden="true" />
+    </Link>
+  );
+}
+
 function WishlistLink() {
-  const { items } = useLocalList(GUEST_WISHLIST_KEY);
+  const { slugs: items } = useWishlist();
   return (
     <Link
       to="/wishlist"
@@ -121,6 +137,7 @@ export function SiteHeader() {
           >
             <Search className="size-5" strokeWidth={1.5} aria-hidden="true" />
           </IconButton>
+          <AccountLink />
           <WishlistLink />
         </div>
       </Container>
@@ -181,7 +198,11 @@ export function SiteHeader() {
               ))}
             </ul>
             <ul className="mt-6 space-y-1 border-t border-line px-5 pt-6">
-              {[{ to: '/wishlist', label: 'Wishlist' }, ...INFO_LINKS].map((link) => (
+              {[
+                { to: '/account', label: 'My account' },
+                { to: '/wishlist', label: 'Wishlist' },
+                ...INFO_LINKS,
+              ].map((link) => (
                 <li key={link.to}>
                   <Link
                     to={link.to}

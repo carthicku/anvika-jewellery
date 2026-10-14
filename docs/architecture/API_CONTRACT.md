@@ -39,11 +39,11 @@
 ```
 | HTTP | Typical `code` values |
 |------|----------------------|
-| 400 | `BAD_REQUEST`, `CONSENT_REQUIRED` |
+| 400 | `BAD_REQUEST`, `CONSENT_REQUIRED`, `INVALID_TOKEN` |
 | 401 | `NOT_AUTHENTICATED`, `INVALID_CREDENTIALS`, `SESSION_EXPIRED` |
 | 403 | `FORBIDDEN`, `CSRF_FAILED` |
 | 404 | `NOT_FOUND` (also used when a resource exists but belongs to someone else) |
-| 409 | `CONFLICT`, `OUT_OF_STOCK`, `PRICE_CHANGED`, `INVALID_STATE_TRANSITION`, `IDEMPOTENCY_CONFLICT` |
+| 409 | `CONFLICT`, `EMAIL_IN_USE`, `REFRESH_RACE`, `ADDRESS_LIMIT`, `OUT_OF_STOCK`, `PRICE_CHANGED`, `INVALID_STATE_TRANSITION`, `IDEMPOTENCY_CONFLICT` |
 | 413 | `PAYLOAD_TOO_LARGE` |
 | 422 | `VALIDATION_ERROR` (with `details.fields` → per-field messages) |
 | 429 | `RATE_LIMITED` (with `Retry-After` header) |
@@ -75,7 +75,7 @@ Legend: 🌐 public · 👤 signed-in customer · 🔑 staff/admin (permission i
 ### Account — `/me`
 | GET/PATCH | `/me/profile` | 👤 | Name, phone |
 | GET/POST | `/me/addresses` | 👤 | List / create |
-| PATCH/DELETE | `/me/addresses/{id}` | 👤 (owner) | Update / delete |
+| PUT/DELETE | `/me/addresses/{id}` | 👤 (owner) | Replace / delete (another customer's id → 404) |
 
 ### Catalogue
 | GET | `/home` | 🌐 | Homepage data: featured categories, new arrivals, bestsellers, featured collections |
@@ -102,9 +102,10 @@ Legend: 🌐 public · 👤 signed-in customer · 🔑 staff/admin (permission i
 | POST | `/cart/accept-prices` | 🌐 | Customer accepts current prices |
 
 ### Wishlist — `/wishlist`
-| GET | `/wishlist` | 👤 | Items with current price/availability |
-| PUT | `/wishlist/{product_id}` / DELETE | 👤 | Add / remove |
-| POST | `/wishlist/merge` | 👤 | Merge guest (browser) wishlist slugs |
+| GET | `/wishlist` | 👤 | Product cards with current price/availability |
+| GET | `/wishlist/slugs` | 👤 | Saved product slugs (for heart buttons) |
+| PUT / DELETE | `/wishlist/{slug}` | 👤 | Add (idempotent) / remove |
+| POST | `/wishlist/merge` | 👤 | Merge the guest (browser) wishlist, max 50 slugs |
 
 ### Checkout & payments
 | POST | `/checkout/quote` | 🌐 | Address PIN, shipping method → full breakdown (no side effects) |

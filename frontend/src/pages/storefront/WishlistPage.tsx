@@ -1,7 +1,8 @@
 import { Heart } from 'lucide-react';
 import { useMemo } from 'react';
-import { Link } from 'react-router';
+import { Link, Navigate } from 'react-router';
 
+import { useMe } from '@/api/queries/account';
 import { useProducts } from '@/api/queries/catalogue';
 import { Container, PageHeader, PageMeta } from '@/components/layout/Page';
 import { ProductGrid } from '@/components/product/ProductCard';
@@ -10,10 +11,11 @@ import { EmptyState, ErrorState } from '@/components/ui/Feedback';
 import { GUEST_WISHLIST_KEY, useLocalList } from '@/hooks/useLocalList';
 
 /**
- * Guest wishlist (saved in this browser). Signed-in customers get a server-side wishlist
- * (Phase 4) and this list is merged into it at sign-in.
+ * Guest wishlist (saved in this browser). Signed-in customers are sent to /account/wishlist; this
+ * browser list is merged into their account when they sign in.
  */
 export function WishlistPage() {
+  const me = useMe();
   const wishlist = useLocalList(GUEST_WISHLIST_KEY);
   const slugs = wishlist.items.slice(0, 48);
   const products = useProducts({ slug: slugs, page_size: 48 }, { enabled: slugs.length > 0 });
@@ -23,6 +25,8 @@ export function WishlistPage() {
     return slugs.flatMap((s) => bySlug.get(s) ?? []);
   }, [products.data, slugs]);
 
+  if (me.data) return <Navigate to="/account/wishlist" replace />;
+
   return (
     <>
       <PageMeta title="Wishlist" path="/wishlist" noindex />
@@ -30,7 +34,15 @@ export function WishlistPage() {
         <PageHeader
           eyebrow="Saved pieces"
           title="Your wishlist"
-          description="Saved on this device. Current prices and availability are shown below."
+          description={
+            <>
+              Saved on this device.{' '}
+              <Link to="/login?next=/account/wishlist" className="underline underline-offset-4">
+                Sign in
+              </Link>{' '}
+              to keep your wishlist on every device.
+            </>
+          }
         />
         {slugs.length === 0 ? (
           <EmptyState
