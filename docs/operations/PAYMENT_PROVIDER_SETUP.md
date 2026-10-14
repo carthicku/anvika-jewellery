@@ -9,8 +9,8 @@ Flow and security rules: [PAYMENT_FLOW.md](../architecture/PAYMENT_FLOW.md).
 3. In `backend/.env`:
    ```
    PAYMENT_PROVIDER=razorpay
-   RAZORPAY_KEY_ID=rzp_test_xxxxxxxx
-   RAZORPAY_KEY_SECRET=xxxxxxxxxxxxxxxx
+   RAZORPAY_KEY_ID=<your rzp_test_... key id>
+   RAZORPAY_KEY_SECRET=<your test key secret>
    RAZORPAY_WEBHOOK_SECRET=<a long random string you choose>
    ```
 4. **Webhooks** (*Account & Settings → Webhooks → Add New Webhook*):

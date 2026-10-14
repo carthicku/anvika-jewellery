@@ -66,7 +66,8 @@ decision, documented in an ADR) · **Owner action** (cannot proceed to launch wi
 | T8 | Inventory uses a row-locked `inventory_levels` table (`on_hand`, `reserved`) with database CHECK constraints plus a movement ledger | [ADR-0007](architecture/ADR/0007-inventory-locking.md) |
 | T9 | Transactional emails go through an `email_outbox` table (idempotent) and a pluggable sender: `file` sink in development, SMTP in production | [ADR-0008](architecture/ADR/0008-email-outbox.md) |
 | T10 | Python 3.13 (3.12 on this machine is broken; 3.11+ remains supported by the code) | — |
-| T11 | TypeScript pinned to 6.0.x because typescript-eslint does not yet support TypeScript 7 | — |
+| T11 | TypeScript pinned to 5.9.x (openapi-typescript 7 requires TS 5; typescript-eslint supports < 6.1); ESLint 10 with the maintained `eslint-plugin-jsx-a11y-x` fork | [ADR-0009](architecture/ADR/0009-frontend-stack.md) |
+| T19 | Local dev ports: web 5180, API 8010 (5173 and 8000 are occupied by other projects on the dev machine) | — |
 | T12 | Tailwind CSS v4 with design tokens declared via `@theme`; accessible primitives from Radix (`radix-ui`) styled in shadcn/ui fashion instead of running the shadcn generator | [ADR-0009](architecture/ADR/0009-frontend-stack.md) |
 | T13 | Frontend talks to the API on the **same origin** (`/api/v1`). Vite proxies in development; in production a reverse proxy/rewrite (or an `api.` subdomain on the same registrable domain) is used so `SameSite=Lax` cookies work | [ADR-0003](architecture/ADR/0003-cookie-auth-and-csrf.md) |
 | T14 | API contract: backend exports `openapi.json`; frontend generates TypeScript types with `openapi-typescript` | [ADR-0009](architecture/ADR/0009-frontend-stack.md) |

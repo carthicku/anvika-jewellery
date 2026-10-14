@@ -14,7 +14,7 @@ A production-oriented e-commerce platform for a gold jewellery retailer in India
 
 | Layer | Technology |
 |-------|-----------|
-| Frontend | React 19, Vite 8, TypeScript 6 (strict), React Router 8, Tailwind CSS 4, Radix, TanStack Query, React Hook Form + Zod |
+| Frontend | React 19, Vite 8, TypeScript 5.9 (strict), React Router 8, Tailwind CSS 4, Radix, TanStack Query, React Hook Form + Zod |
 | Backend | Python 3.13, FastAPI, Pydantic 2, SQLAlchemy 2, Alembic, Argon2id, JWT cookies |
 | Database | PostgreSQL 17 (Supabase in production; embedded PostgreSQL locally) |
 | Tests | pytest, Vitest + Testing Library, Playwright |
@@ -35,10 +35,10 @@ py -3.13 -m venv .venv
 cp .env.example .env                                # then set SECRET_KEY in .env
 .venv/Scripts/python -m alembic upgrade head
 .venv/Scripts/python -m app.cli seed
-.venv/Scripts/python -m uvicorn app.main:app --reload --port 8000
+.venv/Scripts/python -m uvicorn app.main:app --reload --port 8010
 
 cd frontend                                         # terminal 3: website
-npm install && cp .env.example .env && npm run dev  # http://localhost:5173
+npm install && cp .env.example .env && npm run dev  # http://localhost:5180
 ```
 
 ## Documentation

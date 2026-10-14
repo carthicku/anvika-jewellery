@@ -24,17 +24,17 @@ Scope: architecture documents only (no code yet).
 | 5 Duplicate orders | ⬜ | |
 | 6 Brute-force protection | ⬜ | |
 | 7 XSS / CSP | ⬜ | |
-| 8 CSRF | ⬜ | |
+| 8 CSRF | ✅ middleware verified | `test_foundation.py` CSRF tests (missing/mismatched/foreign origin/webhook exemption) |
 | 9 Refresh rotation | ⬜ | |
 | 10 IDOR | ⬜ | |
 | 11 Admin RBAC | ⬜ | |
 | 12 Enumeration | ⬜ | |
 | 13 SQL injection | ⬜ | |
 | 14 Uploads | ⬜ | |
-| 15 Secrets | ⬜ | |
-| 16 Error leakage | ⬜ | |
+| 15 Secrets | ⚠️ scanner + production config validation verified; log redaction untested | `scripts/check-secrets.py`, `test_settings.py` |
+| 16 Error leakage | ✅ | `test_app_errors_and_unexpected_errors_are_formatted` (no internal detail in 500) |
 | 17 Spam | ⬜ | |
-| 18 Security headers | ⬜ | |
+| 18 Security headers | ⚠️ API headers verified; SPA CSP/HSTS pending deploy config | `test_security_headers_present` |
 | 19 CORS | ⬜ | |
 | 20 Guest order access | ⬜ | |
 | 21 Admin money safeguards | ⬜ | |

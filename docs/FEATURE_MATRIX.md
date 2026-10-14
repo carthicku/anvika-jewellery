@@ -5,9 +5,9 @@ the test listed**. Update this file whenever a feature changes state.
 
 | Area | Feature | Route / API | Phase | Status | Evidence |
 |------|---------|-------------|:-:|:-:|----------|
-| Foundation | Backend app factory, config, error format, health check | `/api/v1/health` | 1 | ⬜ | |
-| Foundation | Frontend shell, routing, layout | all | 1 | ⬜ | |
-| Foundation | Local DB, migrations, seed | CLI | 1/3 | ⬜ | |
+| Foundation | Backend app factory, config, error format, health check | `/api/v1/health` | 1 | ✅ | `tests/api/test_foundation.py`, `tests/unit/test_settings.py` |
+| Foundation | Frontend shell, routing, layout | all | 1 | ✅ | `src/router.test.tsx`, `src/api/client.test.ts`, `e2e/smoke.spec.ts` |
+| Foundation | Local DB, migrations, seed | CLI | 1/3 | ⚠️ | DB + migrations verified (fixtures + `alembic check`); seed arrives in Phase 3 |
 | Storefront | Home page | `/` | 2/3 | ⬜ | |
 | Storefront | Collections & categories | `/collections`, `/collections/:slug` | 2/3 | ⬜ | |
 | Storefront | Filters, sorting, pagination (URL state) | `/products` | 3 | ⬜ | |
@@ -17,7 +17,7 @@ the test listed**. Update this file whenever a feature changes state.
 | Storefront | Recently viewed | browser storage | 2 | ⬜ | |
 | Storefront | Supporting & policy pages (editable) | `/about` … `/refund-policy` | 2/7 | ⬜ | |
 | Storefront | Contact form, newsletter | `/contact`, `/newsletter/*` | 3 | ⬜ | |
-| Storefront | 404 page | `*` | 1 | ⬜ | |
+| Storefront | 404 page | `*` | 1 | ✅ | `src/router.test.tsx`, `e2e/smoke.spec.ts` |
 | Accounts | Register / login / logout | `/register`, `/login` | 4 | ⬜ | |
 | Accounts | Email verification | `/verify-email` | 4 | ⬜ | |
 | Accounts | Forgot / reset password | `/forgot-password`, `/reset-password` | 4 | ⬜ | |

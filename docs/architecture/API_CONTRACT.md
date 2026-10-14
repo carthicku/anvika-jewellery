@@ -1,6 +1,6 @@
 # API Contract
 
-* Base path: `/api/v1`. Interactive docs (development only): `http://localhost:8000/api/docs`.
+* Base path: `/api/v1`. Interactive docs (development only): `http://localhost:8010/api/docs`.
 * The machine-readable contract is `backend/openapi.json`. Regenerate it with
   `python -m app.cli export-openapi`, then run `npm run gen:api` in `frontend/` to refresh the
   TypeScript types. **This table is a guide; `openapi.json` is authoritative.**

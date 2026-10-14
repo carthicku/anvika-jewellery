@@ -18,5 +18,6 @@ Add an entry whenever you solve a confusing problem.
 | Razorpay pop-up opens but verification fails with `PAYMENT_SIGNATURE_INVALID` | Wrong `RAZORPAY_KEY_SECRET` (e.g. live secret with test key id) | Use the matching test key id and secret pair. |
 | Webhook returns 400 | Wrong webhook secret, or a proxy modified the body | Check `RAZORPAY_WEBHOOK_SECRET`; make sure nothing re-encodes the JSON body. |
 | Frontend type errors after a backend change | Stale `schema.d.ts` | Regenerate API types (see LOCAL_SETUP §7). |
-| `npm ERR! peer dep` with TypeScript 7 | typescript-eslint supports TS < 6.1 | Keep `typescript` pinned to `~6.0`. |
+| `npm ERR! peer dep` mentioning `typescript` | `openapi-typescript` 7.x requires TypeScript 5; typescript-eslint requires < 6.1 | Keep `typescript` pinned to `~5.9`. |
+| `[Errno 10048] error while attempting to bind on address (127.0.0.1, 8010)` | Another program already uses the port | Run uvicorn with another `--port` and set `VITE_API_PROXY_TARGET` in `frontend/.env` to match. (This project defaults to 8010 because 8000 was taken on the development machine.) |
 | Playwright: `Executable doesn't exist` | Browsers not installed | `npx playwright install chromium`. |

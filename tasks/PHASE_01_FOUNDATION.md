@@ -1,39 +1,41 @@
-# Phase 1 — Foundation
+# Phase 1 — Foundation  ✅ complete (2026-10-14)
 
 Goal: both apps start locally, talk to each other, and basic checks pass.
 
 ## Tasks
 ### Tooling
-- [ ] Root `package.json` with `db:start` (embedded PostgreSQL 17 on :54329, creates `anvika_dev` + `anvika_test`)
-- [ ] `docker-compose.yml` (db + mailpit) for Docker users (unverified locally)
-- [ ] `scripts/check.ps1` + `scripts/check.sh` (lint, types, tests for both apps)
-- [ ] `scripts/check-secrets.py` (simple regex scan for keys/passwords in tracked files)
+- [x] Root `package.json` with `db:start` (embedded PostgreSQL 17.10 on :54329, creates `anvika_dev` + `anvika_test`)
+- [x] `docker-compose.yml` (db + mailpit) for Docker users — **unverified locally (no Docker)**
+- [x] `scripts/check.ps1` + `scripts/check.sh` (docs, secrets, lint, types, migrations, tests, build)
+- [x] `scripts/check-secrets.py` (self-tested with planted secrets)
+- [x] `scripts/lock_python.py` (full Python lock files from `requirements*.in`)
 
 ### Backend
-- [ ] `backend/pyproject.toml` (ruff, mypy, pytest config) + pinned `requirements.txt` / `requirements-dev.txt`
-- [ ] `app/core/config.py` — Settings with production validation (secrets, simulator ban, secure cookies)
-- [ ] `app/core/db.py` — engine, session factory, `get_db`
-- [ ] `app/core/errors.py` — `AppError` hierarchy + handlers → standard error JSON (incl. validation errors)
-- [ ] `app/core/logging.py` — JSON/text logging, redaction, request id middleware
-- [ ] `app/core/security_headers.py` — security headers middleware
-- [ ] `app/core/csrf.py` — double-submit CSRF middleware
-- [ ] Body size limit middleware
-- [ ] `app/main.py` — app factory, CORS from settings, `/api/v1/health` (+ `?deep=1`), docs disabled in production
-- [ ] Alembic configured (naming convention, `env.py` reads settings); baseline migration
-- [ ] `app/cli.py` — command skeleton (`export-openapi`, `run-jobs` placeholder-free commands only)
-- [ ] pytest fixtures: test DB guard (`_test` suffix), schema reset + migrations, TestClient with CSRF helper
-- [ ] Tests: health, error format (404/422/500), CSRF rejection, security headers, settings validation
+- [x] `pyproject.toml` (ruff incl. bandit rules, mypy strict, pytest) + locked `requirements.txt` / `requirements-dev.txt`
+- [x] `app/core/config.py` — Settings with production validation (secrets, simulator ban, secure cookies, https origins, email backend)
+- [x] `app/core/db.py` — engine, session factory, `get_db`
+- [x] `app/core/errors.py` — `AppError` hierarchy + handlers → standard error JSON (incl. validation, 404, 500 without leaks)
+- [x] `app/core/logging.py` — text/JSON logging, redaction, request-context filter
+- [x] `app/core/middleware.py` — request id + access log, security headers, body size limit, CSRF (double-submit + Origin check)
+- [x] `app/main.py` — app factory, lifespan, CORS from settings, `/api/v1/health` (+ `?deep=true`), docs off in production
+- [x] Alembic configured (naming convention, settings-driven URL); first migration (store_settings, audit_logs, rate_limit_buckets + RLS)
+- [x] `app/cli.py` — command registry + `export-openapi`
+- [x] pytest fixtures: `_test` DB guard, schema rebuilt from migrations, per-test rollback, CSRF-aware client
+- [x] Tests: health, error format (404/409/422/500), CSRF (missing, mismatched, valid, foreign origin, webhook exemption), headers, request id, body limit, settings validation, money helpers
 
 ### Frontend
-- [ ] Vite + React 19 + TS 6.0 strict scaffold, `@/` alias, Vite proxy for `/api` `/media` `/sitemap.xml`
-- [ ] Tailwind v4 + token stub, fonts via @fontsource
-- [ ] ESLint (typescript-eslint, react-hooks, jsx-a11y) + Prettier
-- [ ] Router with layout, placeholder-free route shells for every route group, 404 page
-- [ ] API client (`openapi-fetch`) with CSRF header + one-time refresh retry; `gen:api` script
-- [ ] TanStack Query provider
-- [ ] Vitest + Testing Library setup with a first test; Playwright config with a smoke test
+- [x] Vite 8 + React 19 + TypeScript 5.9 strict (5.9 because openapi-typescript requires TS 5), `@/` alias, dev proxy
+- [x] Tailwind v4 design tokens + self-hosted fonts
+- [x] ESLint 10 (typescript-eslint strict-type-checked, react-hooks, jsx-a11y-x, bans `href="#"` and `parseFloat`) + Prettier
+- [x] Router (React Router 8 data mode) with root layout (skip link, focus on navigation), home, 404, route error page
+- [x] Typed API client (`openapi-fetch`) with CSRF header, one-time session refresh retry, `ApiError`; `gen:api` script
+- [x] TanStack Query provider with sensible retry policy
+- [x] Vitest + Testing Library setup with fetch mock helper; Playwright config (desktop + mobile) with smoke tests
 
-## Acceptance
-- `npm run db:start`, `alembic upgrade head`, `uvicorn` and `npm run dev` all run; the frontend shows the
-  backend health status in development.
-- `scripts/check` passes. Results recorded in TEST_RESULTS.md.
+## Environment notes discovered
+- Ports 8000 and 5173 are used by other software on the dev machine → project defaults are **API 8010**, **web 5180**.
+- npm 11 blocks dependency install scripts by default; not needed so far.
+
+## Acceptance — met
+`npm run db:start`, `alembic upgrade head`, `uvicorn` (:8010) and `npm run dev` (:5180) run; the home page shows
+"API connected"; `scripts/check.ps1` passes; Playwright smoke passes on desktop + mobile. See TEST_RESULTS.md.

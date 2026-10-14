@@ -9,7 +9,9 @@ description: Use when writing or reviewing code in frontend/ (React 19, Vite, Ty
 * React Router **8**: import from `react-router`; `RouterProvider` comes from `react-router/dom`.
   `react-router-dom` no longer exists. Data mode (`createBrowserRouter`), with route `lazy` for
   admin/account chunks.
-* TypeScript pinned to **6.0.x** (typescript-eslint does not support 7.x).
+* TypeScript pinned to **5.9.x** (openapi-typescript 7 requires TS 5; typescript-eslint supports < 6.1).
+* ESLint 10 with `eslint-plugin-jsx-a11y-x` (the original jsx-a11y plugin does not support ESLint 10).
+* Dev ports: web **5180**, API **8010** (5173/8000 are used by other software on the dev machine).
 * Tailwind v4 (`@tailwindcss/vite`, tokens in `src/styles/index.css` `@theme`).
 * Zod 4 + `@hookform/resolvers` 5.
 

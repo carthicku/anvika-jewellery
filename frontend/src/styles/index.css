@@ -1,0 +1,113 @@
+/*
+ * Design tokens — the single source of truth for colour, type, shape and depth.
+ * Documented (with measured contrast ratios) in docs/design/DESIGN_SYSTEM.md.
+ * Use the generated utilities (bg-ivory, text-ink, border-line, outline-focus …), never raw hex.
+ */
+@import 'tailwindcss';
+@import '@fontsource-variable/inter';
+@import '@fontsource/cormorant-garamond/500.css';
+@import '@fontsource/cormorant-garamond/600.css';
+@import '@fontsource/cormorant-garamond/500-italic.css';
+
+@theme {
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  --color-ivory: #faf7f2;
+  --color-surface: #ffffff;
+  --color-surface-muted: #f3eee6;
+  --color-ink: #1f1d1a;
+  --color-ink-muted: #5c574f;
+  --color-ink-subtle: #6f695f;
+  --color-line: #e6dfd3;
+  --color-line-strong: #8c8273;
+  --color-gold: #b08d57;
+  --color-focus: #9c7a45;
+  --color-gold-deep: #7e5f2f;
+  --color-gold-soft: #efe6d6;
+  --color-noir: #1a1815;
+  --color-noir-ink: #f4efe7;
+  --color-noir-muted: #b9b0a3;
+  --color-success: #2f6b4f;
+  --color-success-soft: #e6f0ea;
+  --color-warning: #8a5a12;
+  --color-warning-soft: #f6ecda;
+  --color-danger: #a23b32;
+  --color-danger-soft: #f7e5e2;
+  --color-info: #2e5a7a;
+  --color-info-soft: #e3edf4;
+
+  --font-sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
+
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 8px;
+
+  --shadow-soft: 0 1px 2px rgb(31 29 26 / 0.04), 0 4px 16px rgb(31 29 26 / 0.04);
+  --shadow-lift: 0 8px 30px rgb(31 29 26 / 0.08);
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --tracking-eyebrow: 0.18em;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 6rem; /* keep focused/anchored content clear of the sticky header */
+  }
+
+  body {
+    @apply bg-ivory font-sans text-base leading-relaxed text-ink antialiased;
+    font-feature-settings: 'cv11', 'ss01';
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+
+  /* Visible, consistent focus ring (3.7:1 against ivory) on every focusable element. */
+  :focus-visible {
+    outline: 2px solid var(--color-focus);
+    outline-offset: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-gold-soft);
+    color: var(--color-ink);
+  }
+
+  /* Inputs at 16px+ avoid iOS zoom on focus. */
+  input,
+  select,
+  textarea {
+    font-size: max(16px, 1em);
+  }
+}
+
+@layer utilities {
+  .eyebrow {
+    @apply text-xs font-medium tracking-(--tracking-eyebrow) text-ink-muted uppercase;
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

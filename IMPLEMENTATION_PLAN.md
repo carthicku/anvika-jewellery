@@ -50,6 +50,6 @@ risk of fake data shipping in the bundle. Sample content comes from the clearly-
 |------|-----------|
 | No Razorpay keys yet | REST client tested with mocked HTTP; simulator for e2e; the real sandbox test is a documented launch step |
 | No Docker | Embedded PostgreSQL 17 (verified working) |
-| Very new library versions (Vite 8, React Router 8, Vitest 5, TS 6) | Versions pinned; peer ranges checked; docs consulted for breaking changes |
+| Very new library versions (Vite 8, React Router 8, Vitest 5, ESLint 10) | Versions pinned; peer ranges checked; docs consulted for breaking changes |
 | Tax/legal uncertainty | Everything configurable; placeholders flagged; owner checklist |
 | Scope size | Strict phase order; each phase ends at a verified, committed checkpoint with resume notes |

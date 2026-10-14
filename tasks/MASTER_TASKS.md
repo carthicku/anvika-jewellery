@@ -7,9 +7,9 @@ Phase details are in the linked files. Milestones and acceptance criteria are in
 | Phase | File | Status |
 |-------|------|--------|
 | 0 Discovery & planning | (this file, §Phase 0) | ✅ complete |
-| 1 Foundation | [PHASE_01_FOUNDATION.md](PHASE_01_FOUNDATION.md) | ⬜ |
+| 1 Foundation | [PHASE_01_FOUNDATION.md](PHASE_01_FOUNDATION.md) | ✅ complete |
 | 2 Design system & storefront | [PHASE_02_DESIGN_SYSTEM.md](PHASE_02_DESIGN_SYSTEM.md) | ⬜ |
-| 3 Database-backed catalogue | [PHASE_03_CATALOGUE.md](PHASE_03_CATALOGUE.md) | ⬜ |
+| 3 Database-backed catalogue | [PHASE_03_CATALOGUE.md](PHASE_03_CATALOGUE.md) | 🟡 next |
 | 4 Auth & accounts | [PHASE_04_AUTH_AND_ACCOUNTS.md](PHASE_04_AUTH_AND_ACCOUNTS.md) | ⬜ |
 | 5 Cart & pricing | [PHASE_05_CART_AND_CHECKOUT.md](PHASE_05_CART_AND_CHECKOUT.md) | ⬜ |
 | 6 Checkout, payments & orders | [PHASE_06_PAYMENTS_AND_ORDERS.md](PHASE_06_PAYMENTS_AND_ORDERS.md) | ⬜ |
@@ -23,7 +23,7 @@ Phase details are in the linked files. Milestones and acceptance criteria are in
 ## Phase 0 — Discovery & planning
 - [x] Inspect the environment (Node 24.20, npm 11.19, Python 3.13.15, Git 2.56; no Docker/psql)
 - [x] Verify a local PostgreSQL option (embedded-postgres 17.10 works)
-- [x] Check current package versions & peer compatibility (TypeScript pinned to 6.0.x)
+- [x] Check current package versions & peer compatibility (TypeScript pinned to 5.9.x — see ADR-0009)
 - [x] Verify React Router 8 and Razorpay API facts against official sources
 - [x] Assumptions and decisions + ADRs 0001–0009
 - [x] Architecture docs (system, schema, ER, API, auth, pricing, payments, inventory, security)

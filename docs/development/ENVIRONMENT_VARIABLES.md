@@ -19,8 +19,8 @@
 | `DATABASE_URL` | ✅ | `postgresql+psycopg://postgres:postgres@127.0.0.1:54329/anvika_dev` | SQLAlchemy URL. For Supabase use the **session pooler** URI with the `postgresql+psycopg://` prefix and `?sslmode=require`. |
 | `TEST_DATABASE_URL` | tests | `postgresql+psycopg://postgres:postgres@127.0.0.1:54329/anvika_test` | Used by pytest only. **Its data is wiped by the test suite.** |
 | `DB_POOL_SIZE` / `DB_MAX_OVERFLOW` | | `5` / `5` | Connection pool sizing. Keep the total under the Supabase plan's connection limit. |
-| `PUBLIC_SITE_URL` | ✅ prod | `http://localhost:5173` | Canonical storefront URL used in emails, sitemap and links. |
-| `ALLOWED_ORIGINS` | ✅ prod | `http://localhost:5173` | Comma-separated origins allowed for CORS and the CSRF Origin check. |
+| `PUBLIC_SITE_URL` | ✅ prod | `http://localhost:5180` | Canonical storefront URL used in emails, sitemap and links. |
+| `ALLOWED_ORIGINS` | ✅ prod | `http://localhost:5180` | Comma-separated origins allowed for CORS and the CSRF Origin check. |
 | `COOKIE_SECURE` | | `false` (dev), forced `true` in prod | Adds the `Secure` flag to cookies. |
 | `COOKIE_DOMAIN` | | empty | Set to `.example.in` only if the API runs on a subdomain. |
 | `TRUSTED_PROXY_COUNT` | | `0` | Number of reverse proxies in front of the app; used to read the client IP from `X-Forwarded-For` safely. |
@@ -59,9 +59,9 @@ deploy.
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `VITE_STORE_NAME` | `Anvika` | Brand name used before `/settings/public` loads (header, titles). |
-| `VITE_SITE_URL` | `http://localhost:5173` | Canonical URL base for `<link rel="canonical">` and Open Graph. |
-| `VITE_API_BASE_URL` | `/api/v1` | API base. Keep relative (same origin) unless deploying the API on a subdomain. |
-| `VITE_API_PROXY_TARGET` | `http://127.0.0.1:8000` | Dev server only: where Vite proxies `/api`, `/media` and `/sitemap.xml`. |
+| `VITE_SITE_URL` | `http://localhost:5180` | Canonical URL base for `<link rel="canonical">` and Open Graph. |
+| `VITE_API_ORIGIN` | empty | Origin of the API (e.g. `https://api.example.in`). Leave empty so requests go to the same origin (`/api/v1/...`), which is the recommended deployment. |
+| `VITE_API_PROXY_TARGET` | `http://127.0.0.1:8010` | Dev server only: where Vite proxies `/api`, `/media` and `/sitemap.xml`. |
 
 The Razorpay **key id** is not configured in the frontend. The backend returns it with each payment
 request, so test and live keys are switched in one place.

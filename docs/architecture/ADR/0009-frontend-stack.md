@@ -4,8 +4,9 @@
 - Date: 2026-10-14
 
 ## Decision
-- React 19 + Vite 8 + TypeScript 6.0 (strict). TypeScript 7 is avoided until typescript-eslint
-  supports it.
+- React 19 + Vite 8 + TypeScript 5.9 (strict). openapi-typescript 7 requires TypeScript 5 and
+  typescript-eslint supports < 6.1, so TS 6/7 are avoided until the tooling catches up. ESLint 10 with
+  `eslint-plugin-jsx-a11y-x` (maintained fork; the original plugin does not support ESLint 10).
 - React Router 8 in data mode (`createBrowserRouter` from `react-router`, `RouterProvider` from
   `react-router/dom`; `react-router-dom` no longer exists in v8).
 - Tailwind CSS v4; design tokens in `frontend/src/styles/index.css` under `@theme`.

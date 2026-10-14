@@ -116,7 +116,7 @@ checkout, so correctness never depends on the loop running on time.
 
 | Environment | Frontend | Backend | Database | Payments | Email |
 |-------------|----------|---------|----------|----------|-------|
-| development | `vite` dev server :5173 (proxies `/api`) | `uvicorn --reload` :8000 | embedded PostgreSQL :54329 `anvika_dev` | simulator or Razorpay test keys | file sink |
+| development | `vite` dev server :5180 (proxies `/api`) | `uvicorn --reload` :8010 | embedded PostgreSQL :54329 `anvika_dev` | simulator or Razorpay test keys | file sink |
 | test (automated) | Vitest / Playwright | TestClient / uvicorn | `anvika_test` | simulator + mocked Razorpay | in-memory |
 | production | static build behind CDN/reverse proxy | container (uvicorn workers) | Supabase PostgreSQL 17 | Razorpay live keys | SMTP |
 

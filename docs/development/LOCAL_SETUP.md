@@ -58,17 +58,17 @@ cd backend
 ## 5. Run the backend (terminal 2)
 ```bash
 cd backend
-.venv/Scripts/python -m uvicorn app.main:app --reload --port 8000
+.venv/Scripts/python -m uvicorn app.main:app --reload --port 8010
 ```
-* Health check: http://127.0.0.1:8000/api/v1/health
-* API docs (development only): http://127.0.0.1:8000/api/docs
+* Health check: http://127.0.0.1:8010/api/v1/health
+* API docs (development only): http://127.0.0.1:8010/api/docs
 
 ## 6. Run the frontend (terminal 3)
 ```bash
 cd frontend
 npm run dev
 ```
-Open http://localhost:5173. The Vite dev server forwards `/api/*` and `/media/*` to the backend, so
+Open http://localhost:5180. The Vite dev server forwards `/api/*` and `/media/*` to the backend, so
 cookies work without CORS.
 
 ## 7. Everyday commands

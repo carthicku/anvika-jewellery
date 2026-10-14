@@ -61,11 +61,11 @@ scripts/    localdb.mjs (embedded PostgreSQL), check.ps1/check.sh, check-secrets
 | Migrate | `.venv/Scripts/python -m alembic upgrade head` (backend) |
 | Seed sample data | `.venv/Scripts/python -m app.cli seed` (backend) |
 | Create the first admin | `.venv/Scripts/python -m app.cli create-admin --email … --name …` (backend) |
-| Run the API | `.venv/Scripts/python -m uvicorn app.main:app --reload --port 8000` (backend) |
+| Run the API | `.venv/Scripts/python -m uvicorn app.main:app --reload --port 8010` (backend) |
 | Backend tests | `.venv/Scripts/python -m pytest -q` (backend; DB must be running) |
 | Lint / types (backend) | `.venv/Scripts/python -m ruff check . && .venv/Scripts/python -m mypy app` |
 | Export the API contract | `.venv/Scripts/python -m app.cli export-openapi` (backend) |
-| Frontend dev | `npm run dev` (frontend) → http://localhost:5173 |
+| Frontend dev | `npm run dev` (frontend) → http://localhost:5180 |
 | Generate API types | `npm run gen:api` (frontend) |
 | Frontend checks | `npm run typecheck && npm run lint && npm test` (frontend) |
 | E2E | `npm run e2e` (frontend; backend running with the simulator) |
@@ -73,7 +73,8 @@ scripts/    localdb.mjs (embedded PostgreSQL), check.ps1/check.sh, check-secrets
 | Docs/skills consistency | `py -3.13 scripts/check_docs.py` (root) |
 
 Environment notes: use `py -3.13` (the Python 3.12 install on this machine is broken). Docker is not
-installed. Node 24, TypeScript pinned to 6.0.x, React Router 8 (`react-router` + `react-router/dom`).
+installed. Node 24, TypeScript pinned to 5.9.x, ESLint 10, React Router 8 (`react-router` + `react-router/dom`).
+Dev ports: web **5180**, API **8010** (5173 and 8000 are used by other projects on this machine).
 
 ## Documentation index
 * Status & plan: `PROJECT_STATUS.md`, `IMPLEMENTATION_PLAN.md`, `tasks/`, `CHANGELOG.md`
