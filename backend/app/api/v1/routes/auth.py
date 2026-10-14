@@ -21,6 +21,7 @@ from app.core.config import Settings
 from app.core.cookies import (
     REFRESH_COOKIE,
     clear_auth_cookies,
+    clear_cookie,
     issue_csrf_cookie,
     set_auth_cookies,
 )
@@ -40,8 +41,10 @@ from app.schemas.account import (
 )
 from app.schemas.common import OkOut
 from app.services import account, auth
+from app.services import cart as cart_service
 from app.services import email as email_service
 from app.services.auth import RequestMeta
+from app.services.cart import CART_COOKIE
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -100,7 +103,9 @@ def register(
         phone=data.phone,
         meta=meta,
     )
+    cart_service.merge_guest_cart(db, request.cookies.get(CART_COOKIE), user)
     db.commit()
+    clear_cookie(response, settings, CART_COOKIE, path="/api")
     set_auth_cookies(
         response, settings, access_token=issued.access_token, refresh_token=issued.refresh_token
     )
@@ -115,13 +120,16 @@ def register(
 )
 def login(
     data: LoginIn,
+    request: Request,
     response: Response,
     db: Session = Depends(get_db),
     settings: Settings = Depends(get_app_settings),
     meta: RequestMeta = Depends(get_request_meta),
 ) -> MeOut:
     user, issued = auth.login(db, settings, email=data.email, password=data.password, meta=meta)
+    cart_service.merge_guest_cart(db, request.cookies.get(CART_COOKIE), user)
     db.commit()
+    clear_cookie(response, settings, CART_COOKIE, path="/api")
     set_auth_cookies(
         response, settings, access_token=issued.access_token, refresh_token=issued.refresh_token
     )

@@ -31,3 +31,20 @@ def test_round_to_rupee(raw: str, expected: str) -> None:
 def test_to_paise() -> None:
     assert to_paise(Decimal("32301.00")) == 3230100
     assert to_paise(Decimal("0.01")) == 1
+
+
+@pytest.mark.parametrize(
+    ("raw", "expected"),
+    [
+        ("105150.33", "₹1,05,150.33"),
+        ("13287.00", "₹13,287"),
+        ("999", "₹999"),
+        ("1000", "₹1,000"),
+        ("12345678.9", "₹1,23,45,678.90"),
+        ("-191.40", "-₹191.40"),
+    ],
+)
+def test_format_inr_uses_indian_grouping(raw: str, expected: str) -> None:
+    from app.core.money import format_inr
+
+    assert format_inr(Decimal(raw)) == expected

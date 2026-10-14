@@ -18,6 +18,7 @@ from app.models import (
     Collection,
     CollectionProduct,
     ContentPage,
+    Coupon,
     Discount,
     GoldRate,
     Product,
@@ -211,6 +212,26 @@ def seed_discount(db: Session, collections: dict[str, Collection]) -> None:
     db.flush()
 
 
+def seed_coupons(db: Session) -> None:
+    now = utcnow()
+    for spec in data.SAMPLE_COUPONS:
+        coupon = db.scalar(select(Coupon).where(Coupon.code == spec["code"]))
+        if coupon is None:
+            coupon = Coupon(code=spec["code"])
+            db.add(coupon)
+        coupon.description = spec["description"]
+        coupon.kind = spec["kind"]
+        coupon.value = spec["value"]
+        coupon.max_discount_amount = spec["max_discount_amount"]
+        coupon.min_order_amount = spec["min_order_amount"]
+        coupon.usage_limit_per_customer = spec["usage_limit_per_customer"]
+        coupon.starts_at = now - timedelta(days=30)
+        coupon.ends_at = now - timedelta(days=1) if spec["expired"] else None
+        coupon.is_active = True
+        coupon.is_sample = True
+    db.flush()
+
+
 def seed_content(db: Session) -> None:
     for page_data in PAGES:
         slug = str(page_data["slug"])
@@ -243,6 +264,7 @@ def run_seed(db: Session) -> dict[str, int]:
     seed_gold_rates(db)
     seed_shipping(db)
     seed_discount(db, collections)
+    seed_coupons(db)
     seed_content(db)
     seed_settings(db)
     db.flush()

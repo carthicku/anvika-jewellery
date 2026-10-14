@@ -2,6 +2,7 @@
 (Alembic autogenerate and the test fixtures rely on that)."""
 
 from app.models.base import Base
+from app.models.cart import Cart, CartItem, Coupon, CouponRedemption
 from app.models.catalogue import (
     Category,
     Collection,
@@ -23,11 +24,15 @@ __all__ = [
     "Address",
     "AuditLog",
     "Base",
+    "Cart",
+    "CartItem",
     "Category",
     "Collection",
     "CollectionProduct",
     "ContactEnquiry",
     "ContentPage",
+    "Coupon",
+    "CouponRedemption",
     "Discount",
     "EmailOutbox",
     "GoldRate",

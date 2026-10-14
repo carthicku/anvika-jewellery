@@ -33,6 +33,12 @@ def stock_status(level: InventoryLevel | None) -> StockStatus:
     return "in_stock"
 
 
+def stock_status_for(available: int, low_stock_threshold: int = 2) -> StockStatus:
+    if available <= 0:
+        return "out_of_stock"
+    return "low_stock" if available <= low_stock_threshold else "in_stock"
+
+
 def set_initial_stock(
     db: Session,
     variant_id: uuid.UUID,

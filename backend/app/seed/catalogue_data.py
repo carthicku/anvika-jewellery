@@ -8,6 +8,7 @@ from __future__ import annotations
 
 from dataclasses import dataclass, field
 from decimal import Decimal as D
+from typing import Any
 
 CATEGORIES = [
     # slug, name, description, illustration
@@ -843,3 +844,27 @@ SAMPLE_DISCOUNT = {
     "scope": "collection",
     "collection_slug": "everyday-gold",
 }
+
+# Sample coupons (flagged is_sample) for exercising the coupon flows in development.
+SAMPLE_COUPONS: list[dict[str, Any]] = [
+    {
+        "code": "WELCOME5",
+        "description": "5% off your order (sample coupon)",
+        "kind": "percent",
+        "value": D("5"),
+        "max_discount_amount": D("2500.00"),
+        "min_order_amount": D("10000.00"),
+        "usage_limit_per_customer": 1,
+        "expired": False,
+    },
+    {
+        "code": "EXPIRED10",
+        "description": "Expired sample coupon, for testing error messages",
+        "kind": "percent",
+        "value": D("10"),
+        "max_discount_amount": None,
+        "min_order_amount": None,
+        "usage_limit_per_customer": None,
+        "expired": True,
+    },
+]

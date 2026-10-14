@@ -17,8 +17,7 @@
   category/collection listings (URL-driven filters, sort, pagination), search, product page (gallery,
   sizes, itemised breakdown with gold rate, PIN-code delivery check, specs, related, recently viewed),
   guest wishlist, contact form and nine editable content pages. Route-level code splitting (initial JS
-  150 kB gzip).
-
+  150 kB gzip; 93 kB after Phase 4 splitting).
 * **Accounts (Phase 4)**: register / sign in / sign out (one device or all), email verification,
   password reset and change, signed-in device list, profile, address book (Indian PIN/state/mobile
   validation), account wishlist with guest merge; HttpOnly cookie sessions with rotating refresh
@@ -54,7 +53,7 @@ Phase 5: carts (guest cookie + account, merge at sign-in), cart API with backend
 price-change detection/acceptance, quantity stepper, cart page, add-to-cart / buy-now on product pages.
 
 ## How to resume
-1. Read `CLAUDE.md`, this file, `tasks/PHASE_04_AUTH_AND_ACCOUNTS.md`.
+1. Read `CLAUDE.md`, this file, `tasks/PHASE_05_CART_AND_CHECKOUT.md`.
 2. Terminal 1: `npm run db:start` (repo root).
 3. Terminal 2: `cd backend && .venv/Scripts/python -m uvicorn app.main:app --reload --port 8010`
    (for `npm run e2e`, start it with `RATE_LIMIT_ENABLED=false` — see docs/development/TESTING.md).
