@@ -1,9 +1,9 @@
 # Project Status
 
 **Last updated:** 2026-10-14
-**Current phase:** Phase 5 — Cart and pricing (next)
-**Last verified checkpoint:** Phase 4 — authentication and customer accounts
-(`scripts/check.ps1` all green; 168 backend tests, 33 frontend tests, 30 E2E runs ×3, axe clean)
+**Current phase:** Phase 6 — Checkout, payments and orders (next)
+**Last verified checkpoint:** Phase 5 — cart and pricing
+(`scripts/check.ps1` all green; 190 backend tests, 39 frontend tests, 34 E2E runs ×2, axe clean)
 
 ## What exists
 * Planning documentation, ADRs 0001–0009, task tracker, `CLAUDE.md`, 11 skills.
@@ -24,6 +24,10 @@
   tokens; email outbox (development emails are written to `backend/var/mail/`); role→permission map
   and admin-route guard; `create-admin` and `deactivate-user` CLI commands.
 
+* **Cart (Phase 5)**: guest and account carts (merged at sign-in), backend-priced lines and summary
+  with estimated shipping, coupons, price-increase acceptance, stock/quantity limits; add to cart and
+  buy now on product pages.
+
 ## What works (verified — see docs/quality/TEST_RESULTS.md)
 | Item | Evidence |
 |------|----------|
@@ -34,11 +38,12 @@
 | Storefront journeys (browse → filter → product → size → delivery → wishlist; search) | `e2e/browse.spec.ts` on desktop + mobile |
 | Accessibility | axe: 0 serious/critical issues on 7 pages; keyboard flow test |
 | Accounts & access control | `tests/api/test_auth.py`, `test_account.py`, `test_permissions.py`, `e2e/account.spec.ts` |
-| No sideways scrolling on phones | `e2e/smoke.spec.ts` (10 routes) |
+| No sideways scrolling on phones | `e2e/smoke.spec.ts` (11 routes), `e2e/cart.spec.ts` |
+| Cart, coupons, price-change rules | `tests/api/test_cart.py`, `cart.test.tsx`, `e2e/cart.spec.ts` |
 
 ## Not yet built
-Cart & checkout (Phases 5–6), payments/orders (Phase 6), admin UI (Phase 7), launch prep (Phase 8).
-Product pages currently show "Online ordering opens in a later release".
+Checkout, payments and orders (Phase 6), admin UI (Phase 7), launch prep (Phase 8). The cart's
+"Proceed to checkout" button is disabled with an explanation until Phase 6.
 
 ## Local ports
 Web **5180**, API **8010**, PostgreSQL **54329** (5173 and 8000 are used by other projects here).
@@ -48,12 +53,13 @@ Nothing blocks development. Needed before launch: brand details, Razorpay test k
 project, SMTP provider, CA review of GST, legal review of policies (ASSUMPTIONS §5).
 
 ## Next step
-Phase 5: carts (guest cookie + account, merge at sign-in), cart API with backend-calculated totals
-(the pricing engine already supports discounts, coupons, GST and rounding), coupons table + seed,
-price-change detection/acceptance, quantity stepper, cart page, add-to-cart / buy-now on product pages.
+Phase 6: orders, order items (immutable snapshots), reservations, payment attempts/events, refunds,
+shipments; idempotent order creation with stock reservation and expected-total check; Razorpay REST
+client + development simulator; signature verification, webhooks, retries, expiry/reconciliation
+jobs; checkout page, simulated payment dialog, order confirmation and order history.
 
 ## How to resume
-1. Read `CLAUDE.md`, this file, `tasks/PHASE_05_CART_AND_CHECKOUT.md`.
+1. Read `CLAUDE.md`, this file, `tasks/PHASE_06_PAYMENTS_AND_ORDERS.md`.
 2. Terminal 1: `npm run db:start` (repo root).
 3. Terminal 2: `cd backend && .venv/Scripts/python -m uvicorn app.main:app --reload --port 8010`
    (for `npm run e2e`, start it with `RATE_LIMIT_ENABLED=false` — see docs/development/TESTING.md).

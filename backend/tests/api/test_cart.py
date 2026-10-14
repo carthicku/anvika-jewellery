@@ -177,6 +177,9 @@ def test_valid_coupon_applies_with_cap(client: TestClient, db: Session) -> None:
     body = client.post(f"{API}/coupon", json={"code": "welcome5"}).json()
     assert body["coupon"] == {"code": "WELCOME5", "applied": True, "message": "You save ₹2,500."}
     assert body["totals"]["coupon_discount"] == "2500.00"
+    # Line totals stay "price each × quantity"; the coupon is shown once in the summary.
+    line = body["lines"][0]
+    assert line["line_total"] == line["unit_price"]
     removed = client.delete(f"{API}/coupon").json()
     assert removed["coupon"] is None and removed["totals"]["coupon_discount"] == "0.00"
 

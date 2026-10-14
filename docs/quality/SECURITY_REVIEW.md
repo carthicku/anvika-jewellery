@@ -17,7 +17,7 @@ Scope: architecture documents only (no code yet).
 ## Control verification status
 | Control (SECURITY_MODEL #) | Status | Evidence |
 |----------------------------|--------|----------|
-| 1 Server-side pricing | ⬜ Not yet verified | |
+| 1 Server-side pricing | ✅ cart (checkout pending) | `test_browser_supplied_prices_are_rejected` (unknown `unit_price` field → 422); cart responses always re-priced; component test asserts no price is sent |
 | 2 Payment verification | ⬜ | |
 | 3 Webhook HMAC + idempotency | ⬜ | |
 | 4 Overselling protection | ⬜ | |

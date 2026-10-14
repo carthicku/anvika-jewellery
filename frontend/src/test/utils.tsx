@@ -20,6 +20,17 @@ const DEFAULTS: Record<string, Handler> = {
   'GET /api/v1/settings/public': { body: settings },
   'GET /api/v1/categories': { body: home.categories },
   'GET /api/v1/auth/me': { body: { user: null } },
+  'GET /api/v1/cart': {
+    body: {
+      lines: [],
+      item_count: 0,
+      totals: null,
+      coupon: null,
+      can_checkout: false,
+      blocking_issues: [],
+      notices: [],
+    },
+  },
   // Like the backend: issue the CSRF cookie that unsafe requests echo back in a header.
   'GET /api/v1/auth/csrf': () => {
     document.cookie = 'csrf_token=test-csrf; path=/';

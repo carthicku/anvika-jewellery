@@ -1,19 +1,29 @@
-# Phase 5 — Cart and Pricing
+# Phase 5 — Cart and Pricing  ✅ complete (2026-10-14)
 
 Goal: reliable, backend-calculated cart totals with transparent price changes.
 
 ## Tasks
-- [ ] Models + migration: carts, cart_items, coupons, coupon_redemptions
-- [ ] Pricing engine: automatic discounts (best per line), coupons (percent with cap / flat, min order,
+- [x] Models + migration: carts, cart_items, coupons, coupon_redemptions
+- [x] Pricing engine: automatic discounts (best per line), coupons (percent with cap / flat, min order,
       validity window, limits), coupon allocation (largest remainder), per-component tax, rounding to rupee
-- [ ] Pricing context loader (rates, tax settings, discounts) + `gold_rate_stale` handling
-- [ ] Cart service: guest cookie token (hashed), add/update/remove with stock + quantity limits,
+- [x] Pricing context loader (rates, tax settings, discounts) + `gold_rate_stale` handling
+- [x] Cart service: guest cookie token (hashed), add/update/remove with stock + quantity limits,
       merge on login, price-change detection (increase blocks, decrease auto-applies), accept-prices
-- [ ] Cart API + coupon endpoints
-- [ ] Shipping quote (methods, free-above, zones, estimated delivery)
-- [ ] Frontend: cart page (lines, stepper, remove, coupon, summary, notices), header cart count, add to
+- [x] Cart API + coupon endpoints
+- [x] Shipping quote (methods, free-above, zones, estimated delivery)
+- [x] Frontend: cart page (lines, stepper, remove, coupon, summary, notices), header cart count, add to
       cart / buy now on PDP, PIN-code checker
-- [ ] Tests: pricing unit tests (full TEST_PLAN list), cart API, coupon errors, price-change scenarios
+- [x] Tests: pricing unit tests (full TEST_PLAN list), cart API, coupon errors, price-change scenarios
 
 ## Acceptance
 J1 passes; J7 (cart part) passes; no price arithmetic in the frontend.
+
+Notes:
+- The pricing engine (discounts, coupons, GST, rounding) and the PIN-code check were already built in
+  Phase 3; this phase connected them to carts.
+- "Proceed to checkout" is shown but disabled with an explanation until checkout ships in Phase 6;
+  "Buy now" adds to the cart and opens it.
+- J7 (gold-rate change → cart) is covered by API tests; an end-to-end version needs the admin
+  gold-rate screen (Phase 7).
+- Defects found and fixed: cart overflowed sideways on phones; line totals included the coupon share
+  (looked like a pricing error) — now price each × quantity.

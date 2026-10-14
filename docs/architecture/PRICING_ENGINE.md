@@ -118,6 +118,16 @@ This exact case is a unit test (`test_worked_example_from_docs`).
    affect that order. If payment does not complete within the payment window (default 30 min),
    the order expires and a new checkout uses new prices.
 
+### Cart display
+* Each cart line shows `unit_price` (one piece, incl. GST, after its automatic discount) and
+  `line_total` = `unit_price × quantity`. The coupon is shown once, in the order summary, so line
+  totals never look "wrong" to the customer; the summary rows (from `price_order`) are the
+  authoritative totals.
+* The cart includes an **estimated** shipping fee using the first active shipping method; the actual
+  method is chosen at checkout.
+* Guest carts merge into the customer's cart at sign-in (quantities combined up to 10 per line, the
+  higher accepted price kept, so a change is still surfaced).
+
 ## 7. Gold rate administration
 * Rates are **append-only**. A new rate row with an `effective_from` takes over from that moment,
   and history is preserved for audits.

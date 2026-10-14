@@ -23,6 +23,7 @@ owner. Keep it current. Each item states its impact and the plan.
   pre-rendering or an edge function to be fully reliable.
 
 ## Technical
+* Until Phase 6, "Proceed to checkout" is visible but disabled with an explanation.
 * Admin TOTP MFA: planned for Phase 7, not yet implemented.
 * Registration reveals whether an email already has an account (`EMAIL_IN_USE`) — a usability
   trade-off mitigated by rate limiting. Passwords are not checked against breached-password lists.

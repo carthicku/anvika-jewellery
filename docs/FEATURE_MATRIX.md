@@ -25,10 +25,10 @@ the test listed**. Update this file whenever a feature changes state.
 | Accounts | Security: change password, sessions | `/account/security` | 4 | ✅ | `test_change_password_keeps_current_session_only`, `test_list_and_revoke_sessions`, `test_logout_all` |
 | Accounts | Order history & detail with timeline | `/account/orders` | 6 | ⬜ | |
 | Wishlist | Guest (browser) + signed-in + merge | `/wishlist`, `/account/wishlist` | 2/4 | ✅ | `test_wishlist_add_remove_and_merge`, `test_wishlists_are_private`, `account.test.tsx` (merge on sign-in, server save), `e2e/browse.spec.ts` |
-| Cart | Server cart, guest cookie, merge on login | `/cart` | 5 | ⬜ | |
+| Cart | Server cart, guest cookie, merge on login | `/cart` | 5 | ✅ | `tests/api/test_cart.py` (17), `cart.test.tsx`, `e2e/cart.spec.ts` |
 | Pricing | Engine (fixed, weight-based, making, wastage, stones, tax, rounding) | service | 3 | ✅ | `tests/unit/test_pricing.py` (37 tests incl. worked example) |
-| Pricing | Automatic discounts + coupons | `/cart/coupon` | 5 | ⬜ | |
-| Pricing | Price-change acceptance | `/cart/accept-prices` | 5 | ⬜ | |
+| Pricing | Automatic discounts + coupons | `/cart/coupon` | 5 | ✅ | `test_pricing.py`, `test_valid_coupon_applies_with_cap`, `test_invalid_coupons_explain_why`, `test_coupon_below_minimum_is_kept_but_not_applied`, `e2e/cart.spec.ts` |
+| Pricing | Price-change acceptance | `/cart/accept-prices` | 5 | ✅ | `test_price_increase_blocks_checkout_until_accepted`, `test_price_decrease_is_good_news_and_does_not_block`, `cart.test.tsx` |
 | Checkout | Quote, address, shipping, terms, idempotent order creation | `/checkout` | 6 | ⬜ | |
 | Payments | Razorpay order + verify + fetch | `/payments/verify` | 6 | ⬜ | |
 | Payments | Webhooks (idempotent) | `/webhooks/razorpay` | 6 | ⬜ | |

@@ -55,6 +55,7 @@ test('no page scrolls sideways on a phone', async ({ page, isMobile }) => {
     '/gold-buying-guide',
     '/login',
     '/register',
+    '/cart',
   ]) {
     await page.goto(route);
     await expect(page.getByRole('heading', { level: 1 }), route).toBeVisible();

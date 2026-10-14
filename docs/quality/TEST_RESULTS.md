@@ -73,3 +73,14 @@ first load; focus lost after closing header dialogs; JSON-LD `<` escaping.
 
 New E2E coverage: J2 account journey (register → addresses add/edit/delete → sign out → sign in),
 wrong-password message, and "no page scrolls sideways on a phone" for 10 routes.
+
+### 2026-10-14 — Phase 5 checkpoint (cart & pricing)
+| Suite | Command | Result |
+|-------|---------|--------|
+| Full static + unit/API + build | `powershell -File scripts/check.ps1` | All checks passed (initial JS 94 kB gzip) |
+| Backend | `pytest -q` | 190 passed (17 cart API tests added; 6 rupee-format tests) |
+| Frontend unit | `vitest run` | 39 passed (5 files) |
+| End-to-end | `playwright test` ×2 (desktop + mobile, rate limits off) | 34 passed each run |
+
+New E2E coverage: cart journey (one-of-a-kind quantity limit, add two pieces, change quantity,
+WELCOME5 coupon with cap, remove line, no sideways scrolling with items) and expired-coupon message.

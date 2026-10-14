@@ -3,6 +3,7 @@ import type { ProductQuery } from './queries/catalogue';
 
 export const queryKeys = {
   me: ['me'] as const,
+  cart: ['cart'] as const,
   sessions: ['account', 'sessions'] as const,
   addresses: ['account', 'addresses'] as const,
   wishlist: ['wishlist'] as const,

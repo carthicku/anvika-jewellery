@@ -1,8 +1,9 @@
-import { Heart, Menu, Search, UserRound } from 'lucide-react';
+import { Heart, Menu, Search, ShoppingBag, UserRound } from 'lucide-react';
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router';
 
 import { useMe } from '@/api/queries/account';
+import { useCart } from '@/api/queries/cart';
 import { useCategories, usePublicSettings } from '@/api/queries/catalogue';
 import { useWishlist } from '@/api/queries/wishlist';
 import { IconButton } from '@/components/ui/Button';
@@ -62,6 +63,33 @@ function AccountLink() {
       title={signedIn ? 'My account' : 'Sign in'}
     >
       <UserRound className="size-5" strokeWidth={1.5} aria-hidden="true" />
+    </Link>
+  );
+}
+
+function CartLink() {
+  const cart = useCart();
+  const count = cart.data?.item_count ?? 0;
+  return (
+    <Link
+      to="/cart"
+      className="relative inline-flex size-11 items-center justify-center rounded-sm hover:bg-surface-muted"
+      aria-label={count ? `Cart, ${count} ${count === 1 ? 'item' : 'items'}` : 'Cart'}
+      title="Cart"
+    >
+      <ShoppingBag className="size-5" strokeWidth={1.5} aria-hidden="true" />
+      {count > 0 && (
+        <span
+          aria-hidden="true"
+          className="tabular absolute top-1.5 right-1 flex size-4 items-center justify-center rounded-full bg-ink text-[10px] text-ivory"
+        >
+          {count > 9 ? '9+' : count}
+        </span>
+      )}
+      {/* Announce changes to the cart count to screen-reader users. */}
+      <span className="sr-only" aria-live="polite">
+        {cart.isFetched ? `${count} ${count === 1 ? 'item' : 'items'} in cart` : ''}
+      </span>
     </Link>
   );
 }
@@ -139,6 +167,7 @@ export function SiteHeader() {
           </IconButton>
           <AccountLink />
           <WishlistLink />
+          <CartLink />
         </div>
       </Container>
 

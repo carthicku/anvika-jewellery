@@ -25,6 +25,7 @@ function useAfterAuthChange() {
     client.setQueryData(queryKeys.me, user);
     // Anything personalised must be refetched for the new identity.
     void client.invalidateQueries({ queryKey: queryKeys.wishlist });
+    void client.invalidateQueries({ queryKey: queryKeys.cart });
     void client.invalidateQueries({ queryKey: ['account'] });
   };
 }
@@ -70,6 +71,7 @@ export function useLogout() {
       client.setQueryData(queryKeys.me, null);
       client.removeQueries({ queryKey: ['account'] });
       client.removeQueries({ queryKey: queryKeys.wishlist });
+      void client.invalidateQueries({ queryKey: queryKeys.cart });
     },
   });
 }

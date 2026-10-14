@@ -94,11 +94,11 @@ Legend: 🌐 public · 👤 signed-in customer · 🔑 staff/admin (permission i
 | GET | `/shipping/pincode/{pincode}` | 🌐 (rate-limited) | Serviceability, methods, estimated delivery range |
 
 ### Cart — `/cart` (guest cookie or signed-in)
-| GET | `/cart` | 🌐 | Cart with backend-calculated totals, per-line `price_changed` / `stock_issue` flags |
-| POST | `/cart/items` | 🌐 | `{variant_id, quantity}` |
+| GET | `/cart` | 🌐 | Cart with backend-calculated totals (incl. estimated shipping), per-line `price_change` (`increased`/`decreased`) and `issue` (`unavailable`, `price_unavailable`, `out_of_stock`, `insufficient_stock`), `can_checkout`, `blocking_issues`, `notices` |
+| POST | `/cart/items` | 🌐 | `{variant_id, quantity}` — creates the guest cart and its HttpOnly `cart_token` cookie on first use; `409 OUT_OF_STOCK` (with `available`), `QUANTITY_LIMIT`, `PRICE_UNAVAILABLE` |
 | PATCH | `/cart/items/{id}` | 🌐 (own cart) | `{quantity}` |
 | DELETE | `/cart/items/{id}` | 🌐 (own cart) | Remove line |
-| POST | `/cart/coupon` / DELETE `/cart/coupon` | 🌐 | Apply / remove coupon |
+| POST | `/cart/coupon` / DELETE `/cart/coupon` | 🌐 | Apply / remove coupon (`422 COUPON_NOT_FOUND`, `COUPON_NOT_STARTED`, `COUPON_EXPIRED`, `COUPON_USAGE_LIMIT`; minimum-order shortfalls keep the code with `applied=false` and a message) |
 | POST | `/cart/accept-prices` | 🌐 | Customer accepts current prices |
 
 ### Wishlist — `/wishlist`

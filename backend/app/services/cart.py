@@ -349,7 +349,11 @@ def cart_view(db: Session, cart: Cart | None, user: User | None) -> CartOut:
                 unit_price=line.unit.total if line.unit else None,
                 accepted_unit_price=line.item.accepted_unit_price,
                 price_change=line.price_change,
-                line_total=priced_line.total if priced_line else None,
+                # Before the order-level coupon (shown once in the summary), so line totals
+                # always equal "price each × quantity" for the customer.
+                line_total=line.unit.total * line.item.quantity
+                if priced_line and line.unit
+                else None,
                 issue=line.issue,
             )
         )

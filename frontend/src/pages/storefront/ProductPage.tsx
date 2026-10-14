@@ -1,4 +1,3 @@
-import { Info } from 'lucide-react';
 import { useEffect, useMemo, useState } from 'react';
 import { Link, useParams } from 'react-router';
 
@@ -6,6 +5,7 @@ import { ApiError } from '@/api/client';
 import { useProduct, useProducts, useRelated } from '@/api/queries/catalogue';
 import type { ProductDetail } from '@/api/types';
 import { Breadcrumbs, Container, PageMeta } from '@/components/layout/Page';
+import { AddToCart } from '@/components/product/AddToCart';
 import { ProductGrid } from '@/components/product/ProductCard';
 import {
   PincodeChecker,
@@ -101,7 +101,7 @@ function ProductView({ product }: { product: ProductDetail }) {
         image={product.images[0]?.url}
       />
       <ProductJsonLd product={product} variant={variant} url={`${env.siteUrl}${path}`} />
-      <Container className="pt-6 pb-16">
+      <Container className="pt-6 pb-32 lg:pb-16">
         <Breadcrumbs items={crumbs} />
         <div className="mt-6 grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
           <ProductGallery images={product.images} name={product.name} />
@@ -139,14 +139,15 @@ function ProductView({ product }: { product: ProductDetail }) {
                 status={variant.stock_status}
                 quantity={variant.available_quantity}
               />
-              <div className="flex flex-wrap gap-3">
-                <WishlistButton slug={product.slug} name={product.name} variant="full" />
+              <div className="space-y-3">
+                <AddToCart key={variant.id} product={product} variant={variant} />
+                <WishlistButton
+                  slug={product.slug}
+                  name={product.name}
+                  variant="full"
+                  className="w-full"
+                />
               </div>
-              <p className="flex items-start gap-2 text-xs text-ink-muted">
-                <Info className="mt-0.5 size-3.5 shrink-0" aria-hidden="true" />
-                Online ordering opens in a later release of this store. Save pieces to your wishlist
-                in the meantime.
-              </p>
             </div>
 
             <div className="mt-8 rounded-md border border-line bg-surface p-5">

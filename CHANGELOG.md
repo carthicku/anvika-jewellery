@@ -5,6 +5,10 @@ All notable changes to this project. Format based on [Keep a Changelog](https://
 ## [Unreleased]
 
 ### Added
+- Phase 5: shopping cart for guests and customers (merged at sign-in) with backend-calculated
+  totals, quantity limits by stock, price-increase acceptance, price-drop notices, coupons
+  (WELCOME5/EXPIRED10 samples), estimated shipping; add to cart / buy now on product pages with a
+  sticky mobile bar; header cart count announced to screen readers.
 - Phase 4: customer accounts — register, sign in/out (single device or everywhere), email
   verification, password reset/change, signed-in device list, profile, address book, account
   wishlist with guest merge; cookie sessions with rotating refresh tokens; email outbox; permission
