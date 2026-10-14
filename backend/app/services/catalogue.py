@@ -77,6 +77,7 @@ class ProductFilters:
     max_price: Decimal | None = None
     in_stock: bool = False
     attributes: dict[str, list[str]] = field(default_factory=dict)
+    slugs: list[str] = field(default_factory=list)
     sort: str = "relevance"
     page: int = 1
     page_size: int = 24
@@ -170,6 +171,8 @@ def _context_conditions(db: Session, f: ProductFilters) -> list[ColumnElement[bo
 def _refinement_conditions(f: ProductFilters) -> list[ColumnElement[bool]]:
     """Filters the shopper toggles inside a context."""
     conditions: list[ColumnElement[bool]] = []
+    if f.slugs:
+        conditions.append(Product.slug.in_(f.slugs))
     if f.purity:
         conditions.append(Product.purity.in_(f.purity))
     if f.metal_colour:
@@ -279,21 +282,24 @@ def _active_variants(product: Product) -> list[ProductVariant]:
 
 def _cheapest_variant(
     ctx: PricingContext, product: Product
-) -> tuple[ProductVariant | None, PriceOut]:
+) -> tuple[ProductVariant | None, PriceOut, bool]:
+    """(cheapest priceable variant, its price, whether other variants cost a different amount)."""
     best: tuple[ProductVariant, PriceOut, Decimal] | None = None
     fallback: tuple[ProductVariant, PriceOut] | None = None
+    totals: set[Decimal] = set()
     for variant in _active_variants(product):
         out, unit = price_out(ctx, product, variant, with_breakdown=False)
         if unit is None:
             fallback = fallback or (variant, out)
             continue
+        totals.add(unit.total)
         if best is None or unit.total < best[2]:
             best = (variant, out, unit.total)
     if best:
-        return best[0], best[1]
+        return best[0], best[1], len(totals) > 1
     if fallback:
-        return fallback
-    return None, PriceOut(available=False, unavailable_reason="NO_VARIANTS")
+        return fallback[0], fallback[1], False
+    return None, PriceOut(available=False, unavailable_reason="NO_VARIANTS"), False
 
 
 def cards(db: Session, products: Sequence[Product]) -> list[ProductCardOut]:
@@ -304,7 +310,7 @@ def cards(db: Session, products: Sequence[Product]) -> list[ProductCardOut]:
     now = utcnow()
     result = []
     for product in products:
-        variant, price = _cheapest_variant(ctx, product)
+        variant, price, price_is_from = _cheapest_variant(ctx, product)
         statuses = [inventory.stock_status(levels.get(v.id)) for v in _active_variants(product)]
         stock = (
             "in_stock"
@@ -327,6 +333,7 @@ def cards(db: Session, products: Sequence[Product]) -> list[ProductCardOut]:
                 image=image_out(images[0]) if images else None,
                 hover_image=image_out(images[1]) if len(images) > 1 else None,
                 price=price,
+                price_is_from=price_is_from,
                 stock_status=stock,
                 is_sample=product.is_sample,
                 is_new=bool(

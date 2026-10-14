@@ -8,9 +8,9 @@ Phase details are in the linked files. Milestones and acceptance criteria are in
 |-------|------|--------|
 | 0 Discovery & planning | (this file, §Phase 0) | ✅ complete |
 | 1 Foundation | [PHASE_01_FOUNDATION.md](PHASE_01_FOUNDATION.md) | ✅ complete |
-| 2 Design system & storefront | [PHASE_02_DESIGN_SYSTEM.md](PHASE_02_DESIGN_SYSTEM.md) | ⬜ |
-| 3 Database-backed catalogue | [PHASE_03_CATALOGUE.md](PHASE_03_CATALOGUE.md) | 🟡 next |
-| 4 Auth & accounts | [PHASE_04_AUTH_AND_ACCOUNTS.md](PHASE_04_AUTH_AND_ACCOUNTS.md) | ⬜ |
+| 2 Design system & storefront | [PHASE_02_DESIGN_SYSTEM.md](PHASE_02_DESIGN_SYSTEM.md) | ✅ complete |
+| 3 Database-backed catalogue | [PHASE_03_CATALOGUE.md](PHASE_03_CATALOGUE.md) | ✅ complete |
+| 4 Auth & accounts | [PHASE_04_AUTH_AND_ACCOUNTS.md](PHASE_04_AUTH_AND_ACCOUNTS.md) | 🟡 next |
 | 5 Cart & pricing | [PHASE_05_CART_AND_CHECKOUT.md](PHASE_05_CART_AND_CHECKOUT.md) | ⬜ |
 | 6 Checkout, payments & orders | [PHASE_06_PAYMENTS_AND_ORDERS.md](PHASE_06_PAYMENTS_AND_ORDERS.md) | ⬜ |
 | 7 Administration | [PHASE_07_ADMIN_AND_INVENTORY.md](PHASE_07_ADMIN_AND_INVENTORY.md) | ⬜ |

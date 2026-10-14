@@ -21,7 +21,7 @@ step "Backend: pytest";               "$PY" -m pytest -q
 step "Backend: OpenAPI export";       "$PY" -m app.cli export-openapi
 
 cd "$ROOT/frontend"
-step "Frontend: API types up to date"; npm run gen:api --silent; git diff --exit-code -- src/api/schema.d.ts
+step "Frontend: API types up to date"; npm run check:api --silent
 step "Frontend: typecheck";            npm run typecheck --silent
 step "Frontend: lint";                 npm run lint --silent
 step "Frontend: format";               npm run format:check --silent

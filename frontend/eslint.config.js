@@ -57,11 +57,11 @@ export default tseslint.config(
     },
   },
   {
-    files: ['*.config.{js,ts}', 'e2e/**/*.ts'],
+    files: ['*.config.{js,ts}', 'e2e/**/*.ts', 'scripts/**/*.mjs'],
     languageOptions: { globals: { ...globals.node } },
   },
   {
-    files: ['**/*.js'],
+    files: ['**/*.{js,mjs}'],
     ...tseslint.configs.disableTypeChecked,
   },
 );

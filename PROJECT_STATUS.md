@@ -1,47 +1,53 @@
 # Project Status
 
 **Last updated:** 2026-10-14
-**Current phase:** Phase 3 — Database-backed catalogue (next), followed by Phase 2 storefront pages
-**Last verified checkpoint:** Phase 1 — Foundation complete (`scripts/check.ps1` all green, E2E smoke 4/4)
+**Current phase:** Phase 4 — Authentication and customer accounts (next)
+**Last verified checkpoint:** Phases 2 & 3 — database-backed catalogue and storefront
+(`scripts/check.ps1` all green; 134 backend tests, 21 frontend tests, 25 E2E runs, axe clean)
 
 ## What exists
-* Planning documentation (`docs/`), ADRs 0001–0009, task tracker (`tasks/`), `CLAUDE.md`, 11 skills.
-* **Backend** (`backend/`): FastAPI app factory, settings with production safety validation, standard
-  error format, request-id + access logging with redaction, security headers, body-size limit, CSRF
-  middleware, health endpoint, CSRF-token endpoint, Alembic with the first migration (store
-  settings, audit log, rate-limit buckets, RLS enabled), CLI (`export-openapi`), pytest fixtures
-  against a real PostgreSQL test DB.
-* **Frontend** (`frontend/`): Vite 8 + React 19 + TS 5.9 strict, Tailwind v4 design tokens, self-hosted
-  fonts, React Router 8 shell (skip link, focus management, 404, error page), typed API client
-  (CSRF + session refresh + `ApiError`), TanStack Query, Vitest + Playwright.
-* **Tooling**: `npm run db:start` (embedded PostgreSQL 17.10), `scripts/check.ps1|.sh`,
-  `scripts/check-secrets.py`, `scripts/check_docs.py`, `scripts/lock_python.py`, optional Docker Compose.
+* Planning documentation, ADRs 0001–0009, task tracker, `CLAUDE.md`, 11 skills.
+* **Backend**: FastAPI foundation (settings with production validation, error format, CSRF, headers,
+  body limit, logging, rate limiting in PostgreSQL); catalogue/pricing/inventory/shipping/content
+  models with RLS; the Decimal **pricing engine** (all models, discounts, coupons, GST per component,
+  rupee rounding); public catalogue, search, facets, PIN-code, settings, content, contact, newsletter
+  and sitemap APIs; idempotent sample seed (31 products) with original placeholder illustrations.
+* **Frontend**: premium design system (tokens with measured contrast, self-hosted fonts), header with
+  category nav, search dialog with suggestions, mobile menu, footer with newsletter; home, collections,
+  category/collection listings (URL-driven filters, sort, pagination), search, product page (gallery,
+  sizes, itemised breakdown with gold rate, PIN-code delivery check, specs, related, recently viewed),
+  guest wishlist, contact form and nine editable content pages. Route-level code splitting (initial JS
+  150 kB gzip).
 
 ## What works (verified — see docs/quality/TEST_RESULTS.md)
 | Item | Evidence |
 |------|----------|
-| Local PostgreSQL 17.10 | `npm run db:start` |
-| Backend foundation | 35 pytest tests; ruff + mypy strict clean; `alembic check` no drift |
-| Frontend foundation | 9 Vitest tests; typecheck, lint, format, build clean |
-| Frontend ↔ backend via Vite proxy | Playwright smoke (desktop + mobile) shows "API connected" |
+| Pricing engine matches PRICING_ENGINE.md | 37 unit tests incl. the worked example |
+| Catalogue filters, sort, search, pagination, facets | `tests/api/test_catalogue.py` |
+| Contact/newsletter anti-spam + rate limits | `tests/api/test_content.py` |
+| RLS on every table, stock CHECK, UTC sessions | `tests/api/test_database_safety.py` |
+| Storefront journeys (browse → filter → product → size → delivery → wishlist; search) | `e2e/browse.spec.ts` on desktop + mobile |
+| Accessibility | axe: 0 serious/critical issues on 7 pages; keyboard flow test |
+
+## Not yet built
+Accounts/auth (Phase 4), cart & checkout UI (Phase 5–6), payments/orders (Phase 6), admin (Phase 7),
+launch prep (Phase 8). Product pages currently show "Online ordering opens in a later release".
 
 ## Local ports
 Web **5180**, API **8010**, PostgreSQL **54329** (5173 and 8000 are used by other projects here).
 
 ## Blockers / waiting on the owner
-Nothing blocks development. Needed before launch (see `docs/ASSUMPTIONS_AND_DECISIONS.md` §5):
-brand details, Razorpay test keys, Supabase project, SMTP provider, CA review of GST, legal review of
-policies.
+Nothing blocks development. Needed before launch: brand details, Razorpay test keys, Supabase
+project, SMTP provider, CA review of GST, legal review of policies (ASSUMPTIONS §5).
 
 ## Next step
-Phase 3 (backend catalogue): catalogue/pricing/content/shipping models + migration, pricing engine
-core with unit tests, public catalogue APIs with filters/sort/search/pagination, deterministic seed
-with placeholder illustrations, sitemap. Then Phase 2: design-system components and storefront pages
-wired to those APIs.
+Phase 4: users, sessions (JWT access + rotating refresh cookies), CSRF already in place, Argon2id,
+rate-limited login/register/reset, email outbox (file sink), profile/addresses, server wishlist +
+merge, account pages, `create-admin` CLI, permission map and admin-route guard test.
 
 ## How to resume
-1. Read `CLAUDE.md`, this file, `tasks/PHASE_03_CATALOGUE.md`.
+1. Read `CLAUDE.md`, this file, `tasks/PHASE_04_AUTH_AND_ACCOUNTS.md`.
 2. Terminal 1: `npm run db:start` (repo root).
 3. Terminal 2: `cd backend && .venv/Scripts/python -m uvicorn app.main:app --reload --port 8010`.
 4. Terminal 3: `cd frontend && npm run dev` → http://localhost:5180.
-5. Continue with the first unticked task in the Phase 3 file; finish with `scripts/check.ps1`.
+5. Continue with the first unticked task; finish with `scripts/check.ps1` and `npm run e2e`.

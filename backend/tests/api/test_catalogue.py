@@ -90,6 +90,13 @@ def test_filters_narrow_results(
     assert len(body["items"]) == expected_total
 
 
+def test_slug_filter_returns_requested_products(client: TestClient) -> None:
+    body = get_products(client, slug=["om-pendant", "rope-chain", "missing"])
+    assert {p["slug"] for p in body["items"]} == {"om-pendant", "rope-chain"}
+    too_many = client.get(f"{API}/products", params={"slug": [f"s{i}" for i in range(49)]})
+    assert too_many.status_code == 422
+
+
 def test_in_stock_filter_excludes_sold_out_products(client: TestClient) -> None:
     everything = get_products(client, page_size=48)
     in_stock = get_products(client, page_size=48, in_stock="true")
@@ -321,6 +328,12 @@ def test_home_sections(client: TestClient) -> None:
     assert len(body["new_arrivals"]) == 8
     assert all(p["is_sample"] for p in body["bestsellers"])
     assert body["featured"]
+
+
+def test_cards_flag_products_whose_sizes_differ_in_price(client: TestClient) -> None:
+    items = {p["slug"]: p for p in get_products(client, page_size=48)["items"]}
+    assert items["everyday-gold-band"]["price_is_from"] is True  # four ring sizes
+    assert items["om-pendant"]["price_is_from"] is False  # single variant
 
 
 def test_money_is_serialised_as_strings(client: TestClient) -> None:

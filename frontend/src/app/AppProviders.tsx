@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { useState, type ReactNode } from 'react';
 
 import { ApiError } from '@/api/client';
+import { ToastProvider } from '@/components/ui/Toaster';
 
 export function createQueryClient(): QueryClient {
   return new QueryClient({
@@ -19,7 +20,11 @@ export function createQueryClient(): QueryClient {
   });
 }
 
-export function AppProviders({ children }: { children: ReactNode }) {
-  const [queryClient] = useState(createQueryClient);
-  return <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>;
+export function AppProviders({ children, client }: { children: ReactNode; client?: QueryClient }) {
+  const [queryClient] = useState(() => client ?? createQueryClient());
+  return (
+    <QueryClientProvider client={queryClient}>
+      <ToastProvider>{children}</ToastProvider>
+    </QueryClientProvider>
+  );
 }

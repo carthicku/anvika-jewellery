@@ -29,7 +29,7 @@ try {
 
 Push-Location (Join-Path $root 'frontend')
 try {
-  Step 'Frontend: API types up to date' { npm run gen:api --silent; git diff --exit-code -- src/api/schema.d.ts }
+  Step 'Frontend: API types up to date' { npm run check:api --silent }
   Step 'Frontend: typecheck' { npm run typecheck --silent }
   Step 'Frontend: lint' { npm run lint --silent }
   Step 'Frontend: format' { npm run format:check --silent }

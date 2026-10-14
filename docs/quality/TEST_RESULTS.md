@@ -46,3 +46,19 @@ No application code exists yet, so no tests have been run. Environment checks pe
 
 Notes: first E2E run failed because another local project was serving port 5173 and Playwright reused it;
 frontend moved to port 5180 (and API to 8010, since 8000 was also taken).
+
+### 2026-10-14 — Phases 2 & 3 checkpoint (catalogue + storefront)
+| Suite | Command | Result |
+|-------|---------|--------|
+| Full static + unit/API + build | `powershell -File scripts/check.ps1` | All checks passed |
+| Backend | `pytest -q` | 134 passed (37 pricing unit tests; catalogue, content and database-safety API tests) |
+| Frontend unit | `vitest run` | 21 passed (3 files) |
+| End-to-end | `playwright test` (desktop-chrome + mobile-chrome) | 25 passed, 1 skipped (keyboard test is desktop-only) |
+| Accessibility | axe (WCAG 2.0/2.1/2.2 A+AA tags) on 7 pages × 2 viewports | 0 serious/critical violations |
+| Seed | `python -m app.cli seed` ×2 | identical row counts (idempotent) |
+| Manual | Screenshots at 1440 px and 390 px of home, listing, product and guide pages | reviewed; price-format consistency and "From" price fixes applied |
+
+Defects found and fixed during this checkpoint: local PostgreSQL cluster was WIN1252 (UTF-8 now
+enforced); timestamps returned in local time (sessions forced to UTC); SQLAlchemy 2.1 DISTINCT ON
+deprecation; React Router setSearchParams overwrite when setting two keys; focus moved to <main> on
+first load; focus lost after closing header dialogs; JSON-LD `<` escaping.

@@ -46,6 +46,9 @@ def product_filters(
     attr: Annotated[
         list[str], Query(description="Attribute filters as key:value, e.g. occasion:wedding")
     ] = [],  # noqa: B006
+    slug: Annotated[
+        list[str], Query(description="Only these products (wishlist, recently viewed); max 48")
+    ] = [],  # noqa: B006
     sort: Literal["relevance", "newest", "price_asc", "price_desc"] = "relevance",
     page: Annotated[int, Query(ge=1, le=1000)] = 1,
     page_size: Annotated[int, Query(ge=1, le=48)] = 24,
@@ -62,6 +65,8 @@ def product_filters(
             errors["attr"] = "Attribute filters must look like key:value."
             break
         attributes.setdefault(key, []).append(value)
+    if len(slug) > 48 or any(len(s) > 180 for s in slug):
+        errors["slug"] = "Too many products requested."
     if min_price is not None and max_price is not None and min_price > max_price:
         errors["min_price"] = "Minimum price cannot be above maximum price."
     if errors:
@@ -76,6 +81,7 @@ def product_filters(
         max_price=max_price,
         in_stock=in_stock,
         attributes=attributes,
+        slugs=slug,
         sort=sort,
         page=page,
         page_size=page_size,

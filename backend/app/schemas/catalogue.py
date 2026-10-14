@@ -63,6 +63,8 @@ class ProductCardOut(BaseModel):
     image: ImageOut | None
     hover_image: ImageOut | None
     price: PriceOut
+    # True when variants (e.g. sizes) have different prices: show "From ₹…".
+    price_is_from: bool
     stock_status: StockStatusOut
     is_sample: bool
     is_new: bool

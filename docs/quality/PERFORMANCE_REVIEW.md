@@ -14,4 +14,18 @@ here with the date, tool, environment and numbers. Do not estimate.
 | SEO / SPA limits | The SPA renders on the client. Crawlers that run JavaScript (Google) index it. For others, pre-rendering of public routes is a future improvement (KNOWN_LIMITATIONS) |
 
 ## Measurements
-_None yet (Phase 0)._
+
+### 2026-10-14 — Storefront bundle (Vite 8 production build)
+| Chunk | Size | Gzip |
+|-------|-----:|-----:|
+| Initial bundle (`index-*.js`, home page + layout) | 479 kB | **150 kB** (target < 200 kB ✅) |
+| Content pages (Markdown renderer) | 156 kB | 47 kB (loaded only on content pages) |
+| Contact page (form + validation libraries) | 119 kB | 37 kB |
+| Product page | 15 kB | 5 kB |
+| Listing pages | 15 kB | 5 kB |
+
+Actions taken: route-level code splitting (all routes except home are lazy); the footer newsletter
+form was rewritten without zod/react-hook-form so those libraries stay out of the initial bundle
+(initial bundle 248 kB → 150 kB gzip).
+
+Not yet measured: Lighthouse/Core Web Vitals and API latency under load (Phase 8).

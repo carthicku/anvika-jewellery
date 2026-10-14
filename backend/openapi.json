@@ -961,6 +961,10 @@
           "price": {
             "$ref": "#/components/schemas/PriceOut"
           },
+          "price_is_from": {
+            "title": "Price Is From",
+            "type": "boolean"
+          },
           "purity": {
             "title": "Purity",
             "type": "string"
@@ -1001,6 +1005,7 @@
           "image",
           "hover_image",
           "price",
+          "price_is_from",
           "stock_status",
           "is_sample",
           "is_new"
@@ -2131,6 +2136,21 @@
             }
           },
           {
+            "description": "Only these products (wishlist, recently viewed); max 48",
+            "in": "query",
+            "name": "slug",
+            "required": false,
+            "schema": {
+              "default": [],
+              "description": "Only these products (wishlist, recently viewed); max 48",
+              "items": {
+                "type": "string"
+              },
+              "title": "Slug",
+              "type": "array"
+            }
+          },
+          {
             "in": "query",
             "name": "sort",
             "required": false,
@@ -2344,6 +2364,21 @@
                 "type": "string"
               },
               "title": "Attr",
+              "type": "array"
+            }
+          },
+          {
+            "description": "Only these products (wishlist, recently viewed); max 48",
+            "in": "query",
+            "name": "slug",
+            "required": false,
+            "schema": {
+              "default": [],
+              "description": "Only these products (wishlist, recently viewed); max 48",
+              "items": {
+                "type": "string"
+              },
+              "title": "Slug",
               "type": "array"
             }
           },

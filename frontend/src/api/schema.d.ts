@@ -679,6 +679,8 @@ export interface components {
             /** Name */
             name: string;
             price: components["schemas"]["PriceOut"];
+            /** Price Is From */
+            price_is_from: boolean;
             /** Purity */
             purity: string;
             /** Slug */
@@ -1204,6 +1206,8 @@ export interface operations {
                 in_stock?: boolean;
                 /** @description Attribute filters as key:value, e.g. occasion:wedding */
                 attr?: string[];
+                /** @description Only these products (wishlist, recently viewed); max 48 */
+                slug?: string[];
                 sort?: "relevance" | "newest" | "price_asc" | "price_desc";
                 page?: number;
                 page_size?: number;
@@ -1247,6 +1251,8 @@ export interface operations {
                 in_stock?: boolean;
                 /** @description Attribute filters as key:value, e.g. occasion:wedding */
                 attr?: string[];
+                /** @description Only these products (wishlist, recently viewed); max 48 */
+                slug?: string[];
                 sort?: "relevance" | "newest" | "price_asc" | "price_desc";
                 page?: number;
                 page_size?: number;
