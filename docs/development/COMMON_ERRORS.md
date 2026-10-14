@@ -6,6 +6,7 @@ Add an entry whenever you solve a confusing problem.
 |---------|--------------|-----|
 | `Python was not found; run without arguments to install from the Microsoft Store` | Windows `python` alias points to the Store | Use `py -3.13` to create the venv, then always use `.venv/Scripts/python`. |
 | `Unable to create process using '...Python312\python.exe'` | A broken Python 3.12 registration on this machine | Use `py -3.13`. |
+| `UnicodeEncodeError: 'charmap' codec can't encode character` when saving data | The local cluster was initialised as WIN1252 (Windows default) | `scripts/localdb.mjs` now initialises UTF-8 and refuses non-UTF-8 clusters. Stop the DB, delete `.localdb/` (local dev data only) and run `npm run db:start`. |
 | `connection refused` on port 54329 | Local database not running | Run `npm run db:start` in its own terminal. |
 | `EPERM ... rmdir` from embedded-postgres | Windows file lock when the server stops with non-persistent data | The launcher uses `persistent: true`; if it happens, close terminals holding `.localdb/` and retry. |
 | `database "anvika_dev" does not exist` | DB server started outside our script | Run `npm run db:start` once (it creates the databases). |

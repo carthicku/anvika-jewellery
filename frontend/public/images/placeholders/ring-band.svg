@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000" role="img" aria-label="Sample illustration of a gold band ring">
+  <title>Sample illustration of a gold band ring</title>
+  <defs>
+    <radialGradient id="light-ring-band" cx="50%" cy="40%" r="65%">
+      <stop offset="0" stop-color="#FBF8F3"/>
+      <stop offset="1" stop-color="#F3EEE6"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="1000" fill="url(#light-ring-band)"/>
+  <g transform="translate(40.0 100.0) scale(0.900)" fill="none" stroke="#B08D57" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+
+        <ellipse cx="400" cy="400" rx="210" ry="120"/>
+        <ellipse cx="400" cy="372" rx="178" ry="96" stroke="#D9C4A0"/>
+        <path d="M190 400 L190 440 M610 400 L610 440"/>
+        <path d="M190 440 A210 120 0 0 0 610 440"/>
+        <path d="M250 455 Q400 520 550 455" stroke="#D9C4A0"/>
+        
+  </g>
+  <text x="400" y="956" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="20" letter-spacing="6" fill="#6F695F">SAMPLE IMAGE</text>
+</svg>

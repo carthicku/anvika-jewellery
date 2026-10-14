@@ -16,12 +16,14 @@ from alembic import command
 from alembic.config import Config
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
-from sqlalchemy import Connection, Engine, create_engine, text
+from sqlalchemy import Connection, Engine, text
 from sqlalchemy.engine import make_url
 from sqlalchemy.orm import Session, sessionmaker
 
 from app.core.config import BACKEND_DIR, Settings, get_settings
+from app.core.db import make_engine
 from app.main import create_app
+from app.seed import run_seed
 
 
 def _test_settings(**overrides: object) -> Settings:
@@ -52,14 +54,23 @@ def engine(settings: Settings) -> Iterator[Engine]:
     url = make_url(settings.database_url)
     if not (url.database or "").endswith("_test"):
         pytest.exit(f"Refusing to run tests against non-test database {url.database!r}", 2)
-    eng = create_engine(settings.database_url)
+    eng = make_engine(settings.database_url)
     with eng.begin() as conn:
+        encoding = conn.execute(text("SHOW server_encoding")).scalar()
+        if encoding != "UTF8":
+            pytest.exit(
+                f"Test database encoding is {encoding}; it must be UTF8 (like Supabase).", 2
+            )
         conn.execute(text("DROP SCHEMA IF EXISTS public CASCADE"))
         conn.execute(text("CREATE SCHEMA public"))
     cfg = Config(str(BACKEND_DIR / "alembic.ini"))
     cfg.attributes["database_url"] = settings.database_url
     cfg.attributes["skip_logging_config"] = True
     command.upgrade(cfg, "head")
+    # Committed once per session; every test runs in a rolled-back transaction on top of it.
+    with Session(eng) as session:
+        run_seed(session)
+        session.commit()
     yield eng
     eng.dispose()
 

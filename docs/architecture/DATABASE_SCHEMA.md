@@ -37,9 +37,9 @@ was deliberately not created, so that no data edit can grant new powers.
 | `categories` | Rings, earrings, necklaces… (one level of nesting allowed) | `parent_id` self-FK, `name`, `slug` unique, `description`, `image_url`, `sort_order`, `is_active`, `seo_title`, `seo_description` |
 | `collections` | Curated groupings (Bridal, Everyday…) | `slug` unique, `name`, `description`, `hero_image_url`, `is_active`, `is_featured`, `sort_order`, SEO fields |
 | `collection_products` | M:N | PK (`collection_id`, `product_id`), `sort_order` |
-| `products` | A design | `slug` unique, `name`, `category_id` FK, `status` ∈ {draft, active, archived}, `metal_colour` ∈ {yellow, white, rose, two_tone}, `purity` ∈ {24K, 22K, 18K, 14K}, `pricing_model` ∈ {fixed, weight_based}, `making_charge_type` ∈ {per_gram, percent, flat, none}, `making_charge_value`, `wastage_percent` (nullable), `description`, `stone_details`, `hallmark_details`, `certification_details`, `care_instructions`, `return_eligible`, `exchange_eligible`, `return_window_days`, `is_featured`, `is_bestseller`, `is_sample`, SEO fields, `published_at`, `search_vector` (generated `tsvector`, GIN index) |
+| `products` | A design | `slug` unique, `name`, `category_id` FK, `status` ∈ {draft, active, archived}, `metal_colour` ∈ {yellow, white, rose, two_tone}, `purity` ∈ {24K, 22K, 18K, 14K}, `pricing_model` ∈ {fixed, weight_based}, `making_charge_type` ∈ {per_gram, percent, flat, none}, `making_charge_value`, `wastage_percent` (nullable), `description`, `stone_details`, `hallmark_details`, `certification_details`, `care_instructions`, `return_eligible`, `exchange_eligible`, `return_window_days`, `is_featured`, `is_bestseller`, `is_sample`, SEO fields, `published_at`, `price_from` + `price_computed_at` (listing cache), `search_vector` (generated `tsvector`, GIN index) |
 | `product_variants` | A purchasable SKU (e.g. ring size 12) | `product_id` FK, `sku` unique, `label`, `size`, `gross_weight_g`, `net_gold_weight_g`, `stone_weight_ct`, `stone_value`, `other_charges`, `other_charges_label`, `fixed_price` (required when product is `fixed`), `huid` (nullable, per piece), `is_default`, `is_active`, `sort_order` |
-| `product_images` | Gallery | `product_id` FK, `storage_key`, `url`, `alt_text`, `width`, `height`, `sort_order`, `is_placeholder` |
+| `product_images` | Gallery | `product_id` FK, `storage_key`, `url`, `renditions JSONB` (width → URL), `alt_text`, `width`, `height`, `sort_order`, `is_placeholder` |
 | `product_attributes` | Filterable key/value attributes | `product_id` FK, `key` (e.g. `occasion`, `style`), `value`; unique (`product_id`,`key`,`value`); index (`key`,`value`) |
 | `product_reviews` | Customer reviews (moderated) | `product_id` FK, `user_id` FK, `order_item_id` FK (verified purchase), `rating` CHECK 1–5, `title`, `body`, `status` ∈ {pending, approved, rejected}; unique (`user_id`,`product_id`) |
 
@@ -87,8 +87,8 @@ was deliberately not created, so that no data edit can grant new powers.
 ### Content, engagement & operations
 | Table | Purpose |
 |-------|---------|
-| `content_pages` | Editable pages (about, FAQ, policies…): `slug` unique, `title`, `body_markdown`, `is_draft_template`, `updated_by` |
-| `newsletter_subscribers` | `email` unique, `status`, `consent_at`, `unsubscribe_token_hash` |
+| `content_pages` | Editable pages (about, FAQ, policies…): `slug` unique, `title`, `summary`, `body_markdown`, `is_draft_template`, `updated_by` |
+| `newsletter_subscribers` | `email` unique, `status`, `source`, `consent_at`, `unsubscribe_token_hash`, `unsubscribed_at` |
 | `contact_enquiries` | `name`, `email`, `phone`, `subject`, `message`, `status` ∈ {new, in_progress, closed} |
 | `email_outbox` | `idempotency_key` unique, `to_email`, `template`, `subject`, `context JSONB`, `status` ∈ {pending, sent, written_to_sink, failed}, `attempts`, `last_error`, `sent_at` |
 | `audit_logs` | Append-only: `actor_user_id`, `actor_role`, `action`, `entity_type`, `entity_id`, `changes JSONB` (sanitised), `ip_address`, `created_at` |

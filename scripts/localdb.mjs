@@ -21,6 +21,9 @@ const pg = new EmbeddedPostgres({
   port: PORT,
   // persistent: true keeps data between runs (and avoids a Windows rmdir race on shutdown).
   persistent: true,
+  // UTF-8 like Supabase. Without this, Windows initialises the cluster as WIN1252, which cannot
+  // store characters such as ₹ or Indian-language text. Locale C = byte-order collation.
+  initdbFlags: ['--encoding=UTF8', '--locale=C'],
   onLog: () => {},
   onError: (message) => console.error(String(message).trim()),
 });
@@ -34,11 +37,19 @@ async function main() {
 
   const client = pg.getPgClient();
   await client.connect();
+  const encoding = (await client.query('SHOW server_encoding')).rows[0].server_encoding;
+  if (encoding !== 'UTF8') {
+    await client.end();
+    throw new Error(
+      `The data directory uses ${encoding}, not UTF8. Stop this script, delete the .localdb ` +
+        'folder (it only holds local development data) and run npm run db:start again.',
+    );
+  }
   const { rows } = await client.query('SELECT datname FROM pg_database');
   const existing = new Set(rows.map((r) => r.datname));
   for (const db of DATABASES) {
     if (!existing.has(db)) {
-      await client.query(`CREATE DATABASE "${db}"`);
+      await client.query(`CREATE DATABASE "${db}" ENCODING 'UTF8' TEMPLATE template0`);
       console.log(`Created database ${db}`);
     }
   }

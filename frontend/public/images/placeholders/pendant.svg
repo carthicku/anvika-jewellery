@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000" role="img" aria-label="Sample illustration of a pendant on a fine chain">
+  <title>Sample illustration of a pendant on a fine chain</title>
+  <defs>
+    <radialGradient id="light-pendant" cx="50%" cy="40%" r="65%">
+      <stop offset="0" stop-color="#FBF8F3"/>
+      <stop offset="1" stop-color="#F3EEE6"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="1000" fill="url(#light-pendant)"/>
+  <g transform="translate(40.0 100.0) scale(0.900)" fill="none" stroke="#B08D57" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+
+        <path d="M230 140 L400 470 L570 140" stroke-dasharray="2 10"/>
+        <circle cx="400" cy="486" r="16"/>
+        <path d="M400 502 Q330 590 400 680 Q470 590 400 502 Z"/>
+        <path d="M400 540 Q365 592 400 640 Q435 592 400 540" stroke="#D9C4A0"/>
+        
+  </g>
+  <text x="400" y="956" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="20" letter-spacing="6" fill="#6F695F">SAMPLE IMAGE</text>
+</svg>

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000" role="img" aria-label="Sample illustration of a link bracelet">
+  <title>Sample illustration of a link bracelet</title>
+  <defs>
+    <radialGradient id="light-bracelet" cx="50%" cy="40%" r="65%">
+      <stop offset="0" stop-color="#FBF8F3"/>
+      <stop offset="1" stop-color="#F3EEE6"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="1000" fill="url(#light-bracelet)"/>
+  <g transform="translate(40.0 100.0) scale(0.900)" fill="none" stroke="#B08D57" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+
+        <g stroke-width="2.6">
+          <ellipse cx="400" cy="200" rx="40" ry="26"/><ellipse cx="530" cy="250" rx="40" ry="26" transform="rotate(35 530 250)"/>
+          <ellipse cx="600" cy="370" rx="40" ry="26" transform="rotate(80 600 370)"/><ellipse cx="575" cy="505" rx="40" ry="26" transform="rotate(-55 575 505)"/>
+          <ellipse cx="470" cy="590" rx="40" ry="26" transform="rotate(-20 470 590)"/><ellipse cx="330" cy="590" rx="40" ry="26" transform="rotate(20 330 590)"/>
+          <ellipse cx="225" cy="505" rx="40" ry="26" transform="rotate(55 225 505)"/><ellipse cx="200" cy="370" rx="40" ry="26" transform="rotate(100 200 370)"/>
+          <ellipse cx="270" cy="250" rx="40" ry="26" transform="rotate(-35 270 250)"/>
+        </g>
+        
+  </g>
+  <text x="400" y="956" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="20" letter-spacing="6" fill="#6F695F">SAMPLE IMAGE</text>
+</svg>

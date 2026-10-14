@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000" role="img" aria-label="Sample illustration of a pair of jhumka earrings">
+  <title>Sample illustration of a pair of jhumka earrings</title>
+  <defs>
+    <radialGradient id="light-earrings-jhumka" cx="50%" cy="40%" r="65%">
+      <stop offset="0" stop-color="#FBF8F3"/>
+      <stop offset="1" stop-color="#F3EEE6"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="1000" fill="url(#light-earrings-jhumka)"/>
+  <g transform="translate(40.0 100.0) scale(0.900)" fill="none" stroke="#B08D57" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+
+        <g transform="translate(-140 0)">
+          <circle cx="400" cy="230" r="26"/>
+          <path d="M400 256 L400 300"/>
+          <path d="M320 420 Q320 300 400 300 Q480 300 480 420 Z"/>
+          <path d="M320 420 Q400 450 480 420" stroke="#D9C4A0"/>
+          <path d="M335 432 L335 470 M367 440 L367 486 M400 444 L400 492 M433 440 L433 486 M465 432 L465 470"/>
+          <circle cx="335" cy="478" r="7"/><circle cx="367" cy="494" r="7"/><circle cx="400" cy="500" r="7"/>
+          <circle cx="433" cy="494" r="7"/><circle cx="465" cy="478" r="7"/>
+        </g>
+        <g transform="translate(140 0)">
+          <circle cx="400" cy="230" r="26"/>
+          <path d="M400 256 L400 300"/>
+          <path d="M320 420 Q320 300 400 300 Q480 300 480 420 Z"/>
+          <path d="M320 420 Q400 450 480 420" stroke="#D9C4A0"/>
+          <path d="M335 432 L335 470 M367 440 L367 486 M400 444 L400 492 M433 440 L433 486 M465 432 L465 470"/>
+          <circle cx="335" cy="478" r="7"/><circle cx="367" cy="494" r="7"/><circle cx="400" cy="500" r="7"/>
+          <circle cx="433" cy="494" r="7"/><circle cx="465" cy="478" r="7"/>
+        </g>
+        
+  </g>
+  <text x="400" y="956" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="20" letter-spacing="6" fill="#6F695F">SAMPLE IMAGE</text>
+</svg>

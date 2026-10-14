@@ -16,6 +16,8 @@ def make_engine(url: str, *, pool_size: int = 5, max_overflow: int = 5) -> Engin
         max_overflow=max_overflow,
         pool_pre_ping=True,  # survive idle connections dropped by poolers/firewalls
         pool_recycle=1800,
+        # The API speaks UTC; never inherit the server machine's timezone.
+        connect_args={"options": "-c timezone=UTC"},
     )
 
 

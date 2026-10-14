@@ -39,9 +39,9 @@
 ```
 | HTTP | Typical `code` values |
 |------|----------------------|
-| 400 | `BAD_REQUEST`, `CSRF_FAILED` |
+| 400 | `BAD_REQUEST`, `CONSENT_REQUIRED` |
 | 401 | `NOT_AUTHENTICATED`, `INVALID_CREDENTIALS`, `SESSION_EXPIRED` |
-| 403 | `FORBIDDEN` |
+| 403 | `FORBIDDEN`, `CSRF_FAILED` |
 | 404 | `NOT_FOUND` (also used when a resource exists but belongs to someone else) |
 | 409 | `CONFLICT`, `OUT_OF_STOCK`, `PRICE_CHANGED`, `INVALID_STATE_TRANSITION`, `IDEMPOTENCY_CONFLICT` |
 | 413 | `PAYLOAD_TOO_LARGE` |
@@ -81,6 +81,7 @@ Legend: 🌐 public · 👤 signed-in customer · 🔑 staff/admin (permission i
 | GET | `/home` | 🌐 | Homepage data: featured categories, new arrivals, bestsellers, featured collections |
 | GET | `/categories`, `/categories/{slug}` | 🌐 | Category tree / detail |
 | GET | `/collections`, `/collections/{slug}` | 🌐 | Collections |
+| GET | `/listings/{slug}` | 🌐 | Resolves a storefront `/collections/:slug` URL to a category or a collection (`kind`) |
 | GET | `/products` | 🌐 | Filters: `q`, `category`, `collection`, `purity` (multi), `metal_colour`, `min_price`, `max_price`, `in_stock`, `attr.<key>`; `sort` ∈ {relevance, newest, price_asc, price_desc}; `page`, `page_size` |
 | GET | `/products/facets` | 🌐 | Available filter values + counts for the same filters |
 | GET | `/products/{slug}` | 🌐 | Full detail incl. variants, stock status, price breakdown per variant |

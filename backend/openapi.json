@@ -1,6 +1,346 @@
 {
   "components": {
     "schemas": {
+      "AnnouncementOut": {
+        "properties": {
+          "enabled": {
+            "title": "Enabled",
+            "type": "boolean"
+          },
+          "link": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Link"
+          },
+          "text": {
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "enabled",
+          "text",
+          "link"
+        ],
+        "title": "AnnouncementOut",
+        "type": "object"
+      },
+      "AttributeOut": {
+        "properties": {
+          "key": {
+            "title": "Key",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "value"
+        ],
+        "title": "AttributeOut",
+        "type": "object"
+      },
+      "CategoryOut": {
+        "properties": {
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "image_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image Url"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "parent_slug": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Slug"
+          },
+          "seo_description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seo Description"
+          },
+          "seo_title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seo Title"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "name",
+          "description",
+          "image_url",
+          "parent_slug",
+          "seo_title",
+          "seo_description"
+        ],
+        "title": "CategoryOut",
+        "type": "object"
+      },
+      "CategoryRef": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "name"
+        ],
+        "title": "CategoryRef",
+        "type": "object"
+      },
+      "CollectionOut": {
+        "properties": {
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "hero_image_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hero Image Url"
+          },
+          "is_featured": {
+            "title": "Is Featured",
+            "type": "boolean"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "seo_description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seo Description"
+          },
+          "seo_title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seo Title"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "name",
+          "description",
+          "hero_image_url",
+          "is_featured",
+          "seo_title",
+          "seo_description"
+        ],
+        "title": "CollectionOut",
+        "type": "object"
+      },
+      "CollectionRef": {
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "name"
+        ],
+        "title": "CollectionRef",
+        "type": "object"
+      },
+      "ContactIn": {
+        "additionalProperties": false,
+        "properties": {
+          "elapsed_seconds": {
+            "default": 0,
+            "maximum": 86400.0,
+            "minimum": 0.0,
+            "title": "Elapsed Seconds",
+            "type": "integer"
+          },
+          "email": {
+            "format": "email",
+            "title": "Email",
+            "type": "string"
+          },
+          "message": {
+            "maxLength": 5000,
+            "minLength": 10,
+            "title": "Message",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 120,
+            "minLength": 2,
+            "title": "Name",
+            "type": "string"
+          },
+          "phone": {
+            "anyOf": [
+              {
+                "maxLength": 20,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phone"
+          },
+          "subject": {
+            "maxLength": 160,
+            "minLength": 2,
+            "title": "Subject",
+            "type": "string"
+          },
+          "website": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Website",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "subject",
+          "message"
+        ],
+        "title": "ContactIn",
+        "type": "object"
+      },
+      "ContentPageOut": {
+        "properties": {
+          "body_markdown": {
+            "title": "Body Markdown",
+            "type": "string"
+          },
+          "is_draft_template": {
+            "title": "Is Draft Template",
+            "type": "boolean"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          },
+          "summary": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Summary"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "title",
+          "summary",
+          "body_markdown",
+          "is_draft_template",
+          "updated_at"
+        ],
+        "title": "ContentPageOut",
+        "type": "object"
+      },
       "CsrfOut": {
         "properties": {
           "csrf_token": {
@@ -12,6 +352,130 @@
           "csrf_token"
         ],
         "title": "CsrfOut",
+        "type": "object"
+      },
+      "FacetValueOut": {
+        "properties": {
+          "count": {
+            "title": "Count",
+            "type": "integer"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "value",
+          "label",
+          "count"
+        ],
+        "title": "FacetValueOut",
+        "type": "object"
+      },
+      "FacetsOut": {
+        "properties": {
+          "attributes": {
+            "additionalProperties": {
+              "items": {
+                "$ref": "#/components/schemas/FacetValueOut"
+              },
+              "type": "array"
+            },
+            "title": "Attributes",
+            "type": "object"
+          },
+          "categories": {
+            "items": {
+              "$ref": "#/components/schemas/FacetValueOut"
+            },
+            "title": "Categories",
+            "type": "array"
+          },
+          "in_stock_count": {
+            "title": "In Stock Count",
+            "type": "integer"
+          },
+          "metal_colours": {
+            "items": {
+              "$ref": "#/components/schemas/FacetValueOut"
+            },
+            "title": "Metal Colours",
+            "type": "array"
+          },
+          "price_max": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price Max"
+          },
+          "price_min": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price Min"
+          },
+          "purities": {
+            "items": {
+              "$ref": "#/components/schemas/FacetValueOut"
+            },
+            "title": "Purities",
+            "type": "array"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "total",
+          "categories",
+          "purities",
+          "metal_colours",
+          "attributes",
+          "price_min",
+          "price_max",
+          "in_stock_count"
+        ],
+        "title": "FacetsOut",
+        "type": "object"
+      },
+      "GoldRateRef": {
+        "properties": {
+          "effective_from": {
+            "format": "date-time",
+            "title": "Effective From",
+            "type": "string"
+          },
+          "purity": {
+            "title": "Purity",
+            "type": "string"
+          },
+          "rate_per_gram": {
+            "title": "Rate Per Gram",
+            "type": "string"
+          }
+        },
+        "required": [
+          "purity",
+          "rate_per_gram",
+          "effective_from"
+        ],
+        "title": "GoldRateRef",
         "type": "object"
       },
       "HTTPValidationError": {
@@ -61,6 +525,892 @@
         "title": "HealthOut",
         "type": "object"
       },
+      "HomeOut": {
+        "properties": {
+          "bestsellers": {
+            "items": {
+              "$ref": "#/components/schemas/ProductCardOut"
+            },
+            "title": "Bestsellers",
+            "type": "array"
+          },
+          "categories": {
+            "items": {
+              "$ref": "#/components/schemas/CategoryOut"
+            },
+            "title": "Categories",
+            "type": "array"
+          },
+          "collections": {
+            "items": {
+              "$ref": "#/components/schemas/CollectionOut"
+            },
+            "title": "Collections",
+            "type": "array"
+          },
+          "featured": {
+            "items": {
+              "$ref": "#/components/schemas/ProductCardOut"
+            },
+            "title": "Featured",
+            "type": "array"
+          },
+          "new_arrivals": {
+            "items": {
+              "$ref": "#/components/schemas/ProductCardOut"
+            },
+            "title": "New Arrivals",
+            "type": "array"
+          }
+        },
+        "required": [
+          "categories",
+          "collections",
+          "new_arrivals",
+          "featured",
+          "bestsellers"
+        ],
+        "title": "HomeOut",
+        "type": "object"
+      },
+      "ImageOut": {
+        "properties": {
+          "alt": {
+            "title": "Alt",
+            "type": "string"
+          },
+          "height": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Height"
+          },
+          "is_placeholder": {
+            "default": false,
+            "title": "Is Placeholder",
+            "type": "boolean"
+          },
+          "renditions": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "default": {},
+            "title": "Renditions",
+            "type": "object"
+          },
+          "url": {
+            "title": "Url",
+            "type": "string"
+          },
+          "width": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Width"
+          }
+        },
+        "required": [
+          "url",
+          "alt"
+        ],
+        "title": "ImageOut",
+        "type": "object"
+      },
+      "ListingOut": {
+        "description": "What `/collections/:slug` in the storefront shows: a category or a curated collection.",
+        "properties": {
+          "category": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CategoryOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "collection": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CollectionOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "kind": {
+            "enum": [
+              "category",
+              "collection"
+            ],
+            "title": "Kind",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind"
+        ],
+        "title": "ListingOut",
+        "type": "object"
+      },
+      "NewsletterSubscribeIn": {
+        "additionalProperties": false,
+        "properties": {
+          "consent": {
+            "title": "Consent",
+            "type": "boolean"
+          },
+          "elapsed_seconds": {
+            "default": 10,
+            "maximum": 86400.0,
+            "minimum": 0.0,
+            "title": "Elapsed Seconds",
+            "type": "integer"
+          },
+          "email": {
+            "format": "email",
+            "title": "Email",
+            "type": "string"
+          },
+          "source": {
+            "default": "footer",
+            "maxLength": 40,
+            "title": "Source",
+            "type": "string"
+          },
+          "website": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Website",
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "consent"
+        ],
+        "title": "NewsletterSubscribeIn",
+        "type": "object"
+      },
+      "NewsletterUnsubscribeIn": {
+        "additionalProperties": false,
+        "properties": {
+          "token": {
+            "maxLength": 128,
+            "minLength": 16,
+            "title": "Token",
+            "type": "string"
+          }
+        },
+        "required": [
+          "token"
+        ],
+        "title": "NewsletterUnsubscribeIn",
+        "type": "object"
+      },
+      "OkOut": {
+        "properties": {
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          },
+          "ok": {
+            "default": true,
+            "title": "Ok",
+            "type": "boolean"
+          }
+        },
+        "title": "OkOut",
+        "type": "object"
+      },
+      "Page_ProductCardOut_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ProductCardOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "pages": {
+            "title": "Pages",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total",
+          "pages"
+        ],
+        "title": "Page[ProductCardOut]",
+        "type": "object"
+      },
+      "PincodeCheckOut": {
+        "properties": {
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "options": {
+            "items": {
+              "$ref": "#/components/schemas/ShippingOptionOut"
+            },
+            "title": "Options",
+            "type": "array"
+          },
+          "pincode": {
+            "title": "Pincode",
+            "type": "string"
+          },
+          "serviceable": {
+            "title": "Serviceable",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "pincode",
+          "serviceable",
+          "message",
+          "options"
+        ],
+        "title": "PincodeCheckOut",
+        "type": "object"
+      },
+      "PriceOut": {
+        "description": "One piece, tax included. `available=False` means the item cannot be priced or sold now.",
+        "properties": {
+          "amount": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Amount"
+          },
+          "available": {
+            "title": "Available",
+            "type": "boolean"
+          },
+          "breakdown": {
+            "default": [],
+            "items": {
+              "$ref": "#/components/schemas/PriceRowOut"
+            },
+            "title": "Breakdown",
+            "type": "array"
+          },
+          "compare_at": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Compare At"
+          },
+          "currency": {
+            "const": "INR",
+            "default": "INR",
+            "title": "Currency",
+            "type": "string"
+          },
+          "discount_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Discount Label"
+          },
+          "gold_rate": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GoldRateRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "unavailable_reason": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unavailable Reason"
+          }
+        },
+        "required": [
+          "available"
+        ],
+        "title": "PriceOut",
+        "type": "object"
+      },
+      "PriceRowOut": {
+        "properties": {
+          "amount": {
+            "title": "Amount",
+            "type": "string"
+          },
+          "key": {
+            "title": "Key",
+            "type": "string"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "label",
+          "amount"
+        ],
+        "title": "PriceRowOut",
+        "type": "object"
+      },
+      "ProductCardOut": {
+        "properties": {
+          "category": {
+            "$ref": "#/components/schemas/CategoryRef"
+          },
+          "hover_image": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ImageOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "image": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ImageOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "is_new": {
+            "title": "Is New",
+            "type": "boolean"
+          },
+          "is_sample": {
+            "title": "Is Sample",
+            "type": "boolean"
+          },
+          "metal_colour": {
+            "title": "Metal Colour",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "price": {
+            "$ref": "#/components/schemas/PriceOut"
+          },
+          "purity": {
+            "title": "Purity",
+            "type": "string"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          },
+          "stock_status": {
+            "enum": [
+              "in_stock",
+              "low_stock",
+              "out_of_stock"
+            ],
+            "title": "Stock Status",
+            "type": "string"
+          },
+          "weight_g": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Weight G"
+          }
+        },
+        "required": [
+          "id",
+          "slug",
+          "name",
+          "category",
+          "purity",
+          "metal_colour",
+          "weight_g",
+          "image",
+          "hover_image",
+          "price",
+          "stock_status",
+          "is_sample",
+          "is_new"
+        ],
+        "title": "ProductCardOut",
+        "type": "object"
+      },
+      "ProductDetailOut": {
+        "properties": {
+          "attributes": {
+            "items": {
+              "$ref": "#/components/schemas/AttributeOut"
+            },
+            "title": "Attributes",
+            "type": "array"
+          },
+          "care_instructions": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Care Instructions"
+          },
+          "category": {
+            "$ref": "#/components/schemas/CategoryRef"
+          },
+          "certification_details": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Certification Details"
+          },
+          "collections": {
+            "items": {
+              "$ref": "#/components/schemas/CollectionRef"
+            },
+            "title": "Collections",
+            "type": "array"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "exchange_eligible": {
+            "title": "Exchange Eligible",
+            "type": "boolean"
+          },
+          "hallmark_details": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hallmark Details"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "images": {
+            "items": {
+              "$ref": "#/components/schemas/ImageOut"
+            },
+            "title": "Images",
+            "type": "array"
+          },
+          "is_sample": {
+            "title": "Is Sample",
+            "type": "boolean"
+          },
+          "metal_colour": {
+            "title": "Metal Colour",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "parent_category": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/CategoryRef"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "pricing_model": {
+            "title": "Pricing Model",
+            "type": "string"
+          },
+          "published_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Published At"
+          },
+          "purity": {
+            "title": "Purity",
+            "type": "string"
+          },
+          "return_eligible": {
+            "title": "Return Eligible",
+            "type": "boolean"
+          },
+          "return_window_days": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Return Window Days"
+          },
+          "seo_description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seo Description"
+          },
+          "seo_title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seo Title"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          },
+          "stone_details": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stone Details"
+          },
+          "variants": {
+            "items": {
+              "$ref": "#/components/schemas/VariantOut"
+            },
+            "title": "Variants",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "slug",
+          "name",
+          "description",
+          "category",
+          "parent_category",
+          "collections",
+          "purity",
+          "metal_colour",
+          "pricing_model",
+          "stone_details",
+          "hallmark_details",
+          "certification_details",
+          "care_instructions",
+          "return_eligible",
+          "exchange_eligible",
+          "return_window_days",
+          "images",
+          "variants",
+          "attributes",
+          "is_sample",
+          "seo_title",
+          "seo_description",
+          "published_at"
+        ],
+        "title": "ProductDetailOut",
+        "type": "object"
+      },
+      "PublicSettingsOut": {
+        "properties": {
+          "announcement": {
+            "$ref": "#/components/schemas/AnnouncementOut"
+          },
+          "business_address": {
+            "title": "Business Address",
+            "type": "string"
+          },
+          "business_hours": {
+            "title": "Business Hours",
+            "type": "string"
+          },
+          "email_verification_required": {
+            "title": "Email Verification Required",
+            "type": "boolean"
+          },
+          "payment_mode": {
+            "enum": [
+              "razorpay",
+              "simulator"
+            ],
+            "title": "Payment Mode",
+            "type": "string"
+          },
+          "store_name": {
+            "title": "Store Name",
+            "type": "string"
+          },
+          "support_email": {
+            "title": "Support Email",
+            "type": "string"
+          },
+          "support_phone": {
+            "title": "Support Phone",
+            "type": "string"
+          },
+          "tagline": {
+            "title": "Tagline",
+            "type": "string"
+          },
+          "whatsapp": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Whatsapp"
+          }
+        },
+        "required": [
+          "store_name",
+          "tagline",
+          "support_email",
+          "support_phone",
+          "whatsapp",
+          "business_address",
+          "business_hours",
+          "announcement",
+          "payment_mode",
+          "email_verification_required"
+        ],
+        "title": "PublicSettingsOut",
+        "type": "object"
+      },
+      "ShippingOptionOut": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "estimated_from": {
+            "format": "date",
+            "title": "Estimated From",
+            "type": "string"
+          },
+          "estimated_to": {
+            "format": "date",
+            "title": "Estimated To",
+            "type": "string"
+          },
+          "fee": {
+            "title": "Fee",
+            "type": "string"
+          },
+          "free_above": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Free Above"
+          },
+          "max_days": {
+            "title": "Max Days",
+            "type": "integer"
+          },
+          "min_days": {
+            "title": "Min Days",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "name",
+          "description",
+          "fee",
+          "free_above",
+          "min_days",
+          "max_days",
+          "estimated_from",
+          "estimated_to"
+        ],
+        "title": "ShippingOptionOut",
+        "type": "object"
+      },
+      "SuggestOut": {
+        "properties": {
+          "categories": {
+            "items": {
+              "$ref": "#/components/schemas/CategoryRef"
+            },
+            "title": "Categories",
+            "type": "array"
+          },
+          "products": {
+            "items": {
+              "$ref": "#/components/schemas/SuggestionProductOut"
+            },
+            "title": "Products",
+            "type": "array"
+          }
+        },
+        "required": [
+          "products",
+          "categories"
+        ],
+        "title": "SuggestOut",
+        "type": "object"
+      },
+      "SuggestionProductOut": {
+        "properties": {
+          "image": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ImageOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "price": {
+            "$ref": "#/components/schemas/PriceOut"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "name",
+          "image",
+          "price"
+        ],
+        "title": "SuggestionProductOut",
+        "type": "object"
+      },
       "ValidationError": {
         "properties": {
           "ctx": {
@@ -100,6 +1450,101 @@
         ],
         "title": "ValidationError",
         "type": "object"
+      },
+      "VariantOut": {
+        "properties": {
+          "available_quantity": {
+            "title": "Available Quantity",
+            "type": "integer"
+          },
+          "gross_weight_g": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gross Weight G"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "is_default": {
+            "title": "Is Default",
+            "type": "boolean"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "net_gold_weight_g": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Net Gold Weight G"
+          },
+          "price": {
+            "$ref": "#/components/schemas/PriceOut"
+          },
+          "size": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size"
+          },
+          "sku": {
+            "title": "Sku",
+            "type": "string"
+          },
+          "stock_status": {
+            "enum": [
+              "in_stock",
+              "low_stock",
+              "out_of_stock"
+            ],
+            "title": "Stock Status",
+            "type": "string"
+          },
+          "stone_weight_ct": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stone Weight Ct"
+          }
+        },
+        "required": [
+          "id",
+          "sku",
+          "label",
+          "size",
+          "gross_weight_g",
+          "net_gold_weight_g",
+          "stone_weight_ct",
+          "is_default",
+          "stock_status",
+          "available_quantity",
+          "price"
+        ],
+        "title": "VariantOut",
+        "type": "object"
       }
     }
   },
@@ -128,6 +1573,223 @@
         "summary": "Get Csrf Token",
         "tags": [
           "auth"
+        ]
+      }
+    },
+    "/api/v1/categories": {
+      "get": {
+        "operationId": "categories_api_v1_categories_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CategoryOut"
+                  },
+                  "title": "Response Categories Api V1 Categories Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Categories",
+        "tags": [
+          "catalogue"
+        ]
+      }
+    },
+    "/api/v1/categories/{slug}": {
+      "get": {
+        "operationId": "category_api_v1_categories__slug__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "title": "Slug",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CategoryOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Category",
+        "tags": [
+          "catalogue"
+        ]
+      }
+    },
+    "/api/v1/collections": {
+      "get": {
+        "operationId": "collections_api_v1_collections_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CollectionOut"
+                  },
+                  "title": "Response Collections Api V1 Collections Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Collections",
+        "tags": [
+          "catalogue"
+        ]
+      }
+    },
+    "/api/v1/collections/{slug}": {
+      "get": {
+        "operationId": "collection_api_v1_collections__slug__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "title": "Slug",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Collection",
+        "tags": [
+          "catalogue"
+        ]
+      }
+    },
+    "/api/v1/contact": {
+      "post": {
+        "operationId": "contact_api_v1_contact_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContactIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Contact",
+        "tags": [
+          "content"
+        ]
+      }
+    },
+    "/api/v1/content/{slug}": {
+      "get": {
+        "operationId": "content_page_api_v1_content__slug__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "title": "Slug",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ContentPageOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Content Page",
+        "tags": [
+          "content"
         ]
       }
     },
@@ -172,6 +1834,780 @@
         "summary": "Health",
         "tags": [
           "health"
+        ]
+      }
+    },
+    "/api/v1/home": {
+      "get": {
+        "operationId": "home_api_v1_home_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HomeOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Home",
+        "tags": [
+          "catalogue"
+        ]
+      }
+    },
+    "/api/v1/listings/{slug}": {
+      "get": {
+        "operationId": "listing_api_v1_listings__slug__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "title": "Slug",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ListingOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Listing",
+        "tags": [
+          "catalogue"
+        ]
+      }
+    },
+    "/api/v1/newsletter/subscribe": {
+      "post": {
+        "operationId": "newsletter_subscribe_api_v1_newsletter_subscribe_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewsletterSubscribeIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "202": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Newsletter Subscribe",
+        "tags": [
+          "content"
+        ]
+      }
+    },
+    "/api/v1/newsletter/unsubscribe": {
+      "post": {
+        "operationId": "newsletter_unsubscribe_api_v1_newsletter_unsubscribe_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NewsletterUnsubscribeIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Newsletter Unsubscribe",
+        "tags": [
+          "content"
+        ]
+      }
+    },
+    "/api/v1/products": {
+      "get": {
+        "operationId": "products_api_v1_products_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Category"
+            }
+          },
+          {
+            "in": "query",
+            "name": "collection",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Collection"
+            }
+          },
+          {
+            "in": "query",
+            "name": "purity",
+            "required": false,
+            "schema": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Purity",
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "metal_colour",
+            "required": false,
+            "schema": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Metal Colour",
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "min_price",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 100000000.0,
+                  "minimum": 0.0,
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Min Price"
+            }
+          },
+          {
+            "in": "query",
+            "name": "max_price",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 100000000.0,
+                  "minimum": 0.0,
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Max Price"
+            }
+          },
+          {
+            "in": "query",
+            "name": "in_stock",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "In Stock",
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Attribute filters as key:value, e.g. occasion:wedding",
+            "in": "query",
+            "name": "attr",
+            "required": false,
+            "schema": {
+              "default": [],
+              "description": "Attribute filters as key:value, e.g. occasion:wedding",
+              "items": {
+                "type": "string"
+              },
+              "title": "Attr",
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "default": "relevance",
+              "enum": [
+                "relevance",
+                "newest",
+                "price_asc",
+                "price_desc"
+              ],
+              "title": "Sort",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "maximum": 1000,
+              "minimum": 1,
+              "title": "Page",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 24,
+              "maximum": 48,
+              "minimum": 1,
+              "title": "Page Size",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_ProductCardOut_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Products",
+        "tags": [
+          "catalogue"
+        ]
+      }
+    },
+    "/api/v1/products/facets": {
+      "get": {
+        "operationId": "product_facets_api_v1_products_facets_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 200,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "in": "query",
+            "name": "category",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Category"
+            }
+          },
+          {
+            "in": "query",
+            "name": "collection",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Collection"
+            }
+          },
+          {
+            "in": "query",
+            "name": "purity",
+            "required": false,
+            "schema": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Purity",
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "metal_colour",
+            "required": false,
+            "schema": {
+              "default": [],
+              "items": {
+                "type": "string"
+              },
+              "title": "Metal Colour",
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "min_price",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 100000000.0,
+                  "minimum": 0.0,
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Min Price"
+            }
+          },
+          {
+            "in": "query",
+            "name": "max_price",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maximum": 100000000.0,
+                  "minimum": 0.0,
+                  "type": "number"
+                },
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Max Price"
+            }
+          },
+          {
+            "in": "query",
+            "name": "in_stock",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "In Stock",
+              "type": "boolean"
+            }
+          },
+          {
+            "description": "Attribute filters as key:value, e.g. occasion:wedding",
+            "in": "query",
+            "name": "attr",
+            "required": false,
+            "schema": {
+              "default": [],
+              "description": "Attribute filters as key:value, e.g. occasion:wedding",
+              "items": {
+                "type": "string"
+              },
+              "title": "Attr",
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "name": "sort",
+            "required": false,
+            "schema": {
+              "default": "relevance",
+              "enum": [
+                "relevance",
+                "newest",
+                "price_asc",
+                "price_desc"
+              ],
+              "title": "Sort",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "maximum": 1000,
+              "minimum": 1,
+              "title": "Page",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 24,
+              "maximum": 48,
+              "minimum": 1,
+              "title": "Page Size",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FacetsOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Product Facets",
+        "tags": [
+          "catalogue"
+        ]
+      }
+    },
+    "/api/v1/products/{slug}": {
+      "get": {
+        "operationId": "product_detail_api_v1_products__slug__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "title": "Slug",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductDetailOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Product Detail",
+        "tags": [
+          "catalogue"
+        ]
+      }
+    },
+    "/api/v1/products/{slug}/related": {
+      "get": {
+        "operationId": "related_api_v1_products__slug__related_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "title": "Slug",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ProductCardOut"
+                  },
+                  "title": "Response Related Api V1 Products  Slug  Related Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Related",
+        "tags": [
+          "catalogue"
+        ]
+      }
+    },
+    "/api/v1/search/suggest": {
+      "get": {
+        "operationId": "suggest_api_v1_search_suggest_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "default": "",
+              "maxLength": 200,
+              "title": "Q",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuggestOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Suggest",
+        "tags": [
+          "catalogue"
+        ]
+      }
+    },
+    "/api/v1/settings/public": {
+      "get": {
+        "operationId": "public_settings_api_v1_settings_public_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PublicSettingsOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Public Settings",
+        "tags": [
+          "content"
+        ]
+      }
+    },
+    "/api/v1/shipping/pincode/{pincode}": {
+      "get": {
+        "operationId": "pincode_check_api_v1_shipping_pincode__pincode__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "pincode",
+            "required": true,
+            "schema": {
+              "title": "Pincode",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PincodeCheckOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Pincode Check",
+        "tags": [
+          "content"
         ]
       }
     }

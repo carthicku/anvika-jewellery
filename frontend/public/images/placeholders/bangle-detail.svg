@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 1000" width="800" height="1000" role="img" aria-label="Sample illustration of a gold bangle (detail)">
+  <title>Sample illustration of a gold bangle (detail)</title>
+  <defs>
+    <radialGradient id="light-bangle-d" cx="50%" cy="40%" r="65%">
+      <stop offset="0" stop-color="#FBF8F3"/>
+      <stop offset="1" stop-color="#F3EEE6"/>
+    </radialGradient>
+  </defs>
+  <rect width="800" height="1000" fill="url(#light-bangle-d)"/>
+  <g transform="translate(-180.0 -120.0) scale(1.450)" fill="none" stroke="#B08D57" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+
+        <circle cx="400" cy="400" r="230"/>
+        <circle cx="400" cy="400" r="198" stroke="#D9C4A0"/>
+        <circle cx="400" cy="400" r="214" stroke-dasharray="4 18" stroke="#D9C4A0"/>
+        
+  </g>
+  <text x="400" y="956" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="20" letter-spacing="6" fill="#6F695F">SAMPLE IMAGE</text>
+</svg>

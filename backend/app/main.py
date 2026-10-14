@@ -12,6 +12,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.api.sitemap import router as sitemap_router
 from app.api.v1.router import api_router
 from app.core.config import Settings, get_settings
 from app.core.db import make_engine, make_session_factory
@@ -78,6 +79,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.add_middleware(RequestContextMiddleware)
 
     app.include_router(api_router, prefix=API_PREFIX)
+    app.include_router(sitemap_router)
     return app
 
 
