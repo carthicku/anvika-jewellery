@@ -215,3 +215,26 @@ def _fast_password_hashing() -> Iterator[None]:
     security._hasher = PasswordHasher(time_cost=1, memory_cost=1024, parallelism=1)
     yield
     security._hasher = original
+
+
+# ------------------------------------------------------------------ staff / admin browsers
+
+
+def _signed_in_browser(app: FastAPI, email: str) -> Iterator[TestClient]:
+    with TestClient(app, base_url="http://testserver") as browser:
+        browser.headers["X-CSRF-Token"] = browser.get("/api/v1/auth/csrf").json()["csrf_token"]
+        yield login_client(browser, email)
+
+
+@pytest.fixture()
+def staff(app: FastAPI, make_user) -> Iterator[TestClient]:  # type: ignore[no-untyped-def]
+    """A signed-in staff member (no money, pricing, settings or user powers)."""
+    make_user(email="staff@example.com", role="staff", full_name="Store Staff")
+    yield from _signed_in_browser(app, "staff@example.com")
+
+
+@pytest.fixture()
+def admin(app: FastAPI, make_user) -> Iterator[TestClient]:  # type: ignore[no-untyped-def]
+    """A signed-in admin (owner)."""
+    make_user(email="owner@example.com", role="admin", full_name="Store Owner")
+    yield from _signed_in_browser(app, "owner@example.com")

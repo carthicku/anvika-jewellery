@@ -1,6 +1,20 @@
 {
   "components": {
     "schemas": {
+      "ActiveIn": {
+        "additionalProperties": false,
+        "properties": {
+          "is_active": {
+            "title": "Is Active",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "is_active"
+        ],
+        "title": "ActiveIn",
+        "type": "object"
+      },
       "AddToCartIn": {
         "additionalProperties": false,
         "properties": {
@@ -469,6 +483,52 @@
           "product_ids"
         ],
         "title": "AdminCollectionOut",
+        "type": "object"
+      },
+      "AdminContentPageOut": {
+        "properties": {
+          "body_markdown": {
+            "title": "Body Markdown",
+            "type": "string"
+          },
+          "is_draft_template": {
+            "title": "Is Draft Template",
+            "type": "boolean"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          },
+          "summary": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Summary"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "slug",
+          "title",
+          "summary",
+          "body_markdown",
+          "is_draft_template",
+          "updated_at"
+        ],
+        "title": "AdminContentPageOut",
         "type": "object"
       },
       "AdminImageOut": {
@@ -1233,6 +1293,38 @@
           "price_error"
         ],
         "title": "AdminVariantOut",
+        "type": "object"
+      },
+      "AnnouncementIn": {
+        "additionalProperties": false,
+        "properties": {
+          "enabled": {
+            "title": "Enabled",
+            "type": "boolean"
+          },
+          "link": {
+            "anyOf": [
+              {
+                "maxLength": 300,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Link"
+          },
+          "text": {
+            "maxLength": 160,
+            "title": "Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "enabled",
+          "text"
+        ],
+        "title": "AnnouncementIn",
         "type": "object"
       },
       "AnnouncementOut": {
@@ -2314,6 +2406,45 @@
         "title": "ContactIn",
         "type": "object"
       },
+      "ContentPageIn": {
+        "additionalProperties": false,
+        "properties": {
+          "body_markdown": {
+            "maxLength": 100000,
+            "title": "Body Markdown",
+            "type": "string"
+          },
+          "is_draft_template": {
+            "title": "Is Draft Template",
+            "type": "boolean"
+          },
+          "summary": {
+            "anyOf": [
+              {
+                "maxLength": 300,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Summary"
+          },
+          "title": {
+            "maxLength": 160,
+            "minLength": 2,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "title",
+          "body_markdown",
+          "is_draft_template"
+        ],
+        "title": "ContentPageIn",
+        "type": "object"
+      },
       "ContentPageOut": {
         "properties": {
           "body_markdown": {
@@ -2360,6 +2491,133 @@
         "title": "ContentPageOut",
         "type": "object"
       },
+      "CouponCreateIn": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "ends_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ends At"
+          },
+          "is_active": {
+            "default": true,
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "kind": {
+            "enum": [
+              "percent",
+              "flat"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "max_discount_amount": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Discount Amount"
+          },
+          "min_order_amount": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min Order Amount"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "usage_limit_per_customer": {
+            "anyOf": [
+              {
+                "maximum": 1000.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Usage Limit Per Customer"
+          },
+          "usage_limit_total": {
+            "anyOf": [
+              {
+                "maximum": 1000000.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Usage Limit Total"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "required": [
+          "kind",
+          "value",
+          "starts_at",
+          "code"
+        ],
+        "title": "CouponCreateIn",
+        "type": "object"
+      },
       "CouponIn": {
         "additionalProperties": false,
         "properties": {
@@ -2374,6 +2632,133 @@
           "code"
         ],
         "title": "CouponIn",
+        "type": "object"
+      },
+      "CouponOut": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "ends_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ends At"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "is_active": {
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "is_sample": {
+            "title": "Is Sample",
+            "type": "boolean"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "max_discount_amount": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Discount Amount"
+          },
+          "min_order_amount": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min Order Amount"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "times_reserved": {
+            "title": "Times Reserved",
+            "type": "integer"
+          },
+          "times_used": {
+            "title": "Times Used",
+            "type": "integer"
+          },
+          "usage_limit_per_customer": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Usage Limit Per Customer"
+          },
+          "usage_limit_total": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Usage Limit Total"
+          },
+          "value": {
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "description",
+          "kind",
+          "value",
+          "max_discount_amount",
+          "min_order_amount",
+          "starts_at",
+          "ends_at",
+          "usage_limit_total",
+          "usage_limit_per_customer",
+          "is_active",
+          "is_sample",
+          "times_used",
+          "times_reserved"
+        ],
+        "title": "CouponOut",
         "type": "object"
       },
       "CouponStateOut": {
@@ -2404,6 +2789,128 @@
           "message"
         ],
         "title": "CouponStateOut",
+        "type": "object"
+      },
+      "CouponUpdateIn": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "ends_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ends At"
+          },
+          "is_active": {
+            "default": true,
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "kind": {
+            "enum": [
+              "percent",
+              "flat"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "max_discount_amount": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Max Discount Amount"
+          },
+          "min_order_amount": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Min Order Amount"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "usage_limit_per_customer": {
+            "anyOf": [
+              {
+                "maximum": 1000.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Usage Limit Per Customer"
+          },
+          "usage_limit_total": {
+            "anyOf": [
+              {
+                "maximum": 1000000.0,
+                "minimum": 1.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Usage Limit Total"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "required": [
+          "kind",
+          "value",
+          "starts_at"
+        ],
+        "title": "CouponUpdateIn",
         "type": "object"
       },
       "CreateOrderIn": {
@@ -2731,6 +3238,252 @@
           "gold_rates"
         ],
         "title": "DashboardOut",
+        "type": "object"
+      },
+      "DiscountIn": {
+        "additionalProperties": false,
+        "properties": {
+          "ends_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ends At"
+          },
+          "is_active": {
+            "default": true,
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "kind": {
+            "enum": [
+              "percent_off_making",
+              "percent_off_price",
+              "flat_off_price"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 120,
+            "minLength": 2,
+            "title": "Name",
+            "type": "string"
+          },
+          "scope": {
+            "default": "all",
+            "enum": [
+              "all",
+              "category",
+              "collection",
+              "product"
+            ],
+            "title": "Scope",
+            "type": "string"
+          },
+          "scope_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope Id"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "value": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Value"
+          }
+        },
+        "required": [
+          "name",
+          "kind",
+          "value",
+          "starts_at"
+        ],
+        "title": "DiscountIn",
+        "type": "object"
+      },
+      "DiscountOut": {
+        "properties": {
+          "ends_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ends At"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "is_active": {
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "running_now": {
+            "title": "Running Now",
+            "type": "boolean"
+          },
+          "scope": {
+            "title": "Scope",
+            "type": "string"
+          },
+          "scope_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope Id"
+          },
+          "scope_name": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Scope Name"
+          },
+          "starts_at": {
+            "format": "date-time",
+            "title": "Starts At",
+            "type": "string"
+          },
+          "value": {
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "kind",
+          "value",
+          "scope",
+          "scope_id",
+          "scope_name",
+          "starts_at",
+          "ends_at",
+          "is_active",
+          "running_now"
+        ],
+        "title": "DiscountOut",
+        "type": "object"
+      },
+      "EnquiryOut": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "email": {
+            "title": "Email",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "phone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phone"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "subject": {
+            "title": "Subject",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "email",
+          "phone",
+          "subject",
+          "message",
+          "status",
+          "created_at"
+        ],
+        "title": "EnquiryOut",
+        "type": "object"
+      },
+      "EnquiryStatusIn": {
+        "additionalProperties": false,
+        "properties": {
+          "status": {
+            "enum": [
+              "new",
+              "in_progress",
+              "closed"
+            ],
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "status"
+        ],
+        "title": "EnquiryStatusIn",
         "type": "object"
       },
       "FacetValueOut": {
@@ -4132,6 +4885,42 @@
         "title": "Page[CustomerRowOut]",
         "type": "object"
       },
+      "Page_EnquiryOut_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/EnquiryOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "pages": {
+            "title": "Pages",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total",
+          "pages"
+        ],
+        "title": "Page[EnquiryOut]",
+        "type": "object"
+      },
       "Page_InventoryRowOut_": {
         "properties": {
           "items": {
@@ -4310,6 +5099,42 @@
           "pages"
         ],
         "title": "Page[ProductRowOut]",
+        "type": "object"
+      },
+      "Page_SubscriberOut_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/SubscriberOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "pages": {
+            "title": "Pages",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total",
+          "pages"
+        ],
+        "title": "Page[SubscriberOut]",
         "type": "object"
       },
       "PaymentAttemptOut": {
@@ -4878,6 +5703,67 @@
           "amount"
         ],
         "title": "PriceRowOut",
+        "type": "object"
+      },
+      "PricingPolicyIn-Input": {
+        "additionalProperties": false,
+        "properties": {
+          "block_checkout_when_rate_stale": {
+            "title": "Block Checkout When Rate Stale",
+            "type": "boolean"
+          },
+          "gold_rate_max_change_percent": {
+            "anyOf": [
+              {
+                "maximum": 50.0,
+                "minimum": 0.5,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Gold Rate Max Change Percent"
+          },
+          "gold_rate_stale_after_hours": {
+            "maximum": 720.0,
+            "minimum": 1.0,
+            "title": "Gold Rate Stale After Hours",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "gold_rate_max_change_percent",
+          "gold_rate_stale_after_hours",
+          "block_checkout_when_rate_stale"
+        ],
+        "title": "PricingPolicyIn",
+        "type": "object"
+      },
+      "PricingPolicyIn-Output": {
+        "additionalProperties": false,
+        "properties": {
+          "block_checkout_when_rate_stale": {
+            "title": "Block Checkout When Rate Stale",
+            "type": "boolean"
+          },
+          "gold_rate_max_change_percent": {
+            "title": "Gold Rate Max Change Percent",
+            "type": "string"
+          },
+          "gold_rate_stale_after_hours": {
+            "maximum": 720.0,
+            "minimum": 1.0,
+            "title": "Gold Rate Stale After Hours",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "gold_rate_max_change_percent",
+          "gold_rate_stale_after_hours",
+          "block_checkout_when_rate_stale"
+        ],
+        "title": "PricingPolicyIn",
         "type": "object"
       },
       "ProductCardOut": {
@@ -5825,6 +6711,30 @@
         "title": "ProfileIn",
         "type": "object"
       },
+      "PromoteIn": {
+        "additionalProperties": false,
+        "properties": {
+          "email": {
+            "maxLength": 254,
+            "title": "Email",
+            "type": "string"
+          },
+          "role": {
+            "enum": [
+              "staff",
+              "admin"
+            ],
+            "title": "Role",
+            "type": "string"
+          }
+        },
+        "required": [
+          "email",
+          "role"
+        ],
+        "title": "PromoteIn",
+        "type": "object"
+      },
       "PublicSettingsOut": {
         "properties": {
           "announcement": {
@@ -6253,6 +7163,25 @@
         "title": "RetryPaymentOut",
         "type": "object"
       },
+      "RoleIn": {
+        "additionalProperties": false,
+        "properties": {
+          "role": {
+            "enum": [
+              "customer",
+              "staff",
+              "admin"
+            ],
+            "title": "Role",
+            "type": "string"
+          }
+        },
+        "required": [
+          "role"
+        ],
+        "title": "RoleIn",
+        "type": "object"
+      },
       "SessionOut": {
         "properties": {
           "created_at": {
@@ -6298,6 +7227,30 @@
           "current"
         ],
         "title": "SessionOut",
+        "type": "object"
+      },
+      "SettingsOut": {
+        "properties": {
+          "announcement": {
+            "$ref": "#/components/schemas/AnnouncementIn"
+          },
+          "pricing_policy": {
+            "$ref": "#/components/schemas/PricingPolicyIn-Output"
+          },
+          "store": {
+            "$ref": "#/components/schemas/StoreSettingsIn"
+          },
+          "tax": {
+            "$ref": "#/components/schemas/TaxIn-Output"
+          }
+        },
+        "required": [
+          "store",
+          "announcement",
+          "tax",
+          "pricing_policy"
+        ],
+        "title": "SettingsOut",
         "type": "object"
       },
       "ShipIn": {
@@ -6396,6 +7349,166 @@
         "title": "ShipmentOut",
         "type": "object"
       },
+      "ShippingMethodIn": {
+        "additionalProperties": false,
+        "properties": {
+          "code": {
+            "pattern": "^[a-z0-9_-]{2,40}$",
+            "title": "Code",
+            "type": "string"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "maxLength": 300,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "fee": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Fee"
+          },
+          "free_above": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Free Above"
+          },
+          "is_active": {
+            "default": true,
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "max_days": {
+            "maximum": 90.0,
+            "minimum": 0.0,
+            "title": "Max Days",
+            "type": "integer"
+          },
+          "min_days": {
+            "maximum": 60.0,
+            "minimum": 0.0,
+            "title": "Min Days",
+            "type": "integer"
+          },
+          "name": {
+            "maxLength": 80,
+            "minLength": 2,
+            "title": "Name",
+            "type": "string"
+          },
+          "sort_order": {
+            "default": 0,
+            "maximum": 1000.0,
+            "minimum": 0.0,
+            "title": "Sort Order",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "code",
+          "name",
+          "fee",
+          "min_days",
+          "max_days"
+        ],
+        "title": "ShippingMethodIn",
+        "type": "object"
+      },
+      "ShippingMethodOut": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "fee": {
+            "title": "Fee",
+            "type": "string"
+          },
+          "free_above": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Free Above"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "is_active": {
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "max_days": {
+            "title": "Max Days",
+            "type": "integer"
+          },
+          "min_days": {
+            "title": "Min Days",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "sort_order": {
+            "title": "Sort Order",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "code",
+          "name",
+          "description",
+          "fee",
+          "free_above",
+          "min_days",
+          "max_days",
+          "is_active",
+          "sort_order"
+        ],
+        "title": "ShippingMethodOut",
+        "type": "object"
+      },
       "ShippingOptionOut": {
         "properties": {
           "code": {
@@ -6465,6 +7578,80 @@
         "title": "ShippingOptionOut",
         "type": "object"
       },
+      "ShippingZoneIn": {
+        "additionalProperties": false,
+        "properties": {
+          "extra_days": {
+            "default": 0,
+            "maximum": 30.0,
+            "minimum": 0.0,
+            "title": "Extra Days",
+            "type": "integer"
+          },
+          "is_active": {
+            "default": true,
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "name": {
+            "maxLength": 80,
+            "minLength": 2,
+            "title": "Name",
+            "type": "string"
+          },
+          "pincode_prefixes": {
+            "items": {
+              "type": "string"
+            },
+            "maxItems": 500,
+            "minItems": 1,
+            "title": "Pincode Prefixes",
+            "type": "array"
+          }
+        },
+        "required": [
+          "name",
+          "pincode_prefixes"
+        ],
+        "title": "ShippingZoneIn",
+        "type": "object"
+      },
+      "ShippingZoneOut": {
+        "properties": {
+          "extra_days": {
+            "title": "Extra Days",
+            "type": "integer"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "is_active": {
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "pincode_prefixes": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Pincode Prefixes",
+            "type": "array"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "pincode_prefixes",
+          "extra_days",
+          "is_active"
+        ],
+        "title": "ShippingZoneOut",
+        "type": "object"
+      },
       "SimulatorPayIn": {
         "additionalProperties": false,
         "properties": {
@@ -6530,6 +7717,169 @@
         "title": "SimulatorPayOut",
         "type": "object"
       },
+      "StaffUserOut": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "email": {
+            "title": "Email",
+            "type": "string"
+          },
+          "full_name": {
+            "title": "Full Name",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "is_active": {
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "last_login_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Last Login At"
+          },
+          "role": {
+            "enum": [
+              "customer",
+              "staff",
+              "admin"
+            ],
+            "title": "Role",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "email",
+          "full_name",
+          "role",
+          "is_active",
+          "last_login_at",
+          "created_at"
+        ],
+        "title": "StaffUserOut",
+        "type": "object"
+      },
+      "StoreSettingsIn": {
+        "additionalProperties": false,
+        "properties": {
+          "business_address": {
+            "maxLength": 500,
+            "title": "Business Address",
+            "type": "string"
+          },
+          "business_hours": {
+            "maxLength": 200,
+            "title": "Business Hours",
+            "type": "string"
+          },
+          "gstin": {
+            "maxLength": 40,
+            "title": "Gstin",
+            "type": "string"
+          },
+          "support_email": {
+            "maxLength": 254,
+            "title": "Support Email",
+            "type": "string"
+          },
+          "support_phone": {
+            "maxLength": 60,
+            "title": "Support Phone",
+            "type": "string"
+          },
+          "tagline": {
+            "maxLength": 120,
+            "title": "Tagline",
+            "type": "string"
+          },
+          "whatsapp": {
+            "anyOf": [
+              {
+                "maxLength": 60,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Whatsapp"
+          }
+        },
+        "required": [
+          "tagline",
+          "support_email",
+          "support_phone",
+          "business_address",
+          "gstin",
+          "business_hours"
+        ],
+        "title": "StoreSettingsIn",
+        "type": "object"
+      },
+      "SubscriberOut": {
+        "properties": {
+          "consent_at": {
+            "format": "date-time",
+            "title": "Consent At",
+            "type": "string"
+          },
+          "email": {
+            "title": "Email",
+            "type": "string"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "unsubscribed_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unsubscribed At"
+          }
+        },
+        "required": [
+          "email",
+          "status",
+          "source",
+          "consent_at",
+          "unsubscribed_at"
+        ],
+        "title": "SubscriberOut",
+        "type": "object"
+      },
       "SuggestOut": {
         "properties": {
           "categories": {
@@ -6585,6 +7935,100 @@
           "price"
         ],
         "title": "SuggestionProductOut",
+        "type": "object"
+      },
+      "TaxIn-Input": {
+        "additionalProperties": false,
+        "properties": {
+          "making_percent": {
+            "anyOf": [
+              {
+                "maximum": 28.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Making Percent"
+          },
+          "metal_percent": {
+            "anyOf": [
+              {
+                "maximum": 28.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Metal Percent"
+          },
+          "shipping_percent": {
+            "anyOf": [
+              {
+                "maximum": 28.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Shipping Percent"
+          },
+          "stones_percent": {
+            "anyOf": [
+              {
+                "maximum": 28.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Stones Percent"
+          }
+        },
+        "required": [
+          "metal_percent",
+          "making_percent",
+          "stones_percent",
+          "shipping_percent"
+        ],
+        "title": "TaxIn",
+        "type": "object"
+      },
+      "TaxIn-Output": {
+        "additionalProperties": false,
+        "properties": {
+          "making_percent": {
+            "title": "Making Percent",
+            "type": "string"
+          },
+          "metal_percent": {
+            "title": "Metal Percent",
+            "type": "string"
+          },
+          "shipping_percent": {
+            "title": "Shipping Percent",
+            "type": "string"
+          },
+          "stones_percent": {
+            "title": "Stones Percent",
+            "type": "string"
+          }
+        },
+        "required": [
+          "metal_percent",
+          "making_percent",
+          "stones_percent",
+          "shipping_percent"
+        ],
+        "title": "TaxIn",
         "type": "object"
       },
       "ThresholdIn": {
@@ -7684,6 +9128,240 @@
         ]
       }
     },
+    "/api/v1/admin/content": {
+      "get": {
+        "operationId": "list_pages_api_v1_admin_content_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AdminContentPageOut"
+                  },
+                  "title": "Response List Pages Api V1 Admin Content Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Pages",
+        "tags": [
+          "admin-store"
+        ]
+      }
+    },
+    "/api/v1/admin/content/{slug}": {
+      "get": {
+        "operationId": "get_page_api_v1_admin_content__slug__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "title": "Slug",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminContentPageOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Page",
+        "tags": [
+          "admin-store"
+        ]
+      },
+      "put": {
+        "operationId": "update_page_api_v1_admin_content__slug__put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "title": "Slug",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ContentPageIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminContentPageOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Page",
+        "tags": [
+          "admin-store"
+        ]
+      }
+    },
+    "/api/v1/admin/coupons": {
+      "get": {
+        "operationId": "list_coupons_api_v1_admin_coupons_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/CouponOut"
+                  },
+                  "title": "Response List Coupons Api V1 Admin Coupons Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Coupons",
+        "tags": [
+          "admin-store"
+        ]
+      },
+      "post": {
+        "operationId": "create_coupon_api_v1_admin_coupons_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CouponCreateIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CouponOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Coupon",
+        "tags": [
+          "admin-store"
+        ]
+      }
+    },
+    "/api/v1/admin/coupons/{coupon_id}": {
+      "put": {
+        "operationId": "update_coupon_api_v1_admin_coupons__coupon_id__put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "coupon_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Coupon Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CouponUpdateIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CouponOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Coupon",
+        "tags": [
+          "admin-store"
+        ]
+      }
+    },
     "/api/v1/admin/customers": {
       "get": {
         "operationId": "list_customers_api_v1_admin_customers_get",
@@ -7865,6 +9543,250 @@
         "summary": "Get Dashboard",
         "tags": [
           "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/discounts": {
+      "get": {
+        "operationId": "list_discounts_api_v1_admin_discounts_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DiscountOut"
+                  },
+                  "title": "Response List Discounts Api V1 Admin Discounts Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Discounts",
+        "tags": [
+          "admin-store"
+        ]
+      },
+      "post": {
+        "operationId": "create_discount_api_v1_admin_discounts_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DiscountIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscountOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Discount",
+        "tags": [
+          "admin-store"
+        ]
+      }
+    },
+    "/api/v1/admin/discounts/{discount_id}": {
+      "put": {
+        "operationId": "update_discount_api_v1_admin_discounts__discount_id__put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "discount_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Discount Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DiscountIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscountOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Discount",
+        "tags": [
+          "admin-store"
+        ]
+      }
+    },
+    "/api/v1/admin/enquiries": {
+      "get": {
+        "operationId": "list_enquiries_api_v1_admin_enquiries_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 16,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "maximum": 10000,
+              "minimum": 1,
+              "title": "Page",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Page Size",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_EnquiryOut_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Enquiries",
+        "tags": [
+          "admin-store"
+        ]
+      }
+    },
+    "/api/v1/admin/enquiries/{enquiry_id}/status": {
+      "put": {
+        "operationId": "set_enquiry_status_api_v1_admin_enquiries__enquiry_id__status_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "enquiry_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Enquiry Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EnquiryStatusIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Set Enquiry Status",
+        "tags": [
+          "admin-store"
         ]
       }
     },
@@ -8231,6 +10153,80 @@
         "summary": "Set Threshold",
         "tags": [
           "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/newsletter": {
+      "get": {
+        "operationId": "list_subscribers_api_v1_admin_newsletter_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 16,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "maximum": 10000,
+              "minimum": 1,
+              "title": "Page",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Page Size",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_SubscriberOut_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Subscribers",
+        "tags": [
+          "admin-store"
         ]
       }
     },
@@ -9358,6 +11354,640 @@
         "summary": "Update Variant",
         "tags": [
           "admin-catalogue"
+        ]
+      }
+    },
+    "/api/v1/admin/settings": {
+      "get": {
+        "operationId": "get_settings_api_v1_admin_settings_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "Get Settings",
+        "tags": [
+          "admin-store"
+        ]
+      }
+    },
+    "/api/v1/admin/settings/announcement": {
+      "put": {
+        "operationId": "save_announcement_api_v1_admin_settings_announcement_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AnnouncementIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Save Announcement",
+        "tags": [
+          "admin-store"
+        ]
+      }
+    },
+    "/api/v1/admin/settings/pricing-policy": {
+      "put": {
+        "operationId": "save_pricing_policy_api_v1_admin_settings_pricing_policy_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PricingPolicyIn-Input"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Save Pricing Policy",
+        "tags": [
+          "admin-store"
+        ]
+      }
+    },
+    "/api/v1/admin/settings/store": {
+      "put": {
+        "operationId": "save_store_api_v1_admin_settings_store_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/StoreSettingsIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Save Store",
+        "tags": [
+          "admin-store"
+        ]
+      }
+    },
+    "/api/v1/admin/settings/tax": {
+      "put": {
+        "description": "GST rates per price component. Confirm with a tax professional before changing.",
+        "operationId": "save_tax_api_v1_admin_settings_tax_put",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TaxIn-Input"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SettingsOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Save Tax",
+        "tags": [
+          "admin-store"
+        ]
+      }
+    },
+    "/api/v1/admin/shipping/methods": {
+      "get": {
+        "operationId": "list_methods_api_v1_admin_shipping_methods_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ShippingMethodOut"
+                  },
+                  "title": "Response List Methods Api V1 Admin Shipping Methods Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Methods",
+        "tags": [
+          "admin-store"
+        ]
+      },
+      "post": {
+        "operationId": "create_method_api_v1_admin_shipping_methods_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShippingMethodIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShippingMethodOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Method",
+        "tags": [
+          "admin-store"
+        ]
+      }
+    },
+    "/api/v1/admin/shipping/methods/{method_id}": {
+      "put": {
+        "operationId": "update_method_api_v1_admin_shipping_methods__method_id__put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "method_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Method Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShippingMethodIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShippingMethodOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Method",
+        "tags": [
+          "admin-store"
+        ]
+      }
+    },
+    "/api/v1/admin/shipping/zones": {
+      "get": {
+        "operationId": "list_zones_api_v1_admin_shipping_zones_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ShippingZoneOut"
+                  },
+                  "title": "Response List Zones Api V1 Admin Shipping Zones Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Zones",
+        "tags": [
+          "admin-store"
+        ]
+      },
+      "post": {
+        "operationId": "create_zone_api_v1_admin_shipping_zones_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShippingZoneIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShippingZoneOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Zone",
+        "tags": [
+          "admin-store"
+        ]
+      }
+    },
+    "/api/v1/admin/shipping/zones/{zone_id}": {
+      "delete": {
+        "operationId": "delete_zone_api_v1_admin_shipping_zones__zone_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "zone_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Zone Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Delete Zone",
+        "tags": [
+          "admin-store"
+        ]
+      },
+      "put": {
+        "operationId": "update_zone_api_v1_admin_shipping_zones__zone_id__put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "zone_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Zone Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShippingZoneIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ShippingZoneOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Zone",
+        "tags": [
+          "admin-store"
+        ]
+      }
+    },
+    "/api/v1/admin/users": {
+      "get": {
+        "operationId": "list_staff_api_v1_admin_users_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/StaffUserOut"
+                  },
+                  "title": "Response List Staff Api V1 Admin Users Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Staff",
+        "tags": [
+          "admin-store"
+        ]
+      }
+    },
+    "/api/v1/admin/users/promote": {
+      "post": {
+        "description": "Give an existing account (they register first) staff or admin access.",
+        "operationId": "promote_api_v1_admin_users_promote_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PromoteIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffUserOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Promote",
+        "tags": [
+          "admin-store"
+        ]
+      }
+    },
+    "/api/v1/admin/users/{user_id}/active": {
+      "put": {
+        "operationId": "change_active_api_v1_admin_users__user_id__active_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "User Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ActiveIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffUserOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Change Active",
+        "tags": [
+          "admin-store"
+        ]
+      }
+    },
+    "/api/v1/admin/users/{user_id}/role": {
+      "put": {
+        "operationId": "change_role_api_v1_admin_users__user_id__role_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "user_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "User Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RoleIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/StaffUserOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Change Role",
+        "tags": [
+          "admin-store"
         ]
       }
     },

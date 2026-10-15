@@ -6,8 +6,6 @@ from __future__ import annotations
 from decimal import Decimal
 from typing import Any
 
-import pytest
-from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from sqlalchemy import select, update
 from sqlalchemy.orm import Session
@@ -21,22 +19,6 @@ from tests.conftest import login_client
 
 SKU = "ANV-RG-002-12"
 API = "/api/v1/admin"
-
-
-@pytest.fixture()
-def staff(app: FastAPI, make_user) -> TestClient:  # type: ignore[no-untyped-def]
-    make_user(email="staff@example.com", role="staff", full_name="Store Staff")
-    with TestClient(app, base_url="http://testserver") as c:
-        c.headers["X-CSRF-Token"] = c.get("/api/v1/auth/csrf").json()["csrf_token"]
-        yield login_client(c, "staff@example.com")
-
-
-@pytest.fixture()
-def admin(app: FastAPI, make_user) -> TestClient:  # type: ignore[no-untyped-def]
-    make_user(email="owner@example.com", role="admin", full_name="Store Owner")
-    with TestClient(app, base_url="http://testserver") as c:
-        c.headers["X-CSRF-Token"] = c.get("/api/v1/auth/csrf").json()["csrf_token"]
-        yield login_client(c, "owner@example.com")
 
 
 def reference(checkout: dict[str, Any]) -> str:
