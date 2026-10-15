@@ -258,3 +258,42 @@ def restock(
             note=note,
         )
     db.flush()
+
+
+# --------------------------------------------------------------------------------------------
+# Admin adjustments (Phase 7)
+# --------------------------------------------------------------------------------------------
+
+
+def adjust(
+    db: Session,
+    variant_id: uuid.UUID,
+    delta: int,
+    *,
+    note: str,
+    actor_user_id: uuid.UUID | None,
+) -> InventoryLevel:
+    """Add (+) or remove (−) pieces on hand, e.g. a stock count correction or new stock.
+    On-hand stock can never drop below what is reserved for unpaid orders."""
+    if delta == 0:
+        raise ValueError("Adjustment must change the stock")
+    if not note.strip():
+        raise ValueError("A reason is required")
+    level = _lock_levels(db, [variant_id]).get(variant_id)
+    if level is None:
+        level = InventoryLevel(variant_id=variant_id, on_hand=0, reserved=0, low_stock_threshold=2)
+        db.add(level)
+        db.flush()
+    if level.on_hand + delta < level.reserved:
+        raise OutOfStock(
+            f"Only {level.on_hand - level.reserved} can be removed: {level.reserved} are "
+            "reserved for orders awaiting payment.",
+            code="ADJUSTMENT_BELOW_RESERVED",
+            details={"on_hand": level.on_hand, "reserved": level.reserved},
+        )
+    level.on_hand += delta
+    _movement(
+        db, variant_id, on_hand=delta, reason="adjustment", actor_user_id=actor_user_id, note=note
+    )
+    db.flush()
+    return level

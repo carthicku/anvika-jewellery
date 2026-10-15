@@ -280,6 +280,285 @@
         "title": "AddressOut",
         "type": "object"
       },
+      "AdjustStockIn": {
+        "additionalProperties": false,
+        "properties": {
+          "delta": {
+            "maximum": 10000.0,
+            "minimum": -10000.0,
+            "title": "Delta",
+            "type": "integer"
+          },
+          "note": {
+            "maxLength": 300,
+            "minLength": 3,
+            "title": "Note",
+            "type": "string"
+          }
+        },
+        "required": [
+          "delta",
+          "note"
+        ],
+        "title": "AdjustStockIn",
+        "type": "object"
+      },
+      "AdminOrderEventOut": {
+        "properties": {
+          "actor_type": {
+            "title": "Actor Type",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "customer_visible": {
+            "title": "Customer Visible",
+            "type": "boolean"
+          },
+          "from_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "From Status"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "to_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "To Status"
+          }
+        },
+        "required": [
+          "kind",
+          "title",
+          "note",
+          "from_status",
+          "to_status",
+          "actor_type",
+          "customer_visible",
+          "created_at"
+        ],
+        "title": "AdminOrderEventOut",
+        "type": "object"
+      },
+      "AdminOrderOut": {
+        "properties": {
+          "allowed_actions": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Allowed Actions",
+            "type": "array"
+          },
+          "customer_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Customer Id"
+          },
+          "events": {
+            "items": {
+              "$ref": "#/components/schemas/AdminOrderEventOut"
+            },
+            "title": "Events",
+            "type": "array"
+          },
+          "order": {
+            "$ref": "#/components/schemas/OrderOut"
+          },
+          "payment_attempts": {
+            "items": {
+              "$ref": "#/components/schemas/PaymentAttemptOut"
+            },
+            "title": "Payment Attempts",
+            "type": "array"
+          },
+          "refundable": {
+            "title": "Refundable",
+            "type": "string"
+          },
+          "refunds": {
+            "items": {
+              "$ref": "#/components/schemas/AdminRefundOut"
+            },
+            "title": "Refunds",
+            "type": "array"
+          }
+        },
+        "required": [
+          "order",
+          "customer_id",
+          "events",
+          "payment_attempts",
+          "refunds",
+          "refundable",
+          "allowed_actions"
+        ],
+        "title": "AdminOrderOut",
+        "type": "object"
+      },
+      "AdminOrderRowOut": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "customer_name": {
+            "title": "Customer Name",
+            "type": "string"
+          },
+          "email": {
+            "title": "Email",
+            "type": "string"
+          },
+          "grand_total": {
+            "title": "Grand Total",
+            "type": "string"
+          },
+          "item_count": {
+            "title": "Item Count",
+            "type": "integer"
+          },
+          "payment_status": {
+            "enum": [
+              "unpaid",
+              "authorized",
+              "paid",
+              "failed",
+              "refund_pending",
+              "partially_refunded",
+              "refunded"
+            ],
+            "title": "Payment Status",
+            "type": "string"
+          },
+          "payment_status_label": {
+            "title": "Payment Status Label",
+            "type": "string"
+          },
+          "reference": {
+            "title": "Reference",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "pending_payment",
+              "confirmed",
+              "processing",
+              "shipped",
+              "delivered",
+              "cancelled",
+              "expired",
+              "payment_review",
+              "returned"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "status_label": {
+            "title": "Status Label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reference",
+          "created_at",
+          "customer_name",
+          "email",
+          "status",
+          "status_label",
+          "payment_status",
+          "payment_status_label",
+          "grand_total",
+          "item_count"
+        ],
+        "title": "AdminOrderRowOut",
+        "type": "object"
+      },
+      "AdminRefundOut": {
+        "properties": {
+          "amount": {
+            "title": "Amount",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "provider_refund_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider Refund Id"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "amount",
+          "status",
+          "reason",
+          "provider_refund_id",
+          "created_at"
+        ],
+        "title": "AdminRefundOut",
+        "type": "object"
+      },
       "AnnouncementOut": {
         "properties": {
           "enabled": {
@@ -326,6 +605,112 @@
           "value"
         ],
         "title": "AttributeOut",
+        "type": "object"
+      },
+      "AuditLogOut": {
+        "properties": {
+          "action": {
+            "title": "Action",
+            "type": "string"
+          },
+          "actor_email": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actor Email"
+          },
+          "actor_role": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actor Role"
+          },
+          "changes": {
+            "additionalProperties": true,
+            "title": "Changes",
+            "type": "object"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "entity_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Entity Id"
+          },
+          "entity_type": {
+            "title": "Entity Type",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "ip_address": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Ip Address"
+          }
+        },
+        "required": [
+          "id",
+          "created_at",
+          "actor_email",
+          "actor_role",
+          "action",
+          "entity_type",
+          "entity_id",
+          "changes",
+          "ip_address"
+        ],
+        "title": "AuditLogOut",
+        "type": "object"
+      },
+      "BestSellerOut": {
+        "properties": {
+          "product_name": {
+            "title": "Product Name",
+            "type": "string"
+          },
+          "product_slug": {
+            "title": "Product Slug",
+            "type": "string"
+          },
+          "quantity": {
+            "title": "Quantity",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "product_name",
+          "product_slug",
+          "quantity"
+        ],
+        "title": "BestSellerOut",
         "type": "object"
       },
       "CancelOrderIn": {
@@ -1198,6 +1583,63 @@
         "title": "CreateOrderIn",
         "type": "object"
       },
+      "CreateRateIn": {
+        "additionalProperties": false,
+        "properties": {
+          "confirm_large_change": {
+            "default": false,
+            "title": "Confirm Large Change",
+            "type": "boolean"
+          },
+          "effective_from": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Effective From"
+          },
+          "purity": {
+            "enum": [
+              "24K",
+              "22K",
+              "18K",
+              "14K"
+            ],
+            "title": "Purity",
+            "type": "string"
+          },
+          "rate_per_gram": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Rate Per Gram"
+          },
+          "source_note": {
+            "maxLength": 300,
+            "minLength": 3,
+            "title": "Source Note",
+            "type": "string"
+          }
+        },
+        "required": [
+          "purity",
+          "rate_per_gram",
+          "source_note"
+        ],
+        "title": "CreateRateIn",
+        "type": "object"
+      },
       "CsrfOut": {
         "properties": {
           "csrf_token": {
@@ -1209,6 +1651,190 @@
           "csrf_token"
         ],
         "title": "CsrfOut",
+        "type": "object"
+      },
+      "CustomerDetailOut": {
+        "properties": {
+          "addresses": {
+            "items": {
+              "$ref": "#/components/schemas/AddressOut"
+            },
+            "title": "Addresses",
+            "type": "array"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/CustomerRowOut"
+          },
+          "orders": {
+            "items": {
+              "$ref": "#/components/schemas/OrderSummaryOut"
+            },
+            "title": "Orders",
+            "type": "array"
+          }
+        },
+        "required": [
+          "customer",
+          "addresses",
+          "orders"
+        ],
+        "title": "CustomerDetailOut",
+        "type": "object"
+      },
+      "CustomerRowOut": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "email": {
+            "title": "Email",
+            "type": "string"
+          },
+          "email_verified": {
+            "title": "Email Verified",
+            "type": "boolean"
+          },
+          "full_name": {
+            "title": "Full Name",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "is_active": {
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "order_count": {
+            "title": "Order Count",
+            "type": "integer"
+          },
+          "paid_total": {
+            "title": "Paid Total",
+            "type": "string"
+          },
+          "phone": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Phone"
+          }
+        },
+        "required": [
+          "id",
+          "full_name",
+          "email",
+          "phone",
+          "created_at",
+          "is_active",
+          "email_verified",
+          "order_count",
+          "paid_total"
+        ],
+        "title": "CustomerRowOut",
+        "type": "object"
+      },
+      "DashboardOut": {
+        "properties": {
+          "best_sellers": {
+            "items": {
+              "$ref": "#/components/schemas/BestSellerOut"
+            },
+            "title": "Best Sellers",
+            "type": "array"
+          },
+          "date_from": {
+            "format": "date-time",
+            "title": "Date From",
+            "type": "string"
+          },
+          "date_to": {
+            "format": "date-time",
+            "title": "Date To",
+            "type": "string"
+          },
+          "gold_rates": {
+            "items": {
+              "$ref": "#/components/schemas/RateStatusOut"
+            },
+            "title": "Gold Rates",
+            "type": "array"
+          },
+          "low_stock": {
+            "items": {
+              "$ref": "#/components/schemas/LowStockOut"
+            },
+            "title": "Low Stock",
+            "type": "array"
+          },
+          "paid_orders": {
+            "title": "Paid Orders",
+            "type": "integer"
+          },
+          "paid_orders_today": {
+            "title": "Paid Orders Today",
+            "type": "integer"
+          },
+          "paid_revenue": {
+            "title": "Paid Revenue",
+            "type": "string"
+          },
+          "payment_review": {
+            "title": "Payment Review",
+            "type": "integer"
+          },
+          "pending_payment": {
+            "title": "Pending Payment",
+            "type": "integer"
+          },
+          "recent_orders": {
+            "items": {
+              "$ref": "#/components/schemas/AdminOrderRowOut"
+            },
+            "title": "Recent Orders",
+            "type": "array"
+          },
+          "refunded": {
+            "title": "Refunded",
+            "type": "string"
+          },
+          "review_orders": {
+            "items": {
+              "$ref": "#/components/schemas/AdminOrderRowOut"
+            },
+            "title": "Review Orders",
+            "type": "array"
+          },
+          "to_fulfil": {
+            "title": "To Fulfil",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "date_from",
+          "date_to",
+          "paid_orders",
+          "paid_revenue",
+          "refunded",
+          "paid_orders_today",
+          "pending_payment",
+          "payment_review",
+          "to_fulfil",
+          "recent_orders",
+          "review_orders",
+          "low_stock",
+          "best_sellers",
+          "gold_rates"
+        ],
+        "title": "DashboardOut",
         "type": "object"
       },
       "FacetValueOut": {
@@ -1326,6 +1952,52 @@
         "title": "ForgotPasswordIn",
         "type": "object"
       },
+      "GoldRateOut": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "effective_from": {
+            "format": "date-time",
+            "title": "Effective From",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "purity": {
+            "enum": [
+              "24K",
+              "22K",
+              "18K",
+              "14K"
+            ],
+            "title": "Purity",
+            "type": "string"
+          },
+          "rate_per_gram": {
+            "title": "Rate Per Gram",
+            "type": "string"
+          },
+          "source_note": {
+            "title": "Source Note",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "purity",
+          "rate_per_gram",
+          "effective_from",
+          "source_note",
+          "created_at"
+        ],
+        "title": "GoldRateOut",
+        "type": "object"
+      },
       "GoldRateRef": {
         "properties": {
           "effective_from": {
@@ -1348,6 +2020,40 @@
           "effective_from"
         ],
         "title": "GoldRateRef",
+        "type": "object"
+      },
+      "GoldRatesOut": {
+        "properties": {
+          "current": {
+            "items": {
+              "$ref": "#/components/schemas/RateStatusOut"
+            },
+            "title": "Current",
+            "type": "array"
+          },
+          "history": {
+            "items": {
+              "$ref": "#/components/schemas/GoldRateOut"
+            },
+            "title": "History",
+            "type": "array"
+          },
+          "max_change_percent": {
+            "title": "Max Change Percent",
+            "type": "string"
+          },
+          "stale_after_hours": {
+            "title": "Stale After Hours",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "current",
+          "history",
+          "max_change_percent",
+          "stale_after_hours"
+        ],
+        "title": "GoldRatesOut",
         "type": "object"
       },
       "HTTPValidationError": {
@@ -1498,6 +2204,69 @@
         "title": "ImageOut",
         "type": "object"
       },
+      "InventoryRowOut": {
+        "properties": {
+          "available": {
+            "title": "Available",
+            "type": "integer"
+          },
+          "low_stock_threshold": {
+            "title": "Low Stock Threshold",
+            "type": "integer"
+          },
+          "on_hand": {
+            "title": "On Hand",
+            "type": "integer"
+          },
+          "product_name": {
+            "title": "Product Name",
+            "type": "string"
+          },
+          "product_slug": {
+            "title": "Product Slug",
+            "type": "string"
+          },
+          "product_status": {
+            "title": "Product Status",
+            "type": "string"
+          },
+          "reserved": {
+            "title": "Reserved",
+            "type": "integer"
+          },
+          "sku": {
+            "title": "Sku",
+            "type": "string"
+          },
+          "stock_status": {
+            "title": "Stock Status",
+            "type": "string"
+          },
+          "variant_id": {
+            "title": "Variant Id",
+            "type": "string"
+          },
+          "variant_label": {
+            "title": "Variant Label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "variant_id",
+          "sku",
+          "product_name",
+          "product_slug",
+          "variant_label",
+          "product_status",
+          "on_hand",
+          "reserved",
+          "available",
+          "low_stock_threshold",
+          "stock_status"
+        ],
+        "title": "InventoryRowOut",
+        "type": "object"
+      },
       "ListingOut": {
         "description": "What `/collections/:slug` in the storefront shows: a category or a curated collection.",
         "properties": {
@@ -1558,6 +2327,39 @@
         "title": "LoginIn",
         "type": "object"
       },
+      "LowStockOut": {
+        "properties": {
+          "available": {
+            "title": "Available",
+            "type": "integer"
+          },
+          "product_name": {
+            "title": "Product Name",
+            "type": "string"
+          },
+          "sku": {
+            "title": "Sku",
+            "type": "string"
+          },
+          "threshold": {
+            "title": "Threshold",
+            "type": "integer"
+          },
+          "variant_label": {
+            "title": "Variant Label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "sku",
+          "product_name",
+          "variant_label",
+          "available",
+          "threshold"
+        ],
+        "title": "LowStockOut",
+        "type": "object"
+      },
       "MeOut": {
         "properties": {
           "user": {
@@ -1575,6 +2377,81 @@
           "user"
         ],
         "title": "MeOut",
+        "type": "object"
+      },
+      "MovementOut": {
+        "properties": {
+          "actor_email": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Actor Email"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "delta_on_hand": {
+            "title": "Delta On Hand",
+            "type": "integer"
+          },
+          "delta_reserved": {
+            "title": "Delta Reserved",
+            "type": "integer"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "order_reference": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Order Reference"
+          },
+          "product_name": {
+            "title": "Product Name",
+            "type": "string"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "sku": {
+            "title": "Sku",
+            "type": "string"
+          }
+        },
+        "required": [
+          "created_at",
+          "sku",
+          "product_name",
+          "delta_on_hand",
+          "delta_reserved",
+          "reason",
+          "note",
+          "order_reference",
+          "actor_email"
+        ],
+        "title": "MovementOut",
         "type": "object"
       },
       "NewsletterSubscribeIn": {
@@ -1630,6 +2507,22 @@
           "token"
         ],
         "title": "NewsletterUnsubscribeIn",
+        "type": "object"
+      },
+      "NoteIn": {
+        "additionalProperties": false,
+        "properties": {
+          "note": {
+            "maxLength": 500,
+            "minLength": 1,
+            "title": "Note",
+            "type": "string"
+          }
+        },
+        "required": [
+          "note"
+        ],
+        "title": "NoteIn",
         "type": "object"
       },
       "OkOut": {
@@ -2051,6 +2944,24 @@
         "title": "OrderShippingMethodOut",
         "type": "object"
       },
+      "OrderStatusAction": {
+        "additionalProperties": false,
+        "properties": {
+          "action": {
+            "enum": [
+              "start_processing",
+              "mark_delivered"
+            ],
+            "title": "Action",
+            "type": "string"
+          }
+        },
+        "required": [
+          "action"
+        ],
+        "title": "OrderStatusAction",
+        "type": "object"
+      },
       "OrderSummaryOut": {
         "properties": {
           "created_at": {
@@ -2182,6 +3093,186 @@
         "title": "OrderTotalsOut",
         "type": "object"
       },
+      "Page_AdminOrderRowOut_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AdminOrderRowOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "pages": {
+            "title": "Pages",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total",
+          "pages"
+        ],
+        "title": "Page[AdminOrderRowOut]",
+        "type": "object"
+      },
+      "Page_AuditLogOut_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AuditLogOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "pages": {
+            "title": "Pages",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total",
+          "pages"
+        ],
+        "title": "Page[AuditLogOut]",
+        "type": "object"
+      },
+      "Page_CustomerRowOut_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/CustomerRowOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "pages": {
+            "title": "Pages",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total",
+          "pages"
+        ],
+        "title": "Page[CustomerRowOut]",
+        "type": "object"
+      },
+      "Page_InventoryRowOut_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/InventoryRowOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "pages": {
+            "title": "Pages",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total",
+          "pages"
+        ],
+        "title": "Page[InventoryRowOut]",
+        "type": "object"
+      },
+      "Page_MovementOut_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/MovementOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "pages": {
+            "title": "Pages",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total",
+          "pages"
+        ],
+        "title": "Page[MovementOut]",
+        "type": "object"
+      },
       "Page_OrderSummaryOut_": {
         "properties": {
           "items": {
@@ -2252,6 +3343,76 @@
           "pages"
         ],
         "title": "Page[ProductCardOut]",
+        "type": "object"
+      },
+      "PaymentAttemptOut": {
+        "properties": {
+          "amount_paise": {
+            "title": "Amount Paise",
+            "type": "integer"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "error_description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error Description"
+          },
+          "method": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Method"
+          },
+          "provider": {
+            "title": "Provider",
+            "type": "string"
+          },
+          "provider_order_id": {
+            "title": "Provider Order Id",
+            "type": "string"
+          },
+          "provider_payment_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider Payment Id"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "provider",
+          "provider_order_id",
+          "provider_payment_id",
+          "amount_paise",
+          "status",
+          "method",
+          "error_description",
+          "created_at"
+        ],
+        "title": "PaymentAttemptOut",
         "type": "object"
       },
       "PaymentFailureIn": {
@@ -2419,6 +3580,51 @@
           "options"
         ],
         "title": "PincodeCheckOut",
+        "type": "object"
+      },
+      "PriceImpactOut": {
+        "properties": {
+          "new_price": {
+            "title": "New Price",
+            "type": "string"
+          },
+          "old_price": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Old Price"
+          },
+          "product_name": {
+            "title": "Product Name",
+            "type": "string"
+          },
+          "product_slug": {
+            "title": "Product Slug",
+            "type": "string"
+          },
+          "sku": {
+            "title": "Sku",
+            "type": "string"
+          },
+          "variant_label": {
+            "title": "Variant Label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "product_name",
+          "product_slug",
+          "sku",
+          "variant_label",
+          "old_price",
+          "new_price"
+        ],
+        "title": "PriceImpactOut",
         "type": "object"
       },
       "PriceOut": {
@@ -2931,6 +4137,223 @@
         "title": "PublicSettingsOut",
         "type": "object"
       },
+      "RatePreviewIn": {
+        "additionalProperties": false,
+        "properties": {
+          "purity": {
+            "enum": [
+              "24K",
+              "22K",
+              "18K",
+              "14K"
+            ],
+            "title": "Purity",
+            "type": "string"
+          },
+          "rate_per_gram": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Rate Per Gram"
+          }
+        },
+        "required": [
+          "purity",
+          "rate_per_gram"
+        ],
+        "title": "RatePreviewIn",
+        "type": "object"
+      },
+      "RatePreviewOut": {
+        "properties": {
+          "change_percent": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Change Percent"
+          },
+          "current_rate": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Current Rate"
+          },
+          "impacts": {
+            "items": {
+              "$ref": "#/components/schemas/PriceImpactOut"
+            },
+            "title": "Impacts",
+            "type": "array"
+          },
+          "max_change_percent": {
+            "title": "Max Change Percent",
+            "type": "string"
+          },
+          "needs_confirmation": {
+            "title": "Needs Confirmation",
+            "type": "boolean"
+          },
+          "new_rate": {
+            "title": "New Rate",
+            "type": "string"
+          },
+          "purity": {
+            "enum": [
+              "24K",
+              "22K",
+              "18K",
+              "14K"
+            ],
+            "title": "Purity",
+            "type": "string"
+          }
+        },
+        "required": [
+          "purity",
+          "current_rate",
+          "new_rate",
+          "change_percent",
+          "needs_confirmation",
+          "max_change_percent",
+          "impacts"
+        ],
+        "title": "RatePreviewOut",
+        "type": "object"
+      },
+      "RateStatusOut": {
+        "properties": {
+          "age_hours": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Age Hours"
+          },
+          "effective_from": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Effective From"
+          },
+          "purity": {
+            "enum": [
+              "24K",
+              "22K",
+              "18K",
+              "14K"
+            ],
+            "title": "Purity",
+            "type": "string"
+          },
+          "rate_per_gram": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rate Per Gram"
+          },
+          "source_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source Note"
+          },
+          "stale": {
+            "title": "Stale",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "purity",
+          "rate_per_gram",
+          "effective_from",
+          "source_note",
+          "age_hours",
+          "stale"
+        ],
+        "title": "RateStatusOut",
+        "type": "object"
+      },
+      "ReasonIn": {
+        "additionalProperties": false,
+        "properties": {
+          "reason": {
+            "maxLength": 300,
+            "minLength": 3,
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reason"
+        ],
+        "title": "ReasonIn",
+        "type": "object"
+      },
+      "RefundIn": {
+        "additionalProperties": false,
+        "properties": {
+          "amount": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Amount"
+          },
+          "reason": {
+            "maxLength": 300,
+            "minLength": 3,
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "amount",
+          "reason"
+        ],
+        "title": "RefundIn",
+        "type": "object"
+      },
       "RefundOut": {
         "properties": {
           "amount": {
@@ -3019,6 +4442,30 @@
         "title": "ResetPasswordIn",
         "type": "object"
       },
+      "ResolveReviewIn": {
+        "additionalProperties": false,
+        "properties": {
+          "decision": {
+            "enum": [
+              "confirm",
+              "refund"
+            ],
+            "title": "Decision",
+            "type": "string"
+          },
+          "note": {
+            "default": "",
+            "maxLength": 300,
+            "title": "Note",
+            "type": "string"
+          }
+        },
+        "required": [
+          "decision"
+        ],
+        "title": "ResolveReviewIn",
+        "type": "object"
+      },
       "RetryPaymentIn": {
         "additionalProperties": false,
         "properties": {
@@ -3095,6 +4542,41 @@
           "current"
         ],
         "title": "SessionOut",
+        "type": "object"
+      },
+      "ShipIn": {
+        "additionalProperties": false,
+        "properties": {
+          "carrier": {
+            "maxLength": 80,
+            "minLength": 2,
+            "title": "Carrier",
+            "type": "string"
+          },
+          "tracking_number": {
+            "maxLength": 80,
+            "minLength": 3,
+            "title": "Tracking Number",
+            "type": "string"
+          },
+          "tracking_url": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tracking Url"
+          }
+        },
+        "required": [
+          "carrier",
+          "tracking_number"
+        ],
+        "title": "ShipIn",
         "type": "object"
       },
       "ShipmentOut": {
@@ -3347,6 +4829,22 @@
           "price"
         ],
         "title": "SuggestionProductOut",
+        "type": "object"
+      },
+      "ThresholdIn": {
+        "additionalProperties": false,
+        "properties": {
+          "low_stock_threshold": {
+            "maximum": 1000.0,
+            "minimum": 0.0,
+            "title": "Low Stock Threshold",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "low_stock_threshold"
+        ],
+        "title": "ThresholdIn",
         "type": "object"
       },
       "TokenIn": {
@@ -3633,6 +5131,1214 @@
   },
   "openapi": "3.1.0",
   "paths": {
+    "/api/v1/admin/audit-logs": {
+      "get": {
+        "operationId": "list_audit_logs_api_v1_admin_audit_logs_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "entity_type",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 40,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Entity Type"
+            }
+          },
+          {
+            "in": "query",
+            "name": "entity_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 64,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Entity Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "action",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 64,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Action"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "maximum": 10000,
+              "minimum": 1,
+              "title": "Page",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Page Size",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_AuditLogOut_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Audit Logs",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/customers": {
+      "get": {
+        "operationId": "list_customers_api_v1_admin_customers_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "maximum": 10000,
+              "minimum": 1,
+              "title": "Page",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Page Size",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_CustomerRowOut_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Customers",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/customers/{customer_id}": {
+      "get": {
+        "operationId": "get_customer_api_v1_admin_customers__customer_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "customer_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Customer Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CustomerDetailOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Customer",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/dashboard": {
+      "get": {
+        "operationId": "get_dashboard_api_v1_admin_dashboard_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "From"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "To"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DashboardOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Dashboard",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/gold-rates": {
+      "get": {
+        "operationId": "list_gold_rates_api_v1_admin_gold_rates_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GoldRatesOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Gold Rates",
+        "tags": [
+          "admin"
+        ]
+      },
+      "post": {
+        "operationId": "create_gold_rate_api_v1_admin_gold_rates_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRateIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GoldRateOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Gold Rate",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/gold-rates/preview": {
+      "post": {
+        "description": "Old vs new price of every affected piece. Saves nothing.",
+        "operationId": "preview_gold_rate_api_v1_admin_gold_rates_preview_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RatePreviewIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RatePreviewOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Preview Gold Rate",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/inventory": {
+      "get": {
+        "operationId": "list_inventory_api_v1_admin_inventory_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "in": "query",
+            "name": "low_only",
+            "required": false,
+            "schema": {
+              "default": false,
+              "title": "Low Only",
+              "type": "boolean"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "maximum": 10000,
+              "minimum": 1,
+              "title": "Page",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Page Size",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_InventoryRowOut_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Inventory",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/inventory/movements": {
+      "get": {
+        "operationId": "list_movements_api_v1_admin_inventory_movements_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "variant_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Variant Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "maximum": 10000,
+              "minimum": 1,
+              "title": "Page",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 50,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Page Size",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_MovementOut_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Movements",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/inventory/{variant_id}/adjust": {
+      "post": {
+        "operationId": "adjust_stock_api_v1_admin_inventory__variant_id__adjust_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "variant_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Variant Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AdjustStockIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryRowOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Adjust Stock",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/inventory/{variant_id}/threshold": {
+      "put": {
+        "operationId": "set_threshold_api_v1_admin_inventory__variant_id__threshold_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "variant_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Variant Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ThresholdIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/InventoryRowOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Set Threshold",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/orders": {
+      "get": {
+        "operationId": "list_orders_api_v1_admin_orders_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 20,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "payment_status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 20,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Payment Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "in": "query",
+            "name": "from",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "From"
+            }
+          },
+          {
+            "in": "query",
+            "name": "to",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "date-time",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "To"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "maximum": 10000,
+              "minimum": 1,
+              "title": "Page",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Page Size",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_AdminOrderRowOut_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Orders",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/orders/{reference}": {
+      "get": {
+        "operationId": "get_order_api_v1_admin_orders__reference__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reference",
+            "required": true,
+            "schema": {
+              "title": "Reference",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminOrderOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Order",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/orders/{reference}/cancel": {
+      "post": {
+        "operationId": "cancel_order_api_v1_admin_orders__reference__cancel_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reference",
+            "required": true,
+            "schema": {
+              "title": "Reference",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReasonIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminOrderOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Cancel Order",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/orders/{reference}/notes": {
+      "post": {
+        "operationId": "add_note_api_v1_admin_orders__reference__notes_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reference",
+            "required": true,
+            "schema": {
+              "title": "Reference",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/NoteIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminOrderOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Add Note",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/orders/{reference}/refunds": {
+      "post": {
+        "description": "Record a (partial) refund request; it is sent to the provider with the execute action.",
+        "operationId": "request_refund_api_v1_admin_orders__reference__refunds_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reference",
+            "required": true,
+            "schema": {
+              "title": "Reference",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefundIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminOrderOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Request Refund",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/orders/{reference}/refunds/{refund_id}/execute": {
+      "post": {
+        "description": "Send a requested refund to the payment provider (real money with live keys).",
+        "operationId": "execute_refund_api_v1_admin_orders__reference__refunds__refund_id__execute_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reference",
+            "required": true,
+            "schema": {
+              "title": "Reference",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "refund_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Refund Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminOrderOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Execute Refund",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/orders/{reference}/review": {
+      "post": {
+        "operationId": "resolve_review_api_v1_admin_orders__reference__review_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reference",
+            "required": true,
+            "schema": {
+              "title": "Reference",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResolveReviewIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminOrderOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Resolve Review",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/orders/{reference}/shipments": {
+      "post": {
+        "operationId": "ship_order_api_v1_admin_orders__reference__shipments_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reference",
+            "required": true,
+            "schema": {
+              "title": "Reference",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ShipIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminOrderOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Ship Order",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/orders/{reference}/status": {
+      "post": {
+        "operationId": "change_status_api_v1_admin_orders__reference__status_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reference",
+            "required": true,
+            "schema": {
+              "title": "Reference",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/OrderStatusAction"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminOrderOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Change Status",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
     "/api/v1/auth/change-password": {
       "post": {
         "operationId": "change_password_api_v1_auth_change_password_post",

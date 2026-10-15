@@ -6,6 +6,7 @@ from fastapi import APIRouter
 
 from app.api.v1.routes import (
     account,
+    admin_ops,
     auth,
     cart,
     catalogue,
@@ -27,3 +28,4 @@ api_router.include_router(checkout.router)
 api_router.include_router(payments.router)
 api_router.include_router(payments.webhook_router)
 api_router.include_router(orders.router)
+api_router.include_router(admin_ops.router)

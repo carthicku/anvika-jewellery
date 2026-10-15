@@ -248,14 +248,24 @@ def order_link(settings: Settings, order: Order) -> str:
     return f"{base}/order-confirmation/{order.reference}#token={token}"
 
 
-def queue_email(db: Session, settings: Settings, order: Order, template: str, subject: str) -> None:
+def queue_email(
+    db: Session,
+    settings: Settings,
+    order: Order,
+    template: str,
+    subject: str,
+    *,
+    key_suffix: str = "",
+    extra: dict[str, str] | None = None,
+) -> None:
+    """Queue a customer email once per order/template (+ suffix, e.g. one per refund)."""
     items = db.scalars(
         select(OrderItem).where(OrderItem.order_id == order.id).order_by(OrderItem.position)
     ).all()
     summary = "; ".join(f"{i.product_name} ({i.variant_label}) × {i.quantity}" for i in items)
     email_service.enqueue(
         db,
-        key=f"order:{order.id}:{template}",
+        key=f"order:{order.id}:{template}{key_suffix}",
         to=order.email,
         template=template,
         subject=subject.format(reference=order.reference),
@@ -265,6 +275,7 @@ def queue_email(db: Session, settings: Settings, order: Order, template: str, su
             "items": summary,
             "total": format_inr(order.grand_total),
             "order_url": order_link(settings, order),
+            **(extra or {}),
         },
     )
 

@@ -58,6 +58,27 @@ TEMPLATES: dict[str, TemplateSpec] = {
         ("View your order", "order_url"),
         "If you didn't ask for this cancellation, please contact us.",
     ),
+    "order_shipped": (
+        "Your order is on its way",
+        [
+            "Hello {name},",
+            "Good news — order {reference} has been shipped.",
+            "Items: {items}",
+            "You can follow the delivery with the tracking details on your order page.",
+        ],
+        ("Track your order", "order_url"),
+        "Please check the package seal when it arrives and contact us if anything looks wrong.",
+    ),
+    "refund_processed": (
+        "Your refund has been processed",
+        [
+            "Hello {name},",
+            "We've processed a refund of {refund_amount} for order {reference}.",
+            "How long it takes to reach your account depends on your bank and payment method.",
+        ],
+        ("View your order", "order_url"),
+        "If you have questions about this refund, reply to this email or contact us.",
+    ),
 }
 
 

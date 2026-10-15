@@ -24,7 +24,7 @@ from sqlalchemy.orm import Session
 
 from app.core.config import Settings
 from app.core.errors import AppError, Conflict, OutOfStock, PaymentProviderError
-from app.core.money import to_paise
+from app.core.money import format_inr, to_paise
 from app.core.time import utcnow
 from app.models import Cart, Order, OrderItem, PaymentAttempt, PaymentEvent, Refund
 from app.schemas.orders import PaymentPrefillOut, PaymentSessionOut
@@ -438,21 +438,44 @@ def process_webhook(
         refund = db.scalar(select(Refund).where(Refund.provider_refund_id == entity.get("id")))
         if refund is None:
             return "unknown refund"
-        apply_refund_status(db, refund, "processed" if kind == "refund.processed" else "failed")
+        apply_refund_status(
+            db, refund, "processed" if kind == "refund.processed" else "failed", settings
+        )
         return f"refund {refund.id}: {refund.status}"
     return "ignored"
 
 
-def apply_refund_status(db: Session, refund: Refund, status: str) -> None:
+def apply_refund_status(
+    db: Session, refund: Refund, status: str, settings: Settings | None = None
+) -> None:
+    """Record the provider's final refund result once; email the customer when it's processed."""
     order = orders.lock_order(db, refund.order_id)
     if refund.status in ("processed", "failed"):
         return
     refund.status = status
     if status == "processed":
         remaining = orders.refundable_amount(db, order)
-        processed_all = remaining <= 0
-        order.payment_status = "refunded" if processed_all else "partially_refunded"
+        order.payment_status = "refunded" if remaining <= 0 else "partially_refunded"
         orders.add_event(db, order, "refund_processed", actor_type="provider")
+        if settings is not None:
+            orders.queue_email(
+                db,
+                settings,
+                order,
+                "refund_processed",
+                "Your refund for order {reference}",
+                key_suffix=f":{refund.id}",
+                extra={"refund_amount": format_inr(refund.amount)},
+            )
+    else:
+        orders.add_event(
+            db,
+            order,
+            "refund_failed",
+            actor_type="provider",
+            note=f"Refund {refund.id} failed at the provider",
+            customer_visible=False,
+        )
 
 
 # --------------------------------------------------------------------------------------------
