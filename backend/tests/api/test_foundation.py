@@ -120,3 +120,45 @@ def test_oversized_body_is_rejected(client: TestClient) -> None:
     )
     assert response.status_code == 413
     assert response.json()["error"]["code"] == "PAYLOAD_TOO_LARGE"
+
+
+def test_cors_allows_only_listed_origins(client: TestClient) -> None:
+    preflight = {"Access-Control-Request-Method": "POST"}
+    allowed = client.options(
+        "/api/v1/cart/items", headers={"Origin": "http://localhost:5180", **preflight}
+    )
+    assert allowed.headers["access-control-allow-origin"] == "http://localhost:5180"
+    assert allowed.headers["access-control-allow-credentials"] == "true"
+    foreign = client.options(
+        "/api/v1/cart/items", headers={"Origin": "https://evil.example", **preflight}
+    )
+    assert "access-control-allow-origin" not in foreign.headers
+    simple = client.get("/api/v1/health", headers={"Origin": "https://evil.example"})
+    assert "access-control-allow-origin" not in simple.headers
+
+
+def test_logs_never_contain_secrets() -> None:
+    import json
+    import logging
+
+    from app.core.logging import JsonFormatter, TextFormatter
+
+    record = logging.makeLogRecord(
+        {
+            "msg": "login attempt",
+            "levelname": "INFO",
+            "password": "hunter2-secret",
+            "refresh_token": "rt-abc",
+            "headers": {"Authorization": "Bearer xyz", "Cookie": "access=1", "Accept": "json"},
+            "razorpay_signature": "sig",
+            "card_number": "4111",
+            "order": "ANV-1",
+        }
+    )
+    line = JsonFormatter().format(record)
+    data = json.loads(line)
+    for secret in ("hunter2-secret", "rt-abc", "Bearer xyz", "access=1", 'sig"', "4111"):
+        assert secret not in line, secret
+    assert data["headers"]["Accept"] == "json" and data["order"] == "ANV-1"
+    text = TextFormatter("%(message)s").format(record)
+    assert "hunter2" not in text and "Bearer xyz" not in text and "[REDACTED]" in text

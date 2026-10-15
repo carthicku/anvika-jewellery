@@ -20,6 +20,7 @@
 | `TEST_DATABASE_URL` | tests | `postgresql+psycopg://postgres:postgres@127.0.0.1:54329/anvika_test` | Used by pytest only. **Its data is wiped by the test suite.** |
 | `DB_POOL_SIZE` / `DB_MAX_OVERFLOW` | | `5` / `5` | Connection pool sizing. Keep the total under the Supabase plan's connection limit. |
 | `PUBLIC_SITE_URL` | ✅ prod | `http://localhost:5180` | Canonical storefront URL used in emails, sitemap and links. |
+| `ALLOW_SEARCH_INDEXING` | | `false` | `true` only on the live site: `/robots.txt` then allows crawling (private areas stay disallowed) and lists the sitemap. When `false` it disallows everything, so staging copies never show up in search results. |
 | `ALLOWED_ORIGINS` | ✅ prod | `http://localhost:5180` | Comma-separated origins allowed for CORS and the CSRF Origin check. |
 | `COOKIE_SECURE` | | `false` (dev), forced `true` in prod | Adds the `Secure` flag to cookies. |
 | `COOKIE_DOMAIN` | | empty | Set to `.example.in` only if the API runs on a subdomain. |

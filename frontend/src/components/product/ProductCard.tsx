@@ -109,11 +109,14 @@ export function ProductGrid({
   loading = false,
   skeletonCount = 8,
   className,
+  heading,
 }: {
   products?: ProductCardData[];
   loading?: boolean;
   skeletonCount?: number;
   className?: string;
+  /** Screen-reader heading for pages without a visible one above the grid (cards use h3). */
+  heading?: string;
 }) {
   const grid = cn(
     'grid grid-cols-2 gap-x-4 gap-y-10 sm:gap-x-6 lg:grid-cols-3 lg:gap-y-12 xl:grid-cols-4',
@@ -121,20 +124,24 @@ export function ProductGrid({
   );
   if (loading || !products) {
     return (
-      <div className={grid} aria-busy="true" aria-label="Loading products">
+      <div className={grid} role="status" aria-busy="true" aria-label="Loading products">
         {Array.from({ length: skeletonCount }, (_, i) => (
           <ProductCardSkeleton key={i} />
         ))}
       </div>
     );
   }
+  const title = heading ? <h2 className="sr-only">{heading}</h2> : null;
   return (
-    <ul className={grid}>
-      {products.map((product, index) => (
-        <li key={product.id}>
-          <ProductCard product={product} priority={index < 4} />
-        </li>
-      ))}
-    </ul>
+    <>
+      {title}
+      <ul className={grid}>
+        {products.map((product, index) => (
+          <li key={product.id}>
+            <ProductCard product={product} priority={index < 4} />
+          </li>
+        ))}
+      </ul>
+    </>
   );
 }

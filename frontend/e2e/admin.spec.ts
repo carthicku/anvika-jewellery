@@ -1,31 +1,16 @@
-import { readFileSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
+import { resolve } from 'node:path';
 
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
+
+import { adjustStock, here, signInAsAdmin } from './helpers';
 
 /*
  * Admin journeys: J8 (create a product → customers see it), J9 (inventory change), order
  * fulfilment with cancellation + simulated refund, and J10 (customers can't use the admin).
  * Everything created here is archived/cancelled again so repeated runs leave the sample store as
- * it was. The admin account and its random password come from e2e/global-setup.ts.
+ * it was.
  */
-const here = dirname(fileURLToPath(import.meta.url));
-const credentials = (): { email: string; password: string } =>
-  JSON.parse(readFileSync(resolve(here, '.auth/admin.json'), 'utf8')) as {
-    email: string;
-    password: string;
-  };
-
-async function signInAsAdmin(page: Page, next = '/admin') {
-  const { email, password } = credentials();
-  await page.goto(`/login?next=${encodeURIComponent(next)}`);
-  await page.getByLabel('Email', { exact: true }).fill(email);
-  await page.getByLabel('Password').fill(password);
-  await page.getByRole('button', { name: 'Sign in' }).click();
-  await expect(page).toHaveURL(new RegExp(`${next}$`));
-}
 
 test('admin dashboard and navigation', async ({ page, isMobile }) => {
   await signInAsAdmin(page);
@@ -287,17 +272,7 @@ test('a delivered buyer reviews a piece; it shows only after staff publish it', 
   await expect(admin.getByText('Review rejected.')).toBeVisible();
 
   // The test sale stays delivered; put the piece back so repeated runs don't use up sample stock.
-  await admin.goto('/admin/inventory');
-  await admin.getByLabel('Search', { exact: false }).fill('ANV-PD-001');
-  await admin.getByRole('button', { name: 'Search' }).click();
-  await admin
-    .getByRole('row', { name: /ANV-PD-001/ })
-    .getByRole('button', { name: 'Adjust…' })
-    .click();
-  await admin.getByLabel(/^Change/).fill('1');
-  await admin.getByLabel(/^Reason/).fill('E2E: return sample stock used by the review test');
-  await admin.getByRole('button', { name: 'Save adjustment' }).click();
-  await expect(admin.getByText('Stock updated.')).toBeVisible();
+  await adjustStock(admin, 'ANV-PD-001', 1, 'E2E: return sample stock used by the review test');
   await staffContext.close();
 });
 

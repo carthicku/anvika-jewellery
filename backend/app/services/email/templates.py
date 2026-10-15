@@ -78,6 +78,15 @@ TEMPLATES: dict[str, TemplateSpec] = {
         ("View your order", "order_url"),
         "If you have questions, reply to this email or contact us.",
     ),
+    "test_email": (
+        "Test email",
+        [
+            "This is a test message sent with the store's send-test-email command.",
+            "If you can read it, the store can send email from {sent_from}.",
+        ],
+        None,
+        "No action is needed.",
+    ),
     "refund_processed": (
         "Your refund has been processed",
         [

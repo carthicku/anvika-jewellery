@@ -17,6 +17,11 @@ test('unknown routes show the 404 page', async ({ page }) => {
 test('every storefront route renders without errors', async ({ page }) => {
   const errors: string[] = [];
   page.on('pageerror', (e) => errors.push(e.message));
+  // Behind the production web server a Content-Security-Policy is active; a blocked script,
+  // style or request shows up as a console error and must fail this test.
+  page.on('console', (m) => {
+    if (m.type() === 'error' && /Content Security Policy/i.test(m.text())) errors.push(m.text());
+  });
   const routes = [
     '/collections',
     '/collections/rings',

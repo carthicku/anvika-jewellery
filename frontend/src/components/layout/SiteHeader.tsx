@@ -24,6 +24,8 @@ const INFO_LINKS = [
 export function AnnouncementBar() {
   const settings = usePublicSettings();
   const announcement = settings.data?.announcement;
+  // Hold the bar's space while settings load, so the page doesn't jump down when it appears.
+  if (settings.isPending) return <div aria-hidden="true" className="min-h-9 bg-noir" />;
   if (!announcement?.enabled || !announcement.text) return null;
   return (
     <div className="bg-noir text-noir-ink">

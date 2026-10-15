@@ -5,10 +5,12 @@ from __future__ import annotations
 from decimal import Decimal
 
 import pytest
+from fastapi import FastAPI
 from fastapi.testclient import TestClient
 from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 
+from app.core.config import Settings
 from app.models import Category, GoldRate, Product, ProductVariant
 from app.services import inventory
 from app.services.catalogue import refresh_price_cache
@@ -225,6 +227,19 @@ def test_facets_for_category(client: TestClient) -> None:
     assert body["in_stock_count"] == 4
 
 
+def test_facets_for_a_search(client: TestClient) -> None:
+    """Regression: the category facet crashed (500) when combined with a search query."""
+    products = client.get(f"{API}/products", params={"q": "ring"}).json()
+    response = client.get(f"{API}/products/facets", params={"q": "ring"})
+    assert response.status_code == 200, response.text
+    body = response.json()
+    assert body["total"] == products["total"] > 0
+    assert sum(c["count"] for c in body["categories"]) == body["total"]
+    # A category-name match ("Rings") counts too, and search within a category works.
+    within = client.get(f"{API}/products/facets", params={"q": "ring", "category": "rings"})
+    assert within.status_code == 200 and within.json()["total"] >= 1
+
+
 # ------------------------------------------------------------------ product detail
 
 
@@ -344,6 +359,8 @@ def test_money_is_serialised_as_strings(client: TestClient) -> None:
 
 def test_catalogue_responses_are_cacheable(client: TestClient) -> None:
     assert client.get(f"{API}/products").headers["cache-control"] == "public, max-age=60"
+    detail = client.get(f"{API}/products/everyday-gold-band")
+    assert detail.headers["cache-control"] == "no-cache"  # stock/price shown where people buy
 
 
 def test_sitemap_lists_public_pages(client: TestClient) -> None:
@@ -353,3 +370,19 @@ def test_sitemap_lists_public_pages(client: TestClient) -> None:
     assert "http://localhost:5180/products/everyday-gold-band" in response.text
     assert "http://localhost:5180/collections/rings" in response.text
     assert "/refund-policy" in response.text
+
+
+def test_robots_blocks_everything_until_indexing_is_allowed(
+    client: TestClient, app: FastAPI, settings: Settings
+) -> None:
+    closed = client.get("/robots.txt")
+    assert closed.status_code == 200
+    assert closed.headers["content-type"].startswith("text/plain")
+    assert "Disallow: /" in closed.text.splitlines() and "Sitemap" not in closed.text
+
+    app.state.settings = settings.model_copy(update={"allow_search_indexing": True})
+    lines = client.get("/robots.txt").text.splitlines()
+    for private in ("/admin", "/account", "/checkout", "/cart", "/order-confirmation", "/api/"):
+        assert f"Disallow: {private}" in lines
+    assert "Disallow: /" not in lines
+    assert "Sitemap: http://localhost:5180/sitemap.xml" in lines

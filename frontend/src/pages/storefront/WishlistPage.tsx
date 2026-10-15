@@ -61,6 +61,7 @@ export function WishlistPage() {
         ) : (
           <>
             <ProductGrid
+              heading="Saved pieces"
               products={products.data ? ordered : undefined}
               loading={products.isPending}
               skeletonCount={Math.min(slugs.length, 8)}

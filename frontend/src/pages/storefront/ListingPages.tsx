@@ -157,7 +157,12 @@ export function SearchPage() {
   const q = params.get('q')?.trim() ?? '';
   return (
     <>
-      <PageMeta title={q ? `Search: ${q}` : 'Search'} path="/search" noindex />
+      <PageMeta
+        title={q ? `Search: ${q}` : 'Search'}
+        description="Search the gold jewellery collection by name, category or SKU."
+        path="/search"
+        noindex
+      />
       <ListingView
         header={
           <PageHeader eyebrow="Search" title={q ? `Results for “${q}”` : 'Search the collection'}>

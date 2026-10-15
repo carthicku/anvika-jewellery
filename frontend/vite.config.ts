@@ -23,6 +23,7 @@ export default defineConfig(({ mode }) => {
         '/api': { target: apiTarget, changeOrigin: false },
         '/media': { target: apiTarget, changeOrigin: false },
         '/sitemap.xml': { target: apiTarget, changeOrigin: false },
+        '/robots.txt': { target: apiTarget, changeOrigin: false },
       },
     },
     build: {

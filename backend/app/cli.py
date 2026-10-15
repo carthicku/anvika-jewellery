@@ -293,6 +293,124 @@ def reconcile_payments(_args: argparse.Namespace, settings: Settings) -> int:
     return 1 if report.errors else 0
 
 
+# --------------------------------------------------------------------------------------------
+# Operations checks (docs/operations/MONITORING.md)
+# --------------------------------------------------------------------------------------------
+
+
+def _print_problems(title: str, problems: list[object]) -> int:
+    if not problems:
+        print(f"{title}: OK")
+        return 0
+    print(f"{title}: {len(problems)} problem(s)")
+    for problem in problems:
+        print(f"  [{problem.check}] {problem.detail}")  # type: ignore[attr-defined]
+    return 1
+
+
+@command(
+    "verify-integrity",
+    "Check stock ledger, reservations, order totals, payments and refunds (read-only).",
+)
+def verify_integrity(_args: argparse.Namespace, settings: Settings) -> int:
+    from app.services.ops_checks import integrity_problems
+
+    with _session(settings) as db:
+        return _print_problems("Integrity", list(integrity_problems(db)))
+
+
+@command(
+    "verify-rls",
+    "Check that every table has row-level security on and no policies (Supabase safety).",
+)
+def verify_rls(_args: argparse.Namespace, settings: Settings) -> int:
+    from app.services.ops_checks import rls_problems
+
+    with _session(settings) as db:
+        return _print_problems("Row-level security", list(rls_problems(db)))
+
+
+def _catalogue_args(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument(
+        "--samples",
+        action="store_true",
+        help="Exit with an error while any SAMPLE product is still published (use before launch).",
+    )
+
+
+@command(
+    "catalogue-report",
+    "List what needs attention before launch: sample products, placeholder photos, gaps.",
+    _catalogue_args,
+)
+def catalogue_report(args: argparse.Namespace, settings: Settings) -> int:
+    from app.services.ops_checks import catalogue_report as build
+
+    with _session(settings) as db:
+        report = build(db)
+    print(
+        "Products by status: " + ", ".join(f"{k}={v}" for k, v in sorted(report.by_status.items()))
+    )
+    sections = [
+        ("Published SAMPLE products (replace or archive before launch)", report.samples),
+        ("Unpriced published products (missing gold rate or price)", report.unpriced),
+        ("Published products with only placeholder pictures", report.placeholder_images),
+        ("Published products without pictures", report.no_images),
+        ("Published products without hallmark details", report.missing_hallmark),
+    ]
+    for title, slugs in sections:
+        print(f"{title}: {len(slugs)}")
+        for slug in slugs:
+            print(f"  - {slug}")
+    if report.unpriced or (args.samples and report.samples):
+        return 1
+    return 0
+
+
+def _test_email_args(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument("--to", required=True, help="Recipient address (your own inbox).")
+
+
+@command(
+    "send-test-email",
+    "Send one test message through the configured EMAIL_BACKEND and report the result.",
+    _test_email_args,
+)
+def send_test_email(args: argparse.Namespace, settings: Settings) -> int:
+    from sqlalchemy import select
+
+    from app.core.time import utcnow
+    from app.models import EmailOutbox
+    from app.services import email as email_service
+
+    key = f"test-email:{utcnow().isoformat()}"
+    with _session(settings) as db:
+        email_service.enqueue(
+            db,
+            key=key,
+            to=args.to.strip(),
+            template="test_email",
+            subject=f"{settings.store_name}: test email",
+            context={"sent_from": settings.email_from},
+        )
+        db.commit()
+    email_service.dispatch_pending(lambda: _session(settings), settings)
+    with _session(settings) as db:
+        row = db.scalar(select(EmailOutbox).where(EmailOutbox.idempotency_key == key))
+    if row is None:  # pragma: no cover - enqueue always inserts a new key
+        print("The test email was not queued.")
+        return 1
+    print(f"Backend: {settings.email_backend}. Status: {row.status}.")
+    if row.status == "sent":
+        print("Handed to the SMTP server. Check the inbox (and spam folder).")
+        return 0
+    if row.status == "written_to_sink":
+        print("Written to the development sink, NOT delivered (EMAIL_BACKEND is not smtp).")
+        return 0
+    print(f"Not sent yet: {row.last_error or 'see the email_outbox table'}")
+    return 1
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(prog="python -m app.cli", description=__doc__)
     sub = parser.add_subparsers(dest="command", required=True)

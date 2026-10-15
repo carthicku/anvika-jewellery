@@ -51,7 +51,11 @@ export function ListingView({
     <Container>
       {header}
       <div className="lg:grid lg:grid-cols-[15rem_1fr] lg:gap-12">
-        <aside aria-label="Filters" className="hidden lg:block">
+        <aside aria-labelledby="filters-heading" className="hidden lg:block">
+          {/* Filter group titles are h3 (accordion); this keeps the heading outline in order. */}
+          <h2 id="filters-heading" className="sr-only">
+            Filters
+          </h2>
           <div className="sticky top-36">{panel}</div>
         </aside>
 
@@ -105,7 +109,11 @@ export function ListingView({
               aria-busy={products.isFetching || undefined}
               className={products.isPlaceholderData ? 'opacity-60 transition-opacity' : undefined}
             >
-              <ProductGrid products={products.data?.items} loading={products.isPending} />
+              <ProductGrid
+                heading="Products"
+                products={products.data?.items}
+                loading={products.isPending}
+              />
               {products.data && (
                 <Pagination page={products.data.page} pages={products.data.pages} />
               )}

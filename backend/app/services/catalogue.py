@@ -16,7 +16,7 @@ from decimal import Decimal
 from typing import Any
 
 from sqlalchemy import ColumnElement, Select, and_, exists, func, literal, or_, select
-from sqlalchemy.orm import Session, selectinload
+from sqlalchemy.orm import Session, aliased, selectinload
 
 from app.core.errors import NotFound
 from app.core.time import utcnow
@@ -111,8 +111,11 @@ def _search_condition(q: str) -> ColumnElement[bool]:
     sku_match = exists().where(
         ProductVariant.product_id == Product.id, ProductVariant.sku.ilike(pattern, escape="\\")
     )
+    # An alias, so queries that also select FROM categories (the category facet) can't
+    # auto-correlate this subquery away.
+    matched = aliased(Category)
     category_match = exists().where(
-        Category.id == Product.category_id, Category.name.ilike(pattern, escape="\\")
+        matched.id == Product.category_id, matched.name.ilike(pattern, escape="\\")
     )
     return or_(
         Product.search_vector.op("@@")(_tsquery(q)),

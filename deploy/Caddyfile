@@ -1,0 +1,68 @@
+# Production web server (docs/operations/DEPLOYMENT.md): automatic HTTPS, security headers,
+# the built storefront from /srv/site, and API/media/sitemap/robots traffic proxied to the backend
+# on the same origin (ADR-0003). SITE_DOMAIN (e.g. www.example.in) and APEX_DOMAIN (example.in)
+# come from deploy/.env.
+#
+# Re-check the Razorpay hosts in the Content-Security-Policy against Razorpay's current
+# documentation before going live (PRODUCTION_CHECKLIST.md). Fonts are self-hosted, so no font
+# CDN is allowed.
+
+(security_headers) {
+	header {
+		Strict-Transport-Security "max-age=31536000; includeSubDomains"
+		X-Content-Type-Options "nosniff"
+		X-Frame-Options "DENY"
+		Referrer-Policy "strict-origin-when-cross-origin"
+		Permissions-Policy "camera=(), microphone=(), geolocation=()"
+		Content-Security-Policy "default-src 'self'; script-src 'self' https://checkout.razorpay.com; frame-src https://api.razorpay.com https://checkout.razorpay.com; connect-src 'self' https://lumberjack.razorpay.com; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; font-src 'self'; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'"
+		-Server
+	}
+}
+
+# The bare domain only redirects to the canonical host.
+{$APEX_DOMAIN} {
+	redir https://{$SITE_DOMAIN}{uri} permanent
+}
+
+{$SITE_DOMAIN} {
+	import security_headers
+	encode zstd gzip
+
+	# Uploads are capped again by the backend (10 MB); this stops oversized bodies earlier.
+	request_body {
+		max_size 12MB
+	}
+
+	# Backend: API, uploaded photos (local storage only), sitemap and robots.txt.
+	@backend path /api/* /media/* /sitemap.xml /robots.txt
+	handle @backend {
+		reverse_proxy backend:8000 {
+			# Replace whatever the visitor sent: the backend trusts exactly one proxy hop
+			# (TRUSTED_PROXY_COUNT=1), so rate limits and audit logs see the real address.
+			header_up X-Forwarded-For {remote_host}
+		}
+	}
+
+	# Fingerprinted build files never change: cache for a year. A missing file is a plain 404 —
+	# never index.html, which would otherwise be cached for a year under a script's name.
+	handle /assets/* {
+		root * /srv/site
+		@exists file
+		header @exists Cache-Control "public, max-age=31536000, immutable"
+		file_server
+	}
+
+	handle {
+		root * /srv/site
+		# index.html, favicon and images are revalidated so a new release shows at once.
+		header Cache-Control "no-cache"
+		# Single-page app: unknown paths serve index.html; the app shows its own 404 page.
+		try_files {path} /index.html
+		file_server
+	}
+
+	log {
+		output stdout
+		format json
+	}
+}

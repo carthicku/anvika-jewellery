@@ -166,7 +166,8 @@ def product_facets(
 def product_detail(
     slug: str, response: Response, db: Session = Depends(get_db)
 ) -> ProductDetailOut:
-    _cache(response)
+    # Revalidated on every load: stock and price must be current where the customer buys.
+    response.headers["Cache-Control"] = "no-cache"
     return catalogue.get_product_detail(db, slug)
 
 

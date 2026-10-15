@@ -36,6 +36,8 @@ class Settings(BaseSettings):
     db_max_overflow: int = 5
 
     public_site_url: str = "http://localhost:5180"
+    # Off until the owner decides the live site may appear in search results (robots.txt).
+    allow_search_indexing: bool = False
     allowed_origins: Annotated[list[str], NoDecode] = ["http://localhost:5180"]
     cookie_secure: bool = False
     cookie_domain: str | None = None

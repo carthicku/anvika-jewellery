@@ -11,6 +11,7 @@ export default tseslint.config(
       'coverage',
       'playwright-report',
       'test-results',
+      'test-results-prod',
       'src/api/schema.d.ts', // generated
     ],
   },

@@ -1,4 +1,5 @@
-"""XML sitemap of public storefront pages, served at /sitemap.xml (the web server proxies it)."""
+"""Search-engine files served at the site root (the web server proxies both):
+/sitemap.xml (public storefront pages) and /robots.txt."""
 
 from __future__ import annotations
 
@@ -25,6 +26,49 @@ CONTENT_ROUTES = {
     "terms-and-conditions": "/terms-and-conditions",
     "refund-policy": "/refund-policy",
 }
+
+
+# Private or personal areas: never useful in search results (pages also send `noindex`).
+DISALLOWED = (
+    "/admin",
+    "/account",
+    "/cart",
+    "/checkout",
+    "/order-confirmation",
+    "/wishlist",
+    "/login",
+    "/register",
+    "/forgot-password",
+    "/reset-password",
+    "/verify-email",
+    "/api/",
+)
+
+
+@router.get("/robots.txt")
+def robots(request: Request) -> Response:
+    settings = request.app.state.settings
+    if not settings.allow_search_indexing:
+        lines = [
+            "# Search indexing is switched off (ALLOW_SEARCH_INDEXING=false).",
+            "User-agent: *",
+            "Disallow: /",
+        ]
+    else:
+        base = settings.public_site_url.rstrip("/")
+        lines = [
+            "User-agent: *",
+            *(f"Disallow: {path}" for path in DISALLOWED),
+            "Allow: /",
+            "",
+            f"Sitemap: {base}/sitemap.xml",
+        ]
+    body = "\n".join(lines) + "\n"
+    return Response(
+        content=body,
+        media_type="text/plain; charset=utf-8",
+        headers={"Cache-Control": "public, max-age=3600"},
+    )
 
 
 @router.get("/sitemap.xml")

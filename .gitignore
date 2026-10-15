@@ -13,6 +13,7 @@ coverage/
 *.tsbuildinfo
 frontend/playwright-report/
 frontend/test-results/
+frontend/test-results-prod/
 frontend/blob-report/
 frontend/playwright/.cache/
 

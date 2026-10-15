@@ -1,0 +1,63 @@
+# Production stack on one small VM (docs/operations/DEPLOYMENT.md):
+#   caddy   — HTTPS, security headers, the built storefront, proxy to the backend
+#   backend — FastAPI (API, background jobs, sitemap/robots)
+# The database (Supabase) and photo storage (S3-compatible) are managed services, so this machine
+# keeps no important state and can be rebuilt.
+#
+#   cp deploy/.env.example deploy/.env      # SITE_DOMAIN, APEX_DOMAIN, BACKEND_IMAGE
+#   docker compose -f deploy/docker-compose.prod.yml --env-file deploy/.env up -d
+#
+# Secrets live in /opt/store/backend.env on the server (chmod 600), never in this file or git.
+
+services:
+  backend:
+    image: ${BACKEND_IMAGE:?set BACKEND_IMAGE, e.g. store-backend:<git-sha>}
+    env_file:
+      - /opt/store/backend.env
+    environment:
+      APP_ENV: production
+      TRUSTED_PROXY_COUNT: "1"
+      LOG_FORMAT: json
+    restart: unless-stopped
+    expose:
+      - "8000"
+    read_only: true
+    tmpfs:
+      - /tmp
+    volumes:
+      # Only used with STORAGE_BACKEND=local / EMAIL_BACKEND=file; S3 + SMTP need no volume.
+      - backend-var:/app/var
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "5" }
+
+  caddy:
+    image: caddy:2.10-alpine
+    depends_on:
+      backend:
+        condition: service_healthy
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN:?set SITE_DOMAIN, e.g. www.example.in}
+      APEX_DOMAIN: ${APEX_DOMAIN:?set APEX_DOMAIN, e.g. example.in}
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    restart: unless-stopped
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - /opt/store/site:/srv/site:ro # contents of frontend/dist for the current release
+      - caddy-data:/data # TLS certificates — keep across restarts
+      - caddy-config:/config
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "5" }
+
+volumes:
+  backend-var:
+  caddy-data:
+  caddy-config:

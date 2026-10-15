@@ -32,7 +32,9 @@ export function RootLayout() {
       </a>
       <AnnouncementBar />
       <SiteHeader />
-      <main id="main" ref={mainRef} tabIndex={-1} className="flex-1 outline-none">
+      {/* At least one screen tall: while a page loads, the footer stays below the fold instead of
+          being pushed down when content arrives (layout shift). */}
+      <main id="main" ref={mainRef} tabIndex={-1} className="min-h-dvh flex-1 outline-none">
         <Outlet />
       </main>
       <SiteFooter />

@@ -366,6 +366,7 @@ export function AccountWishlistPage() {
           </EmptyState>
         ) : (
           <ProductGrid
+            heading="Saved pieces"
             products={wishlist.data}
             loading={wishlist.isPending}
             skeletonCount={3}

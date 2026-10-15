@@ -5,3 +5,4 @@ test-results
 src/api/schema.d.ts
 package-lock.json
 e2e/.auth
+test-results-prod
