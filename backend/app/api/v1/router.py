@@ -6,6 +6,7 @@ from fastapi import APIRouter
 
 from app.api.v1.routes import (
     account,
+    admin_aftercare,
     admin_catalogue,
     admin_ops,
     admin_store,
@@ -17,6 +18,7 @@ from app.api.v1.routes import (
     health,
     orders,
     payments,
+    reviews,
 )
 
 api_router = APIRouter()
@@ -30,6 +32,8 @@ api_router.include_router(checkout.router)
 api_router.include_router(payments.router)
 api_router.include_router(payments.webhook_router)
 api_router.include_router(orders.router)
+api_router.include_router(reviews.router)
 api_router.include_router(admin_ops.router)
 api_router.include_router(admin_catalogue.router)
 api_router.include_router(admin_store.router)
+api_router.include_router(admin_aftercare.router)

@@ -277,3 +277,48 @@ class Shipment(UUIDPrimaryKey, Timestamps, Base):
     status: Mapped[str] = mapped_column(String(10), nullable=False, default="shipped")
     shipped_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
     delivered_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
+RETURN_KINDS = ("return", "exchange")
+RETURN_STATUSES = ("requested", "approved", "rejected", "received", "refunded", "closed")
+OPEN_RETURN_STATUSES = ("requested", "approved", "received")
+
+
+class ReturnRequest(UUIDPrimaryKey, Timestamps, Base):
+    """A customer's request to return or exchange delivered items (INVENTORY_AND_ORDERS.md §5).
+
+    `items` is a snapshot list of {position, quantity, product_name, variant_label, sku, restock};
+    `position` points at `order_items.position`. At most one open request per order."""
+
+    __tablename__ = "return_requests"
+    __table_args__ = (
+        CheckConstraint(enum_check("kind", RETURN_KINDS), name="kind"),
+        CheckConstraint(enum_check("status", RETURN_STATUSES), name="status"),
+        Index("ix_return_requests_status_created", "status", "created_at"),
+        Index("ix_return_requests_order", "order_id"),
+        Index(
+            "uq_return_requests_one_open_per_order",
+            "order_id",
+            unique=True,
+            postgresql_where=text("status IN ('requested', 'approved', 'received')"),
+        ),
+    )
+
+    order_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("orders.id", ondelete="CASCADE"), nullable=False
+    )
+    user_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="SET NULL")
+    )
+    kind: Mapped[str] = mapped_column(String(10), nullable=False)
+    status: Mapped[str] = mapped_column(String(10), nullable=False, default="requested")
+    reason: Mapped[str] = mapped_column(String(500), nullable=False)
+    items: Mapped[list[dict[str, Any]]] = mapped_column(JSONB, nullable=False)
+    # Shown to the customer (e.g. why a request was rejected, or what happens next).
+    store_note: Mapped[str | None] = mapped_column(String(500))
+    refund_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("refunds.id", ondelete="SET NULL")
+    )
+    decided_by: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True))
+    decided_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+    received_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))

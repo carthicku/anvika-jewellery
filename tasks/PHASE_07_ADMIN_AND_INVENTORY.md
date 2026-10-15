@@ -19,16 +19,16 @@ Goal: the owner can run the store without editing code.
 - [x] Gold rates: current, history, preview of affected prices, large-change confirmation
 - [x] Shipping methods & zones
 - [x] Content pages editor (markdown, preview)
-- [ ] Reviews: verified-purchase submission + moderation
-- [ ] Returns workflow (customer request + admin decisions + restock) incl. `return_requests` table
+- [x] Reviews: verified-purchase submission + moderation
+- [x] Returns workflow (customer request + admin decisions + restock) incl. `return_requests` table
 - [x] Order status / shipment / refund emails (triggered by admin actions)
 - [x] Execute requested refunds with Razorpay (`payments.refund`), refund webhooks end to end
 - [x] Dashboard list of `payment_review` orders and stale gold-rate warning
 - [x] Settings (store info placeholders, announcement, tax rates, thresholds)
 - [x] Audit logs viewer; staff user management (admin only)
-- [ ] Optional TOTP MFA for staff/admin
+- [ ] Optional TOTP MFA for staff/admin — **deferred**, documented in KNOWN_LIMITATIONS
 - [x] Tests: admin permission matrix for every route; product/inventory/gold-rate/coupon/order admin
-      flows; e2e J8/J9 (+ admin component tests still to add)
+      flows; e2e J8/J9; admin component tests (`src/pages/admin.test.tsx`)
 
 ## Acceptance
 J8, J9, J10 pass; every admin mutation is audited.
@@ -42,4 +42,10 @@ Progress notes (2026-10-15):
   clash); reloaded product kept a stale photo list; product form lost its category when opened
   directly; dashboard showed gross revenue only (now net of refunds); wide tables pushed the page
   sideways and were not keyboard-scrollable.
-- Remaining: returns workflow, reviews, optional TOTP MFA, admin component tests.
+- Returns and reviews added (`test_aftercare.py`, 7 tests; `admin.test.tsx`; customer return
+  form test; e2e return and review journeys on desktop and phone).
+- Defects found while testing and fixed: the public review list was cached for 60 s, so a newly
+  published review didn't appear (now `no-cache`); the review E2E used up sample stock on every
+  run (now returned with an audited stock adjustment); the format check failed after E2E runs
+  because of the generated `e2e/.auth` file (now ignored by Prettier).
+- Phase 7 complete except the optional TOTP MFA (deferred).

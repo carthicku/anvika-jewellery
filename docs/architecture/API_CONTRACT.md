@@ -87,8 +87,9 @@ Legend: 🌐 public · 👤 signed-in customer · 🔑 staff/admin (permission i
 | GET | `/products/{slug}` | 🌐 | Full detail incl. variants, stock status, price breakdown per variant |
 | GET | `/products/{slug}/related` | 🌐 | Related products |
 | GET | `/search/suggest?q=` | 🌐 | Up to 8 suggestions (products + categories) |
-| GET | `/products/{slug}/reviews` | 🌐 | Approved reviews |
-| POST | `/products/{slug}/reviews` | 👤 | Verified purchasers only; goes to moderation |
+| GET | `/products/{slug}/reviews` | 🌐 (`Cache-Control: no-cache`) | `{summary: {count, average}, reviews: Page}` — approved reviews only; `average` is a 1-decimal string or null |
+| GET | `/products/{slug}/reviews/mine` | 👤 | `{can_review, review}` — `can_review` when an order with this product was delivered |
+| PUT | `/products/{slug}/reviews/mine` | 👤 (rate-limited 10/h) | `{rating 1–5, title, body}` → create or edit; always back to `pending`. `403 NOT_A_VERIFIED_PURCHASE` |
 
 ### Shipping
 | GET | `/shipping/pincode/{pincode}` | 🌐 (rate-limited) | Serviceability, methods, estimated delivery range |
@@ -120,7 +121,7 @@ Legend: 🌐 public · 👤 signed-in customer · 🔑 staff/admin (permission i
 | GET | `/orders` | 👤 | Own orders (paginated) |
 | GET | `/orders/{reference}` | 👤 owner, or 🌐 with `X-Order-Access-Token` | Order detail + timeline |
 | POST | `/orders/{reference}/cancel` | owner / guest token | `{reason?}`. Unpaid → released; paid & not yet processing → restocked + full refund requested. `409 CANNOT_CANCEL`, `PAYMENT_IN_PROGRESS` |
-| POST | `/orders/{reference}/returns` | 👤 owner | Return/exchange request when eligible (Phase 7) |
+| POST | `/orders/{reference}/returns` | owner / guest token | `{kind: return\|exchange, reason (10–500), items: [{position, quantity}]}` → `201` order. `OrderOut` carries `returns` and `returnable_items` (position, quantity left, kinds, deadline). `409 NOT_DELIVERED`, `RETURN_ALREADY_OPEN`, `RETURN_NOT_AVAILABLE`; `422` for ineligible items/quantities |
 
 ### Content & engagement
 | GET | `/settings/public` | 🌐 | Store name, announcement, contact placeholders, payment provider mode |
@@ -142,8 +143,8 @@ Legend: 🌐 public · 👤 signed-in customer · 🔑 staff/admin (permission i
 | Gold rates | `GET /admin/gold-rates`, `POST /admin/gold-rates/preview`, `POST /admin/gold-rates` | `pricing:write` |
 | Shipping | methods + zones CRUD | `settings:write` |
 | Content | pages CRUD | `content:write` |
-| Reviews | list, approve/reject | `content:write` |
-| Returns | list, decide, mark received/refunded | `orders:write` |
+| Reviews | `GET /admin/reviews?status=`, `POST /admin/reviews/{id}/moderate` `{decision: approve\|reject, note}` | `content:write` |
+| Returns | `GET /admin/returns?status=`, `GET /admin/returns/{id}`, `POST …/{id}/approve\|reject\|receive\|close` (`orders:write`), `POST …/{id}/refund` `{amount, note}` (`orders:refund`); `409 INVALID_RETURN_STATE` | see cell |
 | Enquiries / newsletter | list, update status | `customers:view` |
 | Settings | `GET/PATCH /admin/settings` | `settings:write` |
 | Audit logs | `GET /admin/audit-logs` | `audit:view` |

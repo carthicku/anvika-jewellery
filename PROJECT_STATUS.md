@@ -1,9 +1,9 @@
 # Project Status
 
 **Last updated:** 2026-10-15
-**Current phase:** Phase 7 — Administration (in progress: returns, reviews remaining)
-**Last verified checkpoint:** Phase 7 admin (operations, catalogue, settings, UI)
-(`scripts/check.ps1` all green; 291 backend tests, 44 frontend tests, 52 E2E runs ×2, axe clean)
+**Current phase:** Phase 8 — Launch preparation (next)
+**Last verified checkpoint:** Phase 7 complete — admin plus returns and reviews
+(`scripts/check.ps1` all green; 298 backend tests, 48 frontend tests, 56 E2E passed + 2 skipped by design, axe clean)
 
 ## What exists
 * Planning documentation, ADRs 0001–0009, task tracker, `CLAUDE.md`, 11 skills.
@@ -38,6 +38,11 @@
   discounts/coupons, delivery, content, settings, staff, audit log. Create the first admin with
   `python -m app.cli create-admin`.
 
+* **After-sales (Phase 7)**: return/exchange requests from the order page (eligible pieces, within
+  the window from delivery) with staff approve/reject → received (choose what goes back into
+  stock) → refund or complete; verified-purchase reviews with moderation (only approved reviews
+  are public; rating summary and structured data use approved reviews only).
+
 ## What works (verified — see docs/quality/TEST_RESULTS.md)
 | Item | Evidence |
 |------|----------|
@@ -50,11 +55,12 @@
 | Accounts & access control | `tests/api/test_auth.py`, `test_account.py`, `test_permissions.py`, `e2e/account.spec.ts` |
 | No sideways scrolling on phones | `e2e/smoke.spec.ts` (11 routes), `e2e/cart.spec.ts` |
 | Cart, coupons, price-change rules | `tests/api/test_cart.py`, `cart.test.tsx`, `e2e/cart.spec.ts` |
-| Admin API and screens | `test_admin_ops.py`, `test_admin_catalogue.py`, `test_admin_store.py`, `e2e/admin.spec.ts` |
+| Admin API and screens | `test_admin_ops.py`, `test_admin_catalogue.py`, `test_admin_store.py`, `admin.test.tsx`, `e2e/admin.spec.ts` |
+| Returns and reviews | `tests/api/test_aftercare.py`, `checkout.test.tsx` (return form), `admin.test.tsx`, `e2e/admin.spec.ts` (return and review journeys) |
 | Checkout, payments, webhooks, expiry, cancellation | `tests/api/test_checkout.py`, `test_payments.py`, `test_inventory_concurrency.py`, `checkout.test.tsx`, `e2e/checkout.spec.ts` |
 
 ## Not yet built
-Returns workflow and reviews (rest of Phase 7), optional staff TOTP, and launch prep (Phase 8).
+Optional staff TOTP (deferred, see KNOWN_LIMITATIONS) and launch prep (Phase 8).
 Payments have not yet been run with real Razorpay test keys.
 
 ## Local ports
@@ -65,12 +71,11 @@ Nothing blocks development. Needed before launch: brand details, Razorpay test k
 project, SMTP provider, CA review of GST, legal review of policies (ASSUMPTIONS §5).
 
 ## Next step
-Finish Phase 7: returns/exchange requests (customer request after delivery within the window →
-admin approve/reject → received → restock and refund), verified-purchase reviews with moderation,
-admin component tests; then Phase 8 launch prep.
+Phase 8 launch prep (`tasks/PHASE_08_POLISH_AND_LAUNCH.md`): remaining E2E journeys, security/performance/SEO
+reviews, robots.txt, deployment files, operational CLI checks, production checklist, final report.
 
 ## How to resume
-1. Read `CLAUDE.md`, this file, `tasks/PHASE_07_ADMIN_AND_INVENTORY.md`.
+1. Read `CLAUDE.md`, this file, `tasks/PHASE_08_POLISH_AND_LAUNCH.md`.
 2. Terminal 1: `npm run db:start` (repo root).
 3. Terminal 2: `cd backend && .venv/Scripts/python -m uvicorn app.main:app --reload --port 8010`
    (for `npm run e2e`, start it with `RATE_LIMIT_ENABLED=false` — see docs/development/TESTING.md).

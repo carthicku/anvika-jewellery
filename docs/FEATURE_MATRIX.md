@@ -36,7 +36,7 @@ the test listed**. Update this file whenever a feature changes state.
 | Payments | Dev simulator (non-production) | `/payments/simulator/pay` | 6 | ✅ | `test_simulator_endpoint_is_unavailable_with_a_real_provider`, production settings test |
 | Orders | Confirmation page (owner / guest token) | `/order-confirmation/:ref` | 6 | ✅ | `test_guest_order_needs_its_access_token`, `e2e/checkout.spec.ts` |
 | Orders | Cancellation | `/orders/{ref}/cancel` | 6 | ✅ | `test_cancel_*`, `e2e/checkout.spec.ts` |
-| Orders | Returns / exchanges | `/orders/{ref}/returns` | 7 | ⬜ | |
+| Orders | Returns / exchanges | `/orders/{ref}/returns` | 7 | ✅ | `test_return_for_refund_end_to_end`, `test_return_rules`, `checkout.test.tsx` (returns), e2e return journey |
 | Email | Outbox + templates + file sink + SMTP | jobs | 6 | ⚠️ outbox, templates and file/memory sinks verified; SMTP not tried against a real server | `test_verified_payment_confirms_order_and_sells_stock` (confirmation email), auth email tests |
 | Admin | Auth, RBAC, audit logs | `/admin/*` | 4/7 | ✅ | `test_every_admin_route_declares_a_permission`, `test_staff_permissions_are_limited`, audit viewer, `e2e/admin.spec.ts` (customers blocked) |
 | Admin | Dashboard | `/admin` | 7 | ✅ | `test_dashboard_counts_only_paid_money`, e2e |
@@ -48,10 +48,10 @@ the test listed**. Update this file whenever a feature changes state.
 | Admin | Discounts, coupons | `/admin/discounts`, `/admin/coupons` | 7 | ✅ | `test_automatic_discount_changes_prices`, `test_coupons_are_created_uppercase_and_track_usage` |
 | Admin | Gold rates (preview, confirm, history) | `/admin/gold-rates` | 7 | ✅ | `test_gold_rate_preview_shows_every_affected_price`, `test_large_rate_change_needs_confirmation_and_is_audited` |
 | Admin | Shipping methods & zones | `/admin/shipping` | 7 | ✅ | `test_shipping_zones_limit_delivery`, `test_at_least_one_delivery_method_stays_active` |
-| Admin | Content pages, reviews moderation | `/admin/content`, `/admin/reviews` | 7 | ⚠️ content ✅, reviews pending | `test_staff_edit_content_pages` |
-| Admin | Returns | `/admin/returns` | 7 | ⬜ | |
+| Admin | Content pages, reviews moderation | `/admin/content`, `/admin/reviews` | 7 | ✅ | `test_staff_edit_content_pages`, `test_only_delivered_buyers_can_review_and_staff_approve_first`, `admin.test.tsx`, e2e review journey |
+| Admin | Returns (approve/reject, receive + restock, refund, close) | `/admin/returns` | 7 | ✅ | `test_aftercare.py`, `admin.test.tsx`, e2e return journey |
 | Admin | Staff users (promote, role, deactivate) | `/admin/staff` | 7 | ✅ | `test_admin_promotes_and_deactivates_staff`, `test_the_last_admin_cannot_be_removed` |
 | Admin | Settings (store, tax, announcement) | `/admin/settings` | 7 | ✅ | `test_tax_settings_change_prices_and_are_audited`, `test_store_details_are_validated`, `test_announcement_links_must_be_safe` |
-| Admin | Optional TOTP MFA | `/account/security` | 7 | ⬜ | |
+| Admin | Optional TOTP MFA | `/account/security` | 7 | ⬜ deferred (KNOWN_LIMITATIONS) | |
 | SEO | Metadata, canonical, OG, JSON-LD, sitemap, robots | — | 2/8 | ⚠️ | Titles/descriptions/canonical/OG + JSON-LD (non-sample only) + sitemap (`test_sitemap_lists_public_pages`); robots.txt in Phase 8 |
 | Quality | Playwright journeys J1–J12 | `frontend/e2e` | 8 | ⬜ | |

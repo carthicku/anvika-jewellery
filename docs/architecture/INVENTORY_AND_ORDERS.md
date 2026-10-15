@@ -85,8 +85,19 @@ Refunds are executed against Razorpay by an admin with `orders:refund` (see PAYM
 * Available for `delivered` orders, for items whose product had `return_eligible`/`exchange_eligible`
   set at order time (snapshotted into `order_items.price_inputs`), within `return_window_days` of
   delivery.
-* `requested → approved/rejected → received → refunded/closed`. On `received`, the admin chooses
-  whether each item is restocked (`return_restock`).
+* `requested → approved/rejected → received → refunded/closed` (`approved → closed` too, when the
+  items never arrive). On `received`, staff tick which pieces can be sold again; only those are
+  restocked (`return_restock`, once, inside the request's state change).
+* Delivery time = the latest `delivered` timeline event (else the shipment's `delivered_at`). The
+  window is snapshotted per line at checkout (`price_inputs.return_window_days`); older orders fall
+  back to the product's current window. No window → not returnable online.
+* One open request per order (partial unique index). Quantities already in a non-rejected request
+  can't be asked for again; a rejected line can be requested again while the window is open.
+* Refund: `orders:refund` creates a normal refund request (suggested amount = the returned lines'
+  share of what was paid, excluding delivery, capped at the refundable amount); it is sent to the
+  provider from the order page like any other refund. Exchanges are closed without a refund.
+* When every piece of an order has been received back for a refund, the order moves to `returned`.
+* The customer gets an email at each step; staff see open requests on the dashboard (`return_update`).
 
 ## 6. Expiry job
 Every minute (and on demand with `python -m app.cli run-jobs`):

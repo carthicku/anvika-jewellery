@@ -238,3 +238,40 @@ class ProductAttribute(UUIDPrimaryKey, Base):
     )
     key: Mapped[str] = mapped_column(String(40), nullable=False)
     value: Mapped[str] = mapped_column(String(80), nullable=False)
+
+
+REVIEW_STATUSES = ("pending", "approved", "rejected")
+
+
+class ProductReview(UUIDPrimaryKey, Timestamps, Base):
+    """A review by a customer who received the product. Only `approved` reviews are ever shown;
+    nothing is seeded or invented (ASSUMPTIONS_AND_DECISIONS.md B5)."""
+
+    __tablename__ = "product_reviews"
+    __table_args__ = (
+        UniqueConstraint("user_id", "product_id"),
+        CheckConstraint(enum_check("status", REVIEW_STATUSES), name="status"),
+        CheckConstraint("rating BETWEEN 1 AND 5", name="rating_range"),
+        Index("ix_product_reviews_product_status", "product_id", "status"),
+        Index("ix_product_reviews_status_created", "status", "created_at"),
+    )
+
+    product_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("products.id", ondelete="CASCADE"), nullable=False
+    )
+    user_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False
+    )
+    # The delivered purchase that makes this a verified review.
+    order_item_id: Mapped[uuid.UUID | None] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("order_items.id", ondelete="SET NULL")
+    )
+    rating: Mapped[int] = mapped_column(Integer, nullable=False)
+    title: Mapped[str] = mapped_column(String(120), nullable=False)
+    body: Mapped[str] = mapped_column(Text, nullable=False)
+    # Public name, e.g. "Asha R." (first name + initial), chosen at submission.
+    author_name: Mapped[str] = mapped_column(String(60), nullable=False)
+    status: Mapped[str] = mapped_column(String(10), nullable=False, default="pending")
+    moderation_note: Mapped[str | None] = mapped_column(String(300))
+    moderated_by: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True))
+    moderated_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))

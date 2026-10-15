@@ -111,3 +111,23 @@ create product → photo upload → publish → visible in store → stock adjus
 prepare → cancel → send refund (simulator); customers see "This area is for store staff" (J10);
 axe on dashboard, product editor, orders and gold rates (desktop + phone). The E2E admin is created
 by the dev-only `python -m app.cli e2e-admin` with a fresh random password per run.
+
+### 2026-10-15 — Phase 7 complete (returns and reviews)
+| Suite | Command | Result |
+|-------|---------|--------|
+| Full static + unit/API + build | `powershell -File scripts/check.ps1` | All checks passed (storefront initial JS 93 kB gzip; admin and after-sales screens in separate chunks) |
+| Backend | `pytest -q` | 298 passed (+7 in `test_aftercare.py`) |
+| Frontend unit | `vitest run` | 48 passed (+3 admin component tests in `admin.test.tsx`, +1 customer return form test) |
+| End-to-end | `playwright test` (desktop + mobile) | 56 passed, 2 skipped by design (keyboard flow desktop-only; sideways-scroll check phone-only) |
+
+New E2E coverage: guest return journey (delivered → request → approve → receive with restock →
+refund sent → customer sees "Refund issued" and "Order returned"); signed-in buyer review journey
+(review hidden until staff publish it, then shown with "Verified purchase"; cleaned up afterwards);
+axe on `/admin/returns` and `/admin/reviews`.
+
+Honest record of failures on the way: the first full E2E run had 16 failures because earlier
+failed runs of the new review test had used up the Om Pendant's development stock (cart/checkout
+tests then had nothing to buy). Fixed by making the test return the piece with an audited stock
+adjustment and restoring the dev stock (adjustment, not a reset). Stock after the final run: 9
+on hand, 0 reserved — unchanged. One `vitest` run timed out while the machine was busy and passed
+unchanged on re-run.

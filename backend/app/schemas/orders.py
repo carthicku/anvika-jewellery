@@ -113,6 +113,7 @@ class OrderShippingMethodOut(BaseModel):
 
 
 class OrderItemOut(BaseModel):
+    position: int
     product_name: str
     product_slug: str
     variant_label: str
@@ -159,6 +160,50 @@ class RefundOut(BaseModel):
     created_at: datetime
 
 
+ReturnKind = Literal["return", "exchange"]
+ReturnStatus = Literal["requested", "approved", "rejected", "received", "refunded", "closed"]
+
+
+class ReturnLineOut(BaseModel):
+    position: int
+    product_name: str
+    variant_label: str
+    quantity: int
+
+
+class ReturnOut(BaseModel):
+    id: str
+    kind: ReturnKind
+    kind_label: str
+    status: ReturnStatus
+    status_label: str
+    reason: str
+    store_note: str | None
+    items: list[ReturnLineOut]
+    created_at: datetime
+    updated_at: datetime
+
+
+class ReturnableItemOut(BaseModel):
+    position: int
+    product_name: str
+    variant_label: str
+    quantity: int
+    kinds: list[ReturnKind]
+    deadline: datetime
+
+
+class ReturnLineIn(StrictIn):
+    position: int = Field(ge=0, le=1000)
+    quantity: int = Field(ge=1, le=100)
+
+
+class CreateReturnIn(StrictIn):
+    kind: ReturnKind
+    reason: str = Field(min_length=10, max_length=500)
+    items: list[ReturnLineIn] = Field(min_length=1, max_length=50)
+
+
 class OrderOut(BaseModel):
     reference: str
     status: OrderStatus
@@ -184,6 +229,8 @@ class OrderOut(BaseModel):
     can_pay: bool
     can_cancel: bool
     payment_message: str | None
+    returns: list[ReturnOut]
+    returnable_items: list[ReturnableItemOut]
 
 
 class OrderSummaryOut(BaseModel):

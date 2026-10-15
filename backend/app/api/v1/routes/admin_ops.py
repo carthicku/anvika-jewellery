@@ -134,6 +134,8 @@ def get_dashboard(
         pending_payment=d.pending_payment,
         payment_review=d.payment_review,
         to_fulfil=d.to_fulfil,
+        open_returns=d.open_returns,
+        pending_reviews=d.pending_reviews,
         recent_orders=[_row(o) for o in d.recent],
         review_orders=[_row(o) for o in d.review_orders],
         low_stock=[LowStockOut(**r.__dict__) for r in d.low_stock],

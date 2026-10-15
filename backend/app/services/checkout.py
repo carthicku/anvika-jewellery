@@ -347,6 +347,7 @@ def create_order(
                         "tax_by_component": {k: str(v) for k, v in lp.tax_by_component.items()},
                         "return_eligible": line.product.return_eligible,
                         "exchange_eligible": line.product.exchange_eligible,
+                        "return_window_days": line.product.return_window_days,
                     }
                 ),
             )

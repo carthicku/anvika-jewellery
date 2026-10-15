@@ -69,6 +69,15 @@ TEMPLATES: dict[str, TemplateSpec] = {
         ("Track your order", "order_url"),
         "Please check the package seal when it arrives and contact us if anything looks wrong.",
     ),
+    "return_update": (
+        "Update on your return or exchange",
+        [
+            "Hello {name},",
+            "{return_kind} for order {reference}: {return_message}",
+        ],
+        ("View your order", "order_url"),
+        "If you have questions, reply to this email or contact us.",
+    ),
     "refund_processed": (
         "Your refund has been processed",
         [

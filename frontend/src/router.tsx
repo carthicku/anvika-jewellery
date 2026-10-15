@@ -145,31 +145,38 @@ export const routes: RouteObject[] = [
 ];
 
 /** Admin pages: [path, module, export]. Loaded only when staff open the admin. */
-const ADMIN_PAGES: [string | null, 'OperationsPages' | 'CataloguePages' | 'StorePages', string][] =
-  [
-    [null, 'OperationsPages', 'AdminDashboardPage'],
-    ['orders', 'OperationsPages', 'AdminOrdersPage'],
-    ['orders/:reference', 'OperationsPages', 'AdminOrderDetailPage'],
-    ['inventory', 'OperationsPages', 'AdminInventoryPage'],
-    ['gold-rates', 'OperationsPages', 'AdminGoldRatesPage'],
-    ['customers', 'OperationsPages', 'AdminCustomersPage'],
-    ['customers/:id', 'OperationsPages', 'AdminCustomerDetailPage'],
-    ['enquiries', 'OperationsPages', 'AdminEnquiriesPage'],
-    ['audit', 'OperationsPages', 'AdminAuditPage'],
-    ['products', 'CataloguePages', 'AdminProductsPage'],
-    ['products/:id', 'CataloguePages', 'AdminProductEditPage'],
-    ['categories', 'CataloguePages', 'AdminCategoriesPage'],
-    ['promotions', 'StorePages', 'AdminPromotionsPage'],
-    ['shipping', 'StorePages', 'AdminShippingPage'],
-    ['content', 'StorePages', 'AdminContentPage'],
-    ['settings', 'StorePages', 'AdminSettingsPage'],
-    ['staff', 'StorePages', 'AdminStaffPage'],
-  ];
+const ADMIN_PAGES: [
+  string | null,
+  'OperationsPages' | 'CataloguePages' | 'StorePages' | 'AftercarePages',
+  string,
+][] = [
+  [null, 'OperationsPages', 'AdminDashboardPage'],
+  ['orders', 'OperationsPages', 'AdminOrdersPage'],
+  ['orders/:reference', 'OperationsPages', 'AdminOrderDetailPage'],
+  ['inventory', 'OperationsPages', 'AdminInventoryPage'],
+  ['gold-rates', 'OperationsPages', 'AdminGoldRatesPage'],
+  ['customers', 'OperationsPages', 'AdminCustomersPage'],
+  ['customers/:id', 'OperationsPages', 'AdminCustomerDetailPage'],
+  ['enquiries', 'OperationsPages', 'AdminEnquiriesPage'],
+  ['returns', 'AftercarePages', 'AdminReturnsPage'],
+  ['returns/:id', 'AftercarePages', 'AdminReturnDetailPage'],
+  ['reviews', 'AftercarePages', 'AdminReviewsPage'],
+  ['audit', 'OperationsPages', 'AdminAuditPage'],
+  ['products', 'CataloguePages', 'AdminProductsPage'],
+  ['products/:id', 'CataloguePages', 'AdminProductEditPage'],
+  ['categories', 'CataloguePages', 'AdminCategoriesPage'],
+  ['promotions', 'StorePages', 'AdminPromotionsPage'],
+  ['shipping', 'StorePages', 'AdminShippingPage'],
+  ['content', 'StorePages', 'AdminContentPage'],
+  ['settings', 'StorePages', 'AdminSettingsPage'],
+  ['staff', 'StorePages', 'AdminStaffPage'],
+];
 
 const loadAdminModule = {
   OperationsPages: () => import('@/pages/admin/OperationsPages'),
   CataloguePages: () => import('@/pages/admin/CataloguePages'),
   StorePages: () => import('@/pages/admin/StorePages'),
+  AftercarePages: () => import('@/pages/admin/AftercarePages'),
 } as const;
 
 routes.unshift({

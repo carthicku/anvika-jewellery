@@ -141,6 +141,27 @@ export function useOrder(reference: string) {
   });
 }
 
+export type CreateReturnInput = components['schemas']['CreateReturnIn'];
+
+/** Ask to return or exchange delivered items. The backend checks eligibility and the window. */
+export function useRequestReturn() {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: ({ reference, body }: { reference: string; body: CreateReturnInput }) =>
+      unwrap(
+        api.POST('/api/v1/orders/{reference}/returns', {
+          params: { path: { reference } },
+          body,
+          headers: orderTokenHeaders(reference),
+        }),
+      ),
+    onSuccess: (order) => {
+      client.setQueryData(queryKeys.order(order.reference), order);
+      void client.invalidateQueries({ queryKey: queryKeys.orders });
+    },
+  });
+}
+
 export function useCancelOrder() {
   const client = useQueryClient();
   return useMutation({

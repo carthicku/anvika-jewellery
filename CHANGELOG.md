@@ -5,6 +5,11 @@ All notable changes to this project. Format based on [Keep a Changelog](https://
 ## [Unreleased]
 
 ### Added
+- Phase 7 (after-sales): customers can ask for a return or exchange of delivered pieces within
+  each piece's window; staff approve/reject, mark items received (choosing which go back into
+  stock) and refund through the normal refund flow, with emails at each step. Verified-purchase
+  product reviews with staff moderation; only approved reviews are shown and only they feed the
+  rating summary and structured data. Dashboard shows open returns and reviews to moderate.
 - Phase 7 (admin): dashboard with net sales and work queues; order management (prepare, ship with
   tracking, deliver, cancel, payment-review resolution, partial/full refunds sent to the payment
   provider, internal notes); product management with variants, photo uploads (re-encoded WebP),

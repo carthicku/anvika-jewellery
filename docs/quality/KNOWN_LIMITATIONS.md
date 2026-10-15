@@ -33,7 +33,12 @@ owner. Keep it current. Each item states its impact and the plan.
   reconciliation job cannot see them (development only — no money involved).
 * Guests keep their order access token in `sessionStorage` for the current tab; reopening the
   order later needs the link from the confirmation email.
-* Admin TOTP MFA: planned for Phase 7, not yet implemented.
+* Admin TOTP MFA is **not built** (deferred). Mitigations: strong unique passwords, rate-limited
+  sign-in, short sessions, sessions revoked on role change, every admin action audited. Recommended
+  before giving more people staff access.
+* Returns: return shipping (courier pickup, labels) is arranged by staff outside the system; the
+  suggested refund excludes delivery charges (staff can change the amount). Only signed-in
+  customers can write reviews; guests' orders can be returned but not reviewed.
 * Registration reveals whether an email already has an account (`EMAIL_IN_USE`) — a usability
   trade-off mitigated by rate limiting. Passwords are not checked against breached-password lists.
 * End-to-end tests run against a backend with `RATE_LIMIT_ENABLED=false` (limits are covered by API

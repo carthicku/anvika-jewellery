@@ -50,6 +50,7 @@ const ORDER_STATUSES = [
   ['processing', 'Being prepared'],
   ['shipped', 'Shipped'],
   ['delivered', 'Delivered'],
+  ['returned', 'Returned'],
   ['payment_review', 'Payment review'],
   ['cancelled', 'Cancelled'],
   ['expired', 'Payment not completed'],
@@ -156,6 +157,20 @@ export function AdminDashboardPage() {
               <Link to="/admin/gold-rates" className="underline underline-offset-4">
                 Update gold rates
               </Link>
+            </Alert>
+          )}
+          {(d.open_returns > 0 || d.pending_reviews > 0) && (
+            <Alert tone="info" title="Waiting for a decision">
+              {d.open_returns > 0 && (
+                <Link to="/admin/returns" className="mr-4 underline underline-offset-4">
+                  {d.open_returns} open {d.open_returns === 1 ? 'return' : 'returns'}
+                </Link>
+              )}
+              {d.pending_reviews > 0 && (
+                <Link to="/admin/reviews" className="underline underline-offset-4">
+                  {d.pending_reviews} {d.pending_reviews === 1 ? 'review' : 'reviews'} to moderate
+                </Link>
+              )}
             </Alert>
           )}
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -678,6 +693,23 @@ export function AdminOrderDetailPage() {
               </ul>
             )}
           </Panel>
+          {order.returns.length > 0 && (
+            <Panel title="Returns and exchanges">
+              <ul className="space-y-2 text-sm">
+                {order.returns.map((r) => (
+                  <li key={r.id}>
+                    <Link to={`/admin/returns/${r.id}`} className="underline underline-offset-4">
+                      {r.kind_label}
+                    </Link>{' '}
+                    · {r.status_label}
+                    <span className="block text-xs text-ink-muted">
+                      {formatDateTime(r.created_at)}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </Panel>
+          )}
           <Panel title="Refunds">
             {data.refunds.length === 0 ? (
               <p className="text-sm text-ink-muted">None.</p>

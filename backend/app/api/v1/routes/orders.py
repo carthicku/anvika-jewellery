@@ -1,4 +1,4 @@
-"""Customer order history, order detail (owner or guest token) and cancellation."""
+"""Customer order history, order detail (owner or guest token), cancellation and returns."""
 
 from __future__ import annotations
 
@@ -20,8 +20,8 @@ from app.core.db import get_db
 from app.core.errors import Conflict
 from app.models import User
 from app.schemas.common import Page
-from app.schemas.orders import CancelOrderIn, OrderOut, OrderSummaryOut
-from app.services import orders
+from app.schemas.orders import CancelOrderIn, CreateReturnIn, OrderOut, OrderSummaryOut
+from app.services import orders, returns
 
 router = APIRouter(prefix="/orders", tags=["orders"])
 
@@ -90,5 +90,37 @@ def cancel_order(
     db.commit()
     out = orders.order_view(db, order)
     db.commit()  # end the read transaction before the after-response work
+    send_emails_later(request, tasks)
+    return out
+
+
+@router.post("/{reference}/returns", response_model=OrderOut, status_code=201)
+def request_return(
+    reference: str,
+    data: CreateReturnIn,
+    request: Request,
+    response: Response,
+    tasks: BackgroundTasks,
+    db: Session = Depends(get_db),
+    settings: Settings = Depends(get_app_settings),
+    auth: Auth | None = Depends(get_optional_auth),
+    access_token: str | None = Depends(get_order_access_token),
+) -> OrderOut:
+    """Ask to return or exchange delivered items (eligibility and window checked here)."""
+    response.headers["Cache-Control"] = "no-store"
+    user = auth.user if auth else None
+    order = orders.find_order(db, reference[:24], user, access_token, lock=True)
+    returns.create_request(
+        db,
+        settings,
+        order,
+        user,
+        kind=data.kind,
+        reason=data.reason,
+        lines=[(line.position, line.quantity) for line in data.items],
+    )
+    db.commit()
+    out = orders.order_view(db, order)
+    db.commit()
     send_emails_later(request, tasks)
     return out

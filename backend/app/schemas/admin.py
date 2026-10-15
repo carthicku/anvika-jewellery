@@ -69,6 +69,8 @@ class DashboardOut(BaseModel):
     pending_payment: int
     payment_review: int
     to_fulfil: int
+    open_returns: int
+    pending_reviews: int
     recent_orders: list[AdminOrderRowOut]
     review_orders: list[AdminOrderRowOut]
     low_stock: list[LowStockOut]
@@ -288,3 +290,56 @@ class AuditLogOut(BaseModel):
     entity_id: str | None
     changes: dict[str, Any]
     ip_address: str | None
+
+
+# --------------------------------------------------------------------------------------------
+# Returns
+# --------------------------------------------------------------------------------------------
+
+
+class AdminReturnLineOut(BaseModel):
+    position: int
+    product_name: str
+    variant_label: str
+    sku: str
+    quantity: int
+    restock: bool | None
+
+
+class AdminReturnRowOut(BaseModel):
+    id: str
+    order_reference: str
+    customer_name: str
+    kind: Literal["return", "exchange"]
+    status: Literal["requested", "approved", "rejected", "received", "refunded", "closed"]
+    status_label: str
+    item_count: int
+    created_at: datetime
+    updated_at: datetime
+
+
+class AdminReturnOut(AdminReturnRowOut):
+    email: str
+    reason: str
+    store_note: str | None
+    items: list[AdminReturnLineOut]
+    delivered_at: datetime | None
+    suggested_refund: MoneyStr
+    refund_id: str | None
+    refund_status: str | None
+    refund_amount: MoneyStr | None
+    allowed_actions: list[str]
+
+
+class ReturnDecisionIn(StrictIn):
+    note: str = Field(default="", max_length=500)
+
+
+class ReturnReceiveIn(StrictIn):
+    restock_positions: list[int] = Field(default_factory=list, max_length=50)
+    note: str = Field(default="", max_length=500)
+
+
+class ReturnRefundIn(StrictIn):
+    amount: Decimal = Field(gt=0, max_digits=12, decimal_places=2)
+    note: str = Field(default="", max_length=500)

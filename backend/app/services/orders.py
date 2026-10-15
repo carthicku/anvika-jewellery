@@ -24,7 +24,16 @@ from app.core.errors import Conflict, InvalidStateTransition, NotFound
 from app.core.money import ZERO, format_inr
 from app.core.security import hash_token
 from app.core.time import utcnow
-from app.models import CouponRedemption, Order, OrderEvent, OrderItem, Refund, Shipment, User
+from app.models import (
+    CouponRedemption,
+    Order,
+    OrderEvent,
+    OrderItem,
+    Refund,
+    ReturnRequest,
+    Shipment,
+    User,
+)
 from app.schemas.catalogue import ImageOut, PriceRowOut
 from app.schemas.common import Page
 from app.schemas.orders import (
@@ -36,6 +45,9 @@ from app.schemas.orders import (
     OrderSummaryOut,
     OrderTotalsOut,
     RefundOut,
+    ReturnableItemOut,
+    ReturnLineOut,
+    ReturnOut,
     ShipmentOut,
 )
 from app.services import email as email_service
@@ -77,7 +89,24 @@ EVENT_TITLES = {
     "status_changed": "Status updated",
     "shipped": "Shipped",
     "delivered": "Delivered",
+    "order_returned": "Order returned",
+    "return_requested": "Return or exchange requested",
+    "return_approved": "Return approved",
+    "return_rejected": "Return not accepted",
+    "return_received": "Returned items received",
+    "return_refunded": "Refund issued for returned items",
+    "return_closed": "Return or exchange completed",
 }
+
+RETURN_STATUS_LABELS = {
+    "requested": "Requested — waiting for our reply",
+    "approved": "Approved — please send the items back",
+    "rejected": "Not accepted",
+    "received": "Items received",
+    "refunded": "Refund issued",
+    "closed": "Completed",
+}
+RETURN_KIND_LABELS = {"return": "Return for a refund", "exchange": "Exchange"}
 
 ALLOWED_TRANSITIONS: dict[str, set[str]] = {
     "pending_payment": {"confirmed", "expired", "cancelled", "payment_review"},
@@ -407,6 +436,14 @@ def order_view(db: Session, order: Order) -> OrderOut:
     refunds = db.scalars(
         select(Refund).where(Refund.order_id == order.id).order_by(Refund.created_at)
     ).all()
+    requests = db.scalars(
+        select(ReturnRequest)
+        .where(ReturnRequest.order_id == order.id)
+        .order_by(ReturnRequest.created_at)
+    ).all()
+    # Imported here: the returns service builds on this module.
+    from app.services import returns
+
     method = order.shipping_method
     return OrderOut(
         reference=order.reference,
@@ -434,6 +471,7 @@ def order_view(db: Session, order: Order) -> OrderOut:
         customer_note=order.customer_note,
         items=[
             OrderItemOut(
+                position=i.position,
                 product_name=i.product_name,
                 product_slug=i.product_slug,
                 variant_label=i.variant_label,
@@ -484,6 +522,41 @@ def order_view(db: Session, order: Order) -> OrderOut:
         can_pay=can_pay(order),
         can_cancel=can_customer_cancel(order),
         payment_message=_payment_message(order),
+        returns=[return_view(r) for r in requests],
+        returnable_items=[
+            ReturnableItemOut(
+                position=r.position,
+                product_name=r.product_name,
+                variant_label=r.variant_label,
+                quantity=r.quantity,
+                kinds=r.kinds,
+                deadline=r.deadline,
+            )
+            for r in returns.returnable_items(db, order)
+        ],
+    )
+
+
+def return_view(request: ReturnRequest) -> ReturnOut:
+    return ReturnOut(
+        id=str(request.id),
+        kind=request.kind,
+        kind_label=RETURN_KIND_LABELS[request.kind],
+        status=request.status,
+        status_label=RETURN_STATUS_LABELS[request.status],
+        reason=request.reason,
+        store_note=request.store_note,
+        items=[
+            ReturnLineOut(
+                position=int(line["position"]),
+                product_name=line["product_name"],
+                variant_label=line["variant_label"],
+                quantity=int(line["quantity"]),
+            )
+            for line in request.items
+        ],
+        created_at=request.created_at,
+        updated_at=request.updated_at,
     )
 
 

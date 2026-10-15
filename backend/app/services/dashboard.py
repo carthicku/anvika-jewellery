@@ -12,7 +12,17 @@ from sqlalchemy.orm import Session
 
 from app.core.money import ZERO
 from app.core.time import utcnow
-from app.models import InventoryLevel, Order, OrderItem, Product, ProductVariant, Refund
+from app.models import (
+    InventoryLevel,
+    Order,
+    OrderItem,
+    Product,
+    ProductReview,
+    ProductVariant,
+    Refund,
+    ReturnRequest,
+)
+from app.models.orders import OPEN_RETURN_STATUSES
 from app.services import gold_rates
 from app.services.shipping import IST
 
@@ -47,6 +57,8 @@ class Dashboard:
     pending_payment: int
     payment_review: int
     to_fulfil: int
+    open_returns: int
+    pending_reviews: int
     recent: list[Order]
     review_orders: list[Order]
     low_stock: list[LowStockRow]
@@ -140,6 +152,16 @@ def build(db: Session, date_from: datetime | None, date_to: datetime | None) -> 
         pending_payment=count("pending_payment"),
         payment_review=len(review_orders),
         to_fulfil=count("confirmed") + count("processing"),
+        open_returns=db.scalar(
+            select(func.count())
+            .select_from(ReturnRequest)
+            .where(ReturnRequest.status.in_(OPEN_RETURN_STATUSES))
+        )
+        or 0,
+        pending_reviews=db.scalar(
+            select(func.count()).select_from(ProductReview).where(ProductReview.status == "pending")
+        )
+        or 0,
         recent=recent,
         review_orders=review_orders,
         low_stock=[LowStockRow(r[0], r[1], r[2], int(r[3]), int(r[4])) for r in low_rows],

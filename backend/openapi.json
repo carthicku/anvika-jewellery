@@ -1129,6 +1129,364 @@
         "title": "AdminRefundOut",
         "type": "object"
       },
+      "AdminReturnLineOut": {
+        "properties": {
+          "position": {
+            "title": "Position",
+            "type": "integer"
+          },
+          "product_name": {
+            "title": "Product Name",
+            "type": "string"
+          },
+          "quantity": {
+            "title": "Quantity",
+            "type": "integer"
+          },
+          "restock": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Restock"
+          },
+          "sku": {
+            "title": "Sku",
+            "type": "string"
+          },
+          "variant_label": {
+            "title": "Variant Label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "position",
+          "product_name",
+          "variant_label",
+          "sku",
+          "quantity",
+          "restock"
+        ],
+        "title": "AdminReturnLineOut",
+        "type": "object"
+      },
+      "AdminReturnOut": {
+        "properties": {
+          "allowed_actions": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Allowed Actions",
+            "type": "array"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "customer_name": {
+            "title": "Customer Name",
+            "type": "string"
+          },
+          "delivered_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Delivered At"
+          },
+          "email": {
+            "title": "Email",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "item_count": {
+            "title": "Item Count",
+            "type": "integer"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AdminReturnLineOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "kind": {
+            "enum": [
+              "return",
+              "exchange"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "order_reference": {
+            "title": "Order Reference",
+            "type": "string"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "refund_amount": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Refund Amount"
+          },
+          "refund_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Refund Id"
+          },
+          "refund_status": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Refund Status"
+          },
+          "status": {
+            "enum": [
+              "requested",
+              "approved",
+              "rejected",
+              "received",
+              "refunded",
+              "closed"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "status_label": {
+            "title": "Status Label",
+            "type": "string"
+          },
+          "store_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Store Note"
+          },
+          "suggested_refund": {
+            "title": "Suggested Refund",
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "order_reference",
+          "customer_name",
+          "kind",
+          "status",
+          "status_label",
+          "item_count",
+          "created_at",
+          "updated_at",
+          "email",
+          "reason",
+          "store_note",
+          "items",
+          "delivered_at",
+          "suggested_refund",
+          "refund_id",
+          "refund_status",
+          "refund_amount",
+          "allowed_actions"
+        ],
+        "title": "AdminReturnOut",
+        "type": "object"
+      },
+      "AdminReturnRowOut": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "customer_name": {
+            "title": "Customer Name",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "item_count": {
+            "title": "Item Count",
+            "type": "integer"
+          },
+          "kind": {
+            "enum": [
+              "return",
+              "exchange"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "order_reference": {
+            "title": "Order Reference",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "requested",
+              "approved",
+              "rejected",
+              "received",
+              "refunded",
+              "closed"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "status_label": {
+            "title": "Status Label",
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "order_reference",
+          "customer_name",
+          "kind",
+          "status",
+          "status_label",
+          "item_count",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "AdminReturnRowOut",
+        "type": "object"
+      },
+      "AdminReviewOut": {
+        "properties": {
+          "author_name": {
+            "title": "Author Name",
+            "type": "string"
+          },
+          "body": {
+            "title": "Body",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "customer_email": {
+            "title": "Customer Email",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "moderation_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Moderation Note"
+          },
+          "product_name": {
+            "title": "Product Name",
+            "type": "string"
+          },
+          "product_slug": {
+            "title": "Product Slug",
+            "type": "string"
+          },
+          "rating": {
+            "title": "Rating",
+            "type": "integer"
+          },
+          "status": {
+            "enum": [
+              "pending",
+              "approved",
+              "rejected"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          },
+          "verified_purchase": {
+            "title": "Verified Purchase",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "product_name",
+          "product_slug",
+          "rating",
+          "title",
+          "body",
+          "author_name",
+          "customer_email",
+          "verified_purchase",
+          "status",
+          "moderation_note",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "AdminReviewOut",
+        "type": "object"
+      },
       "AdminVariantOut": {
         "properties": {
           "fixed_price": {
@@ -3043,6 +3401,41 @@
         "title": "CreateRateIn",
         "type": "object"
       },
+      "CreateReturnIn": {
+        "additionalProperties": false,
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ReturnLineIn"
+            },
+            "maxItems": 50,
+            "minItems": 1,
+            "title": "Items",
+            "type": "array"
+          },
+          "kind": {
+            "enum": [
+              "return",
+              "exchange"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "reason": {
+            "maxLength": 500,
+            "minLength": 10,
+            "title": "Reason",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "reason",
+          "items"
+        ],
+        "title": "CreateReturnIn",
+        "type": "object"
+      },
       "CsrfOut": {
         "properties": {
           "csrf_token": {
@@ -3182,6 +3575,10 @@
             "title": "Net Revenue",
             "type": "string"
           },
+          "open_returns": {
+            "title": "Open Returns",
+            "type": "integer"
+          },
           "paid_orders": {
             "title": "Paid Orders",
             "type": "integer"
@@ -3200,6 +3597,10 @@
           },
           "pending_payment": {
             "title": "Pending Payment",
+            "type": "integer"
+          },
+          "pending_reviews": {
+            "title": "Pending Reviews",
             "type": "integer"
           },
           "recent_orders": {
@@ -3236,6 +3637,8 @@
           "pending_payment",
           "payment_review",
           "to_fulfil",
+          "open_returns",
+          "pending_reviews",
           "recent_orders",
           "review_orders",
           "low_stock",
@@ -4068,6 +4471,30 @@
         "title": "MeOut",
         "type": "object"
       },
+      "ModerateReviewIn": {
+        "additionalProperties": false,
+        "properties": {
+          "decision": {
+            "enum": [
+              "approve",
+              "reject"
+            ],
+            "title": "Decision",
+            "type": "string"
+          },
+          "note": {
+            "default": "",
+            "maxLength": 300,
+            "title": "Note",
+            "type": "string"
+          }
+        },
+        "required": [
+          "decision"
+        ],
+        "title": "ModerateReviewIn",
+        "type": "object"
+      },
       "MovementOut": {
         "properties": {
           "actor_email": {
@@ -4141,6 +4568,74 @@
           "actor_email"
         ],
         "title": "MovementOut",
+        "type": "object"
+      },
+      "MyReviewOut": {
+        "properties": {
+          "body": {
+            "title": "Body",
+            "type": "string"
+          },
+          "rating": {
+            "title": "Rating",
+            "type": "integer"
+          },
+          "status": {
+            "enum": [
+              "pending",
+              "approved",
+              "rejected"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "status_label": {
+            "title": "Status Label",
+            "type": "string"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "rating",
+          "title",
+          "body",
+          "status",
+          "status_label",
+          "updated_at"
+        ],
+        "title": "MyReviewOut",
+        "type": "object"
+      },
+      "MyReviewStateOut": {
+        "properties": {
+          "can_review": {
+            "title": "Can Review",
+            "type": "boolean"
+          },
+          "review": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/MyReviewOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "can_review",
+          "review"
+        ],
+        "title": "MyReviewStateOut",
         "type": "object"
       },
       "NewsletterSubscribeIn": {
@@ -4361,6 +4856,10 @@
             "title": "Line Total",
             "type": "string"
           },
+          "position": {
+            "title": "Position",
+            "type": "integer"
+          },
           "product_name": {
             "title": "Product Name",
             "type": "string"
@@ -4391,6 +4890,7 @@
           }
         },
         "required": [
+          "position",
           "product_name",
           "product_slug",
           "variant_label",
@@ -4521,6 +5021,20 @@
             "title": "Refunds",
             "type": "array"
           },
+          "returnable_items": {
+            "items": {
+              "$ref": "#/components/schemas/ReturnableItemOut"
+            },
+            "title": "Returnable Items",
+            "type": "array"
+          },
+          "returns": {
+            "items": {
+              "$ref": "#/components/schemas/ReturnOut"
+            },
+            "title": "Returns",
+            "type": "array"
+          },
           "shipments": {
             "items": {
               "$ref": "#/components/schemas/ShipmentOut"
@@ -4588,7 +5102,9 @@
           "refunds",
           "can_pay",
           "can_cancel",
-          "payment_message"
+          "payment_message",
+          "returns",
+          "returnable_items"
         ],
         "title": "OrderOut",
         "type": "object"
@@ -4816,6 +5332,78 @@
           "pages"
         ],
         "title": "Page[AdminOrderRowOut]",
+        "type": "object"
+      },
+      "Page_AdminReturnRowOut_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AdminReturnRowOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "pages": {
+            "title": "Pages",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total",
+          "pages"
+        ],
+        "title": "Page[AdminReturnRowOut]",
+        "type": "object"
+      },
+      "Page_AdminReviewOut_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/AdminReviewOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "pages": {
+            "title": "Pages",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total",
+          "pages"
+        ],
+        "title": "Page[AdminReviewOut]",
         "type": "object"
       },
       "Page_AuditLogOut_": {
@@ -5104,6 +5692,42 @@
           "pages"
         ],
         "title": "Page[ProductRowOut]",
+        "type": "object"
+      },
+      "Page_ReviewOut_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ReviewOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "pages": {
+            "title": "Pages",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total",
+          "pages"
+        ],
+        "title": "Page[ReviewOut]",
         "type": "object"
       },
       "Page_SubscriberOut_": {
@@ -6586,6 +7210,22 @@
         "title": "ProductIn",
         "type": "object"
       },
+      "ProductReviewsOut": {
+        "properties": {
+          "reviews": {
+            "$ref": "#/components/schemas/Page_ReviewOut_"
+          },
+          "summary": {
+            "$ref": "#/components/schemas/ReviewSummaryOut"
+          }
+        },
+        "required": [
+          "summary",
+          "reviews"
+        ],
+        "title": "ProductReviewsOut",
+        "type": "object"
+      },
       "ProductRowOut": {
         "properties": {
           "available": {
@@ -7166,6 +7806,346 @@
           "payment"
         ],
         "title": "RetryPaymentOut",
+        "type": "object"
+      },
+      "ReturnDecisionIn": {
+        "additionalProperties": false,
+        "properties": {
+          "note": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Note",
+            "type": "string"
+          }
+        },
+        "title": "ReturnDecisionIn",
+        "type": "object"
+      },
+      "ReturnLineIn": {
+        "additionalProperties": false,
+        "properties": {
+          "position": {
+            "maximum": 1000.0,
+            "minimum": 0.0,
+            "title": "Position",
+            "type": "integer"
+          },
+          "quantity": {
+            "maximum": 100.0,
+            "minimum": 1.0,
+            "title": "Quantity",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "position",
+          "quantity"
+        ],
+        "title": "ReturnLineIn",
+        "type": "object"
+      },
+      "ReturnLineOut": {
+        "properties": {
+          "position": {
+            "title": "Position",
+            "type": "integer"
+          },
+          "product_name": {
+            "title": "Product Name",
+            "type": "string"
+          },
+          "quantity": {
+            "title": "Quantity",
+            "type": "integer"
+          },
+          "variant_label": {
+            "title": "Variant Label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "position",
+          "product_name",
+          "variant_label",
+          "quantity"
+        ],
+        "title": "ReturnLineOut",
+        "type": "object"
+      },
+      "ReturnOut": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ReturnLineOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "kind": {
+            "enum": [
+              "return",
+              "exchange"
+            ],
+            "title": "Kind",
+            "type": "string"
+          },
+          "kind_label": {
+            "title": "Kind Label",
+            "type": "string"
+          },
+          "reason": {
+            "title": "Reason",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "requested",
+              "approved",
+              "rejected",
+              "received",
+              "refunded",
+              "closed"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "status_label": {
+            "title": "Status Label",
+            "type": "string"
+          },
+          "store_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Store Note"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "kind",
+          "kind_label",
+          "status",
+          "status_label",
+          "reason",
+          "store_note",
+          "items",
+          "created_at",
+          "updated_at"
+        ],
+        "title": "ReturnOut",
+        "type": "object"
+      },
+      "ReturnReceiveIn": {
+        "additionalProperties": false,
+        "properties": {
+          "note": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Note",
+            "type": "string"
+          },
+          "restock_positions": {
+            "items": {
+              "type": "integer"
+            },
+            "maxItems": 50,
+            "title": "Restock Positions",
+            "type": "array"
+          }
+        },
+        "title": "ReturnReceiveIn",
+        "type": "object"
+      },
+      "ReturnRefundIn": {
+        "additionalProperties": false,
+        "properties": {
+          "amount": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Amount"
+          },
+          "note": {
+            "default": "",
+            "maxLength": 500,
+            "title": "Note",
+            "type": "string"
+          }
+        },
+        "required": [
+          "amount"
+        ],
+        "title": "ReturnRefundIn",
+        "type": "object"
+      },
+      "ReturnableItemOut": {
+        "properties": {
+          "deadline": {
+            "format": "date-time",
+            "title": "Deadline",
+            "type": "string"
+          },
+          "kinds": {
+            "items": {
+              "enum": [
+                "return",
+                "exchange"
+              ],
+              "type": "string"
+            },
+            "title": "Kinds",
+            "type": "array"
+          },
+          "position": {
+            "title": "Position",
+            "type": "integer"
+          },
+          "product_name": {
+            "title": "Product Name",
+            "type": "string"
+          },
+          "quantity": {
+            "title": "Quantity",
+            "type": "integer"
+          },
+          "variant_label": {
+            "title": "Variant Label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "position",
+          "product_name",
+          "variant_label",
+          "quantity",
+          "kinds",
+          "deadline"
+        ],
+        "title": "ReturnableItemOut",
+        "type": "object"
+      },
+      "ReviewIn": {
+        "additionalProperties": false,
+        "properties": {
+          "body": {
+            "maxLength": 2000,
+            "minLength": 20,
+            "title": "Body",
+            "type": "string"
+          },
+          "rating": {
+            "maximum": 5.0,
+            "minimum": 1.0,
+            "title": "Rating",
+            "type": "integer"
+          },
+          "title": {
+            "maxLength": 120,
+            "minLength": 3,
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "rating",
+          "title",
+          "body"
+        ],
+        "title": "ReviewIn",
+        "type": "object"
+      },
+      "ReviewOut": {
+        "properties": {
+          "author_name": {
+            "title": "Author Name",
+            "type": "string"
+          },
+          "body": {
+            "title": "Body",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "rating": {
+            "title": "Rating",
+            "type": "integer"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          },
+          "verified_purchase": {
+            "title": "Verified Purchase",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "id",
+          "rating",
+          "title",
+          "body",
+          "author_name",
+          "verified_purchase",
+          "created_at"
+        ],
+        "title": "ReviewOut",
+        "type": "object"
+      },
+      "ReviewSummaryOut": {
+        "properties": {
+          "average": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Average"
+          },
+          "count": {
+            "title": "Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "count",
+          "average"
+        ],
+        "title": "ReviewSummaryOut",
         "type": "object"
       },
       "RoleIn": {
@@ -11362,6 +12342,527 @@
         ]
       }
     },
+    "/api/v1/admin/returns": {
+      "get": {
+        "operationId": "list_returns_api_v1_admin_returns_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "requested",
+                    "approved",
+                    "rejected",
+                    "received",
+                    "refunded",
+                    "closed"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "maximum": 10000,
+              "minimum": 1,
+              "title": "Page",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Page Size",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_AdminReturnRowOut_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Returns",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/returns/{request_id}": {
+      "get": {
+        "operationId": "get_return_api_v1_admin_returns__request_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "request_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Request Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminReturnOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Return",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/returns/{request_id}/approve": {
+      "post": {
+        "operationId": "approve_return_api_v1_admin_returns__request_id__approve_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "request_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Request Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReturnDecisionIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminReturnOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Approve Return",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/returns/{request_id}/close": {
+      "post": {
+        "operationId": "close_return_api_v1_admin_returns__request_id__close_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "request_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Request Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReturnDecisionIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminReturnOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Close Return",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/returns/{request_id}/receive": {
+      "post": {
+        "operationId": "receive_return_api_v1_admin_returns__request_id__receive_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "request_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Request Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReturnReceiveIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminReturnOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Receive Return",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/returns/{request_id}/refund": {
+      "post": {
+        "description": "Record the refund request; it is sent to the payment provider from the order page.",
+        "operationId": "refund_return_api_v1_admin_returns__request_id__refund_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "request_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Request Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReturnRefundIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminReturnOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Refund Return",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/returns/{request_id}/reject": {
+      "post": {
+        "operationId": "reject_return_api_v1_admin_returns__request_id__reject_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "request_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Request Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReturnDecisionIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminReturnOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Reject Return",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/reviews": {
+      "get": {
+        "operationId": "list_reviews_api_v1_admin_reviews_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "enum": [
+                    "pending",
+                    "approved",
+                    "rejected"
+                  ],
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "maximum": 10000,
+              "minimum": 1,
+              "title": "Page",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Page Size",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_AdminReviewOut_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Reviews",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/reviews/{review_id}/moderate": {
+      "post": {
+        "operationId": "moderate_review_api_v1_admin_reviews__review_id__moderate_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "review_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Review Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ModerateReviewIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminReviewOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Moderate Review",
+        "tags": [
+          "admin"
+        ]
+      }
+    },
     "/api/v1/admin/settings": {
       "get": {
         "operationId": "get_settings_api_v1_admin_settings_get",
@@ -13581,6 +15082,76 @@
         ]
       }
     },
+    "/api/v1/orders/{reference}/returns": {
+      "post": {
+        "description": "Ask to return or exchange delivered items (eligibility and window checked here).",
+        "operationId": "request_return_api_v1_orders__reference__returns_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reference",
+            "required": true,
+            "schema": {
+              "title": "Reference",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Order-Access-Token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Order-Access-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateReturnIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Request Return",
+        "tags": [
+          "orders"
+        ]
+      }
+    },
     "/api/v1/payments/report-failure": {
       "post": {
         "description": "The pop-up reported a failure. Only what the provider confirms is recorded.",
@@ -14374,6 +15945,166 @@
         "summary": "Related",
         "tags": [
           "catalogue"
+        ]
+      }
+    },
+    "/api/v1/products/{slug}/reviews": {
+      "get": {
+        "description": "Approved reviews only, newest first, with a summary counted from approved reviews.",
+        "operationId": "product_reviews_api_v1_products__slug__reviews_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "title": "Slug",
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "maximum": 1000,
+              "minimum": 1,
+              "title": "Page",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 10,
+              "maximum": 50,
+              "minimum": 1,
+              "title": "Page Size",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProductReviewsOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Product Reviews",
+        "tags": [
+          "reviews"
+        ]
+      }
+    },
+    "/api/v1/products/{slug}/reviews/mine": {
+      "get": {
+        "operationId": "my_review_api_v1_products__slug__reviews_mine_get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "title": "Slug",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyReviewStateOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "My Review",
+        "tags": [
+          "reviews"
+        ]
+      },
+      "put": {
+        "description": "Write or edit your review. It is published after a member of staff approves it.",
+        "operationId": "save_my_review_api_v1_products__slug__reviews_mine_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "slug",
+            "required": true,
+            "schema": {
+              "title": "Slug",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/MyReviewStateOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Save My Review",
+        "tags": [
+          "reviews"
         ]
       }
     },

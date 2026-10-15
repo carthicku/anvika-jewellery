@@ -10,6 +10,7 @@ from app.models.catalogue import (
     Product,
     ProductAttribute,
     ProductImage,
+    ProductReview,
     ProductVariant,
 )
 from app.models.content import ContactEnquiry, ContentPage, NewsletterSubscriber
@@ -24,6 +25,7 @@ from app.models.orders import (
     PaymentAttempt,
     PaymentEvent,
     Refund,
+    ReturnRequest,
     Shipment,
 )
 from app.models.pricing import Discount, GoldRate
@@ -58,9 +60,11 @@ __all__ = [
     "Product",
     "ProductAttribute",
     "ProductImage",
+    "ProductReview",
     "ProductVariant",
     "RateLimitBucket",
     "Refund",
+    "ReturnRequest",
     "Shipment",
     "ShippingMethod",
     "ShippingZone",

@@ -9,11 +9,13 @@ import {
   History,
   Inbox,
   Menu,
+  MessageSquareText,
   Package,
   Settings,
   ShieldCheck,
   Store,
   Truck,
+  Undo2,
   Users,
   type LucideIcon,
 } from 'lucide-react';
@@ -40,6 +42,7 @@ interface NavItem {
 const NAV: NavItem[] = [
   { to: '/admin', label: 'Dashboard', icon: Gauge, permission: 'dashboard:view', end: true },
   { to: '/admin/orders', label: 'Orders', icon: ClipboardList, permission: 'orders:write' },
+  { to: '/admin/returns', label: 'Returns', icon: Undo2, permission: 'orders:write' },
   { to: '/admin/products', label: 'Products', icon: Gem, permission: 'catalogue:write' },
   {
     to: '/admin/categories',
@@ -58,6 +61,7 @@ const NAV: NavItem[] = [
   },
   { to: '/admin/gold-rates', label: 'Gold rates', icon: Coins, permission: 'pricing:write' },
   { to: '/admin/shipping', label: 'Delivery', icon: Truck, permission: 'settings:write' },
+  { to: '/admin/reviews', label: 'Reviews', icon: MessageSquareText, permission: 'content:write' },
   { to: '/admin/content', label: 'Content pages', icon: FileText, permission: 'content:write' },
   { to: '/admin/settings', label: 'Settings', icon: Settings, permission: 'settings:write' },
   { to: '/admin/staff', label: 'Staff', icon: ShieldCheck, permission: 'users:manage' },

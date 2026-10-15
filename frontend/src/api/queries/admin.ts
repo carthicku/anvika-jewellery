@@ -711,3 +711,125 @@ export function useAuditLogs(params: { entity_type?: string; action?: string; pa
     placeholderData: keepPreviousData,
   });
 }
+
+// --------------------------------------------------------------------------- returns & reviews
+
+export type AdminReturn = S['AdminReturnOut'];
+export type AdminReturnRow = S['AdminReturnRowOut'];
+export type AdminReview = S['AdminReviewOut'];
+
+export function useAdminReturns(params: { status?: string; page: number }) {
+  return useQuery({
+    queryKey: ['admin', 'returns', params],
+    queryFn: () =>
+      unwrap(
+        api.GET('/api/v1/admin/returns', {
+          params: {
+            query: {
+              status: (params.status || undefined) as AdminReturnRow['status'] | undefined,
+              page: params.page,
+            },
+          },
+        }),
+      ),
+    placeholderData: keepPreviousData,
+  });
+}
+
+export function useAdminReturn(id: string) {
+  return useQuery({
+    queryKey: ['admin', 'return', id],
+    queryFn: () =>
+      unwrap(
+        api.GET('/api/v1/admin/returns/{request_id}', { params: { path: { request_id: id } } }),
+      ),
+  });
+}
+
+export type ReturnAction =
+  | { action: 'approve' | 'reject' | 'close'; note: string }
+  | { action: 'receive'; restock_positions: number[]; note: string }
+  | { action: 'refund'; amount: string; note: string };
+
+export function useReturnAction(id: string) {
+  const client = useQueryClient();
+  return useMutation({
+    mutationFn: (vars: ReturnAction) => {
+      const params = { path: { request_id: id } };
+      switch (vars.action) {
+        case 'approve':
+          return unwrap(
+            api.POST('/api/v1/admin/returns/{request_id}/approve', {
+              params,
+              body: { note: vars.note },
+            }),
+          );
+        case 'reject':
+          return unwrap(
+            api.POST('/api/v1/admin/returns/{request_id}/reject', {
+              params,
+              body: { note: vars.note },
+            }),
+          );
+        case 'close':
+          return unwrap(
+            api.POST('/api/v1/admin/returns/{request_id}/close', {
+              params,
+              body: { note: vars.note },
+            }),
+          );
+        case 'receive':
+          return unwrap(
+            api.POST('/api/v1/admin/returns/{request_id}/receive', {
+              params,
+              body: { restock_positions: vars.restock_positions, note: vars.note },
+            }),
+          );
+        case 'refund':
+          return unwrap(
+            api.POST('/api/v1/admin/returns/{request_id}/refund', {
+              params,
+              body: { amount: vars.amount, note: vars.note },
+            }),
+          );
+      }
+    },
+    onSuccess: (data) => {
+      client.setQueryData(['admin', 'return', id], data);
+      void client.invalidateQueries({ queryKey: ['admin', 'returns'] });
+      void client.invalidateQueries({ queryKey: adminKeys.order(data.order_reference) });
+      void client.invalidateQueries({ queryKey: adminKeys.dashboard });
+    },
+  });
+}
+
+export function useAdminReviews(params: { status?: string; page: number }) {
+  return useQuery({
+    queryKey: ['admin', 'reviews', params],
+    queryFn: () =>
+      unwrap(
+        api.GET('/api/v1/admin/reviews', {
+          params: {
+            query: {
+              status: (params.status || undefined) as AdminReview['status'] | undefined,
+              page: params.page,
+            },
+          },
+        }),
+      ),
+    placeholderData: keepPreviousData,
+  });
+}
+
+export function useModerateReview() {
+  return useAdminMutation(
+    ({ id, decision, note }: { id: string; decision: 'approve' | 'reject'; note: string }) =>
+      unwrap(
+        api.POST('/api/v1/admin/reviews/{review_id}/moderate', {
+          params: { path: { review_id: id } },
+          body: { decision, note },
+        }),
+      ),
+    [['admin', 'reviews'], adminKeys.dashboard],
+  );
+}

@@ -13,6 +13,7 @@ import { formatDateTime, formatMoney, formatShortDate, hasPaise } from '@/lib/fo
 import { errorMessage } from '@/lib/forms';
 
 import { PriceSummary } from './PriceSummary';
+import { OrderReturns } from './Returns';
 
 type Tone = 'neutral' | 'gold' | 'success' | 'warning' | 'danger' | 'info';
 
@@ -250,6 +251,8 @@ export function OrderDetails({
             ))}
           </div>
         </section>
+
+        <OrderReturns order={order} />
 
         <section aria-labelledby="timeline-heading">
           <h2 id="timeline-heading" className="font-display text-2xl">

@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router';
 
 import { ApiError } from '@/api/client';
 import { useProduct, useProducts, useRelated } from '@/api/queries/catalogue';
+import { useProductReviews } from '@/api/queries/reviews';
 import type { ProductDetail } from '@/api/types';
 import { Breadcrumbs, Container, PageMeta } from '@/components/layout/Page';
 import { AddToCart } from '@/components/product/AddToCart';
@@ -16,6 +17,7 @@ import {
   VariantPicker,
 } from '@/components/product/ProductDetails';
 import { ProductGallery } from '@/components/product/ProductGallery';
+import { ProductReviewsSection } from '@/components/product/Reviews';
 import { WishlistButton } from '@/components/product/WishlistButton';
 import { Accordion, AccordionItem } from '@/components/ui/Disclosure';
 import { Alert, ErrorState, Skeleton } from '@/components/ui/Feedback';
@@ -62,6 +64,7 @@ function ProductView({ product }: { product: ProductDetail }) {
   const [variantId, setVariantId] = useState(defaultVariant?.id ?? '');
   const variant = product.variants.find((v) => v.id === variantId) ?? defaultVariant;
   const related = useRelated(product.slug);
+  const reviews = useProductReviews(product.slug);
   const recent = useLocalList(RECENTLY_VIEWED_KEY, 12);
   const { add: addRecent } = recent;
 
@@ -100,7 +103,12 @@ function ProductView({ product }: { product: ProductDetail }) {
         path={path}
         image={product.images[0]?.url}
       />
-      <ProductJsonLd product={product} variant={variant} url={`${env.siteUrl}${path}`} />
+      <ProductJsonLd
+        product={product}
+        variant={variant}
+        url={`${env.siteUrl}${path}`}
+        rating={reviews.data?.summary}
+      />
       <Container className="pt-6 pb-32 lg:pb-16">
         <Breadcrumbs items={crumbs} />
         <div className="mt-6 grid gap-10 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
@@ -217,6 +225,8 @@ function ProductView({ product }: { product: ProductDetail }) {
             </Accordion>
           </div>
         </div>
+
+        <ProductReviewsSection slug={product.slug} />
 
         {related.data && related.data.length > 0 && (
           <section aria-labelledby="related" className="mt-20 border-t border-line pt-16">

@@ -114,8 +114,8 @@ test('create a product with a photo, publish it, adjust stock, then archive it',
   await expect(page.getByRole('heading', { level: 1, name })).toHaveCount(0);
 });
 
-test('prepare, cancel and refund an order', async ({ page, isMobile }, testInfo) => {
-  // A guest buys a piece with the simulator.
+/** Buy the Om Pendant with the simulator; a guest when `email` is given. Returns the reference. */
+async function buyOmPendant(page: Page, isMobile: boolean, email: string | null) {
   await page.goto('/products/om-pendant');
   await (
     isMobile
@@ -124,9 +124,7 @@ test('prepare, cancel and refund an order', async ({ page, isMobile }, testInfo)
   ).click();
   await expect(page.getByRole('link', { name: /^Cart, [1-9]/ }).first()).toBeVisible();
   await page.goto('/checkout');
-  await page
-    .getByLabel(/^Email\*?$/)
-    .fill(`admin-flow-${testInfo.project.name}-${Date.now()}@example.com`);
+  if (email) await page.getByLabel(/^Email\*?$/).fill(email);
   await page.getByLabel(/^Full name/).fill('Asha Rao');
   await page.getByLabel(/^Mobile number/).fill('9876543210');
   await page.getByLabel(/^House/).fill('12 MG Road');
@@ -141,7 +139,31 @@ test('prepare, cancel and refund an order', async ({ page, isMobile }, testInfo)
     .getByRole('button', { name: 'Pay (simulated)' })
     .click();
   await expect(page).toHaveURL(/\/order-confirmation\/ANV-/);
-  const reference = page.url().split('/').pop() ?? '';
+  return page.url().split('/').pop() ?? '';
+}
+
+/** Staff take a paid order through preparing → shipped → delivered. */
+async function deliver(admin: Page, reference: string) {
+  await admin.goto(`/admin/orders/${reference}`);
+  await admin.getByRole('button', { name: 'Start preparing' }).click();
+  await expect(admin.getByText('Marked as being prepared.')).toBeVisible();
+  await admin.getByRole('button', { name: 'Ship…' }).click();
+  const ship = admin.getByRole('dialog', { name: 'Ship this order' });
+  await ship.getByLabel(/^Courier/).fill('Sample Courier');
+  await ship.getByLabel(/^Tracking number/).fill('E2E123456');
+  await ship.getByRole('button', { name: 'Mark as shipped' }).click();
+  await expect(admin.getByText('Marked as shipped.')).toBeVisible();
+  await admin.getByRole('button', { name: 'Mark delivered' }).click();
+  await expect(admin.getByRole('button', { name: 'Mark delivered' })).toHaveCount(0);
+}
+
+test('prepare, cancel and refund an order', async ({ page, isMobile }, testInfo) => {
+  // A guest buys a piece with the simulator.
+  const reference = await buyOmPendant(
+    page,
+    isMobile,
+    `admin-flow-${testInfo.project.name}-${Date.now()}@example.com`,
+  );
 
   // Staff side (fresh browser context: the admin signs in).
   await page.context().clearCookies();
@@ -161,9 +183,134 @@ test('prepare, cancel and refund an order', async ({ page, isMobile }, testInfo)
   await expect(page.getByText(/Refunded/).first()).toBeVisible();
 });
 
+test('return a delivered piece: request, approval, restock and refund', async ({
+  page,
+  browser,
+  isMobile,
+}, testInfo) => {
+  const reference = await buyOmPendant(
+    page,
+    isMobile,
+    `return-flow-${testInfo.project.name}-${Date.now()}@example.com`,
+  );
+  const staffContext = await browser.newContext();
+  const admin = await staffContext.newPage();
+  await signInAsAdmin(admin, `/admin/orders/${reference}`);
+  await deliver(admin, reference);
+
+  // The customer (still on their private order link) asks for a return.
+  await page.reload();
+  await page.getByRole('button', { name: 'Request a return or exchange' }).click();
+  const ask = page.getByRole('dialog', { name: 'Return or exchange' });
+  await ask.getByRole('combobox').first().selectOption('1');
+  await ask.getByLabel(/^Reason/).fill('E2E: the chain is shorter than I expected');
+  await ask.getByRole('button', { name: 'Send request' }).click();
+  await expect(page.getByText('Requested — waiting for our reply')).toBeVisible();
+
+  // Staff approve, receive (back into stock) and refund.
+  await admin.goto('/admin/returns');
+  await admin.getByRole('link', { name: `Return · ${reference}` }).click();
+  await admin.getByRole('button', { name: 'Approve…' }).click();
+  await admin
+    .getByRole('dialog', { name: 'Approve this request' })
+    .getByRole('button', { name: 'Approve' })
+    .click();
+  await expect(admin.getByText('Request approved.')).toBeVisible();
+  await admin.getByRole('button', { name: 'Mark as received…' }).click();
+  const receive = admin.getByRole('dialog', { name: 'Items received' });
+  await receive.getByRole('checkbox').first().check();
+  await receive.getByRole('button', { name: 'Save' }).click();
+  await expect(admin.getByText('Restocked')).toBeVisible();
+  await admin.getByRole('button', { name: /^Refund ₹/ }).click();
+  await admin
+    .getByRole('dialog', { name: 'Refund the returned pieces' })
+    .getByRole('button', { name: 'Request refund' })
+    .click();
+  await expect(admin.getByText('Refund requested.')).toBeVisible();
+  await admin.getByRole('link', { name: 'order page' }).click();
+  await admin.getByRole('button', { name: /^Send refund ₹/ }).click();
+  await admin.getByRole('dialog').getByRole('button', { name: 'Send refund' }).click();
+  await expect(admin.getByText('Refund sent.')).toBeVisible();
+  await staffContext.close();
+
+  await page.reload();
+  await expect(page.getByText('Refund issued', { exact: true })).toBeVisible();
+  await expect(page.getByText('Order returned')).toBeVisible();
+});
+
+test('a delivered buyer reviews a piece; it shows only after staff publish it', async ({
+  page,
+  browser,
+  isMobile,
+}, testInfo) => {
+  const title = `E2E review ${testInfo.project.name} ${Date.now().toString(36)}`;
+  await page.goto('/register');
+  await page.getByLabel(/^Full name/).fill('Meera Iyer');
+  await page
+    .getByLabel(/^Email\*?$/)
+    .fill(`reviewer-${testInfo.project.name}-${Date.now()}@example.com`);
+  await page.getByLabel(/^Password/).fill('a long e2e passphrase');
+  await page.getByRole('button', { name: 'Create account' }).click();
+  await expect(page).toHaveURL(/\/account$/);
+  const reference = await buyOmPendant(page, isMobile, null);
+
+  const staffContext = await browser.newContext();
+  const admin = await staffContext.newPage();
+  await signInAsAdmin(admin, `/admin/orders/${reference}`);
+  await deliver(admin, reference);
+
+  await page.goto('/products/om-pendant');
+  const reviews = page.getByRole('region', { name: 'Reviews' });
+  await reviews.getByRole('radio', { name: '4 stars' }).check({ force: true });
+  await reviews.getByLabel(/^Title/).fill(title);
+  await reviews.getByLabel(/^Your review/).fill('Delicate and well finished; arrived safely.');
+  await reviews.getByRole('button', { name: 'Submit review' }).click();
+  await expect(page.getByText('Waiting for approval')).toBeVisible();
+  await expect(page.getByText(title)).toHaveCount(0);
+
+  await admin.goto('/admin/reviews');
+  const card = admin.getByRole('listitem').filter({ hasText: title });
+  await card.getByRole('button', { name: 'Publish' }).click();
+  await expect(admin.getByText('Review published.')).toBeVisible();
+  await expect(card).toHaveCount(0); // no longer waiting for approval
+
+  await page.reload();
+  const shown = page.getByRole('listitem').filter({ hasText: title });
+  await expect(shown).toBeVisible();
+  await expect(shown.getByText('Meera I. · Verified purchase', { exact: false })).toBeVisible();
+
+  // Clean up so the sample store doesn't collect test reviews.
+  await admin.getByRole('combobox', { name: 'Show' }).selectOption('approved');
+  const published = admin.getByRole('listitem').filter({ hasText: title });
+  await published.getByRole('button', { name: 'Unpublish…' }).click();
+  await admin.getByRole('dialog').getByRole('button', { name: 'Reject' }).click();
+  await expect(admin.getByText('Review rejected.')).toBeVisible();
+
+  // The test sale stays delivered; put the piece back so repeated runs don't use up sample stock.
+  await admin.goto('/admin/inventory');
+  await admin.getByLabel('Search', { exact: false }).fill('ANV-PD-001');
+  await admin.getByRole('button', { name: 'Search' }).click();
+  await admin
+    .getByRole('row', { name: /ANV-PD-001/ })
+    .getByRole('button', { name: 'Adjust…' })
+    .click();
+  await admin.getByLabel(/^Change/).fill('1');
+  await admin.getByLabel(/^Reason/).fill('E2E: return sample stock used by the review test');
+  await admin.getByRole('button', { name: 'Save adjustment' }).click();
+  await expect(admin.getByText('Stock updated.')).toBeVisible();
+  await staffContext.close();
+});
+
 test('admin screens have no serious accessibility violations', async ({ page }) => {
   await signInAsAdmin(page);
-  for (const path of ['/admin', '/admin/products/new', '/admin/orders', '/admin/gold-rates']) {
+  for (const path of [
+    '/admin',
+    '/admin/products/new',
+    '/admin/orders',
+    '/admin/gold-rates',
+    '/admin/returns',
+    '/admin/reviews',
+  ]) {
     await page.goto(path);
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     await page.waitForLoadState('networkidle');

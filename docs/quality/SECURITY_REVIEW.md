@@ -51,4 +51,18 @@ Scope: `app/core/security.py`, `app/services/auth.py`, `app/api/deps.py`, auth/a
 | One-time links persisted in the email outbox after sending | Medium | Context cleared once sent |
 | Open redirect via `?next=` | Medium | `safeNext` allows same-site paths only (unit-tested) |
 | JWT algorithm confusion | — | Decoder pins `HS256` and requires exp/iat/sub/sid/typ |
-Not yet done: admin MFA (Phase 7), breached-password screening (not planned; documented in KNOWN_LIMITATIONS).
+Not yet done: admin MFA (deferred after Phase 7), breached-password screening (not planned; documented in KNOWN_LIMITATIONS).
+
+### 2026-10-15 — Returns and reviews review (Phase 7)
+Scope: `app/services/returns.py`, `app/services/reviews.py`, `routes/orders.py` (returns),
+`routes/reviews.py`, `routes/admin_aftercare.py`.
+| Check | Result |
+|-------|--------|
+| Who can ask for a return | Order owner or guest token only (others get 404, `test_return_rules`); eligibility, quantities and window computed on the server from the order snapshot |
+| Double requests / races | Order row locked (`FOR UPDATE`) + partial unique index (one open request per order) |
+| Money | Refund only via `orders:refund` and the existing capped refund flow (`test_return_for_refund_end_to_end`: staff get 403) |
+| Stock | Restock only on `receive`, once, for ticked lines (`return_restock` ledger) |
+| Fake reviews | Only buyers with a delivered order; nothing public until staff approve; edits go back to pending; no seed reviews; JSON-LD `aggregateRating` only from approved reviews |
+| Privacy | Public reviews show first name + initial only, never the email (`test_only_delivered_buyers_can_review_and_staff_approve_first`) |
+| Spam | Review writes rate-limited (10/hour per client) |
+| Admin routes | All declare permissions (guard test); every decision audited |

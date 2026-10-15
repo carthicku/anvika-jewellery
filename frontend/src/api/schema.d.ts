@@ -706,6 +706,162 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/admin/returns": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Returns */
+        get: operations["list_returns_api_v1_admin_returns_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/returns/{request_id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** Get Return */
+        get: operations["get_return_api_v1_admin_returns__request_id__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/returns/{request_id}/approve": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Approve Return */
+        post: operations["approve_return_api_v1_admin_returns__request_id__approve_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/returns/{request_id}/close": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Close Return */
+        post: operations["close_return_api_v1_admin_returns__request_id__close_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/returns/{request_id}/receive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Receive Return */
+        post: operations["receive_return_api_v1_admin_returns__request_id__receive_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/returns/{request_id}/refund": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Refund Return
+         * @description Record the refund request; it is sent to the payment provider from the order page.
+         */
+        post: operations["refund_return_api_v1_admin_returns__request_id__refund_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/returns/{request_id}/reject": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Reject Return */
+        post: operations["reject_return_api_v1_admin_returns__request_id__reject_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/reviews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List Reviews */
+        get: operations["list_reviews_api_v1_admin_reviews_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/admin/reviews/{review_id}/moderate": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /** Moderate Review */
+        post: operations["moderate_review_api_v1_admin_reviews__review_id__moderate_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/admin/settings": {
         parameters: {
             query?: never;
@@ -1606,6 +1762,26 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/orders/{reference}/returns": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Request Return
+         * @description Ask to return or exchange delivered items (eligibility and window checked here).
+         */
+        post: operations["request_return_api_v1_orders__reference__returns_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/payments/report-failure": {
         parameters: {
             query?: never;
@@ -1750,6 +1926,47 @@ export interface paths {
         /** Related */
         get: operations["related_api_v1_products__slug__related_get"];
         put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/products/{slug}/reviews": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Product Reviews
+         * @description Approved reviews only, newest first, with a summary counted from approved reviews.
+         */
+        get: operations["product_reviews_api_v1_products__slug__reviews_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/products/{slug}/reviews/mine": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** My Review */
+        get: operations["my_review_api_v1_products__slug__reviews_mine_get"];
+        /**
+         * Save My Review
+         * @description Write or edit your review. It is published after a member of staff approves it.
+         */
+        put: operations["save_my_review_api_v1_products__slug__reviews_mine_put"];
         post?: never;
         delete?: never;
         options?: never;
@@ -2243,6 +2460,145 @@ export interface components {
             reason: string;
             /** Status */
             status: string;
+        };
+        /** AdminReturnLineOut */
+        AdminReturnLineOut: {
+            /** Position */
+            position: number;
+            /** Product Name */
+            product_name: string;
+            /** Quantity */
+            quantity: number;
+            /** Restock */
+            restock: boolean | null;
+            /** Sku */
+            sku: string;
+            /** Variant Label */
+            variant_label: string;
+        };
+        /** AdminReturnOut */
+        AdminReturnOut: {
+            /** Allowed Actions */
+            allowed_actions: string[];
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Customer Name */
+            customer_name: string;
+            /** Delivered At */
+            delivered_at: string | null;
+            /** Email */
+            email: string;
+            /** Id */
+            id: string;
+            /** Item Count */
+            item_count: number;
+            /** Items */
+            items: components["schemas"]["AdminReturnLineOut"][];
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "return" | "exchange";
+            /** Order Reference */
+            order_reference: string;
+            /** Reason */
+            reason: string;
+            /** Refund Amount */
+            refund_amount: string | null;
+            /** Refund Id */
+            refund_id: string | null;
+            /** Refund Status */
+            refund_status: string | null;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "requested" | "approved" | "rejected" | "received" | "refunded" | "closed";
+            /** Status Label */
+            status_label: string;
+            /** Store Note */
+            store_note: string | null;
+            /** Suggested Refund */
+            suggested_refund: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+        };
+        /** AdminReturnRowOut */
+        AdminReturnRowOut: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Customer Name */
+            customer_name: string;
+            /** Id */
+            id: string;
+            /** Item Count */
+            item_count: number;
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "return" | "exchange";
+            /** Order Reference */
+            order_reference: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "requested" | "approved" | "rejected" | "received" | "refunded" | "closed";
+            /** Status Label */
+            status_label: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+        };
+        /** AdminReviewOut */
+        AdminReviewOut: {
+            /** Author Name */
+            author_name: string;
+            /** Body */
+            body: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Customer Email */
+            customer_email: string;
+            /** Id */
+            id: string;
+            /** Moderation Note */
+            moderation_note: string | null;
+            /** Product Name */
+            product_name: string;
+            /** Product Slug */
+            product_slug: string;
+            /** Rating */
+            rating: number;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "pending" | "approved" | "rejected";
+            /** Title */
+            title: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+            /** Verified Purchase */
+            verified_purchase: boolean;
         };
         /** AdminVariantOut */
         AdminVariantOut: {
@@ -2799,6 +3155,18 @@ export interface components {
             /** Source Note */
             source_note: string;
         };
+        /** CreateReturnIn */
+        CreateReturnIn: {
+            /** Items */
+            items: components["schemas"]["ReturnLineIn"][];
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "return" | "exchange";
+            /** Reason */
+            reason: string;
+        };
         /** CsrfOut */
         CsrfOut: {
             /** Csrf Token */
@@ -2856,6 +3224,8 @@ export interface components {
             low_stock: components["schemas"]["LowStockOut"][];
             /** Net Revenue */
             net_revenue: string;
+            /** Open Returns */
+            open_returns: number;
             /** Paid Orders */
             paid_orders: number;
             /** Paid Orders Today */
@@ -2866,6 +3236,8 @@ export interface components {
             payment_review: number;
             /** Pending Payment */
             pending_payment: number;
+            /** Pending Reviews */
+            pending_reviews: number;
             /** Recent Orders */
             recent_orders: components["schemas"]["AdminOrderRowOut"][];
             /** Refunded */
@@ -3182,6 +3554,19 @@ export interface components {
         MeOut: {
             user: components["schemas"]["UserOut"] | null;
         };
+        /** ModerateReviewIn */
+        ModerateReviewIn: {
+            /**
+             * Decision
+             * @enum {string}
+             */
+            decision: "approve" | "reject";
+            /**
+             * Note
+             * @default
+             */
+            note: string;
+        };
         /** MovementOut */
         MovementOut: {
             /** Actor Email */
@@ -3205,6 +3590,33 @@ export interface components {
             reason: string;
             /** Sku */
             sku: string;
+        };
+        /** MyReviewOut */
+        MyReviewOut: {
+            /** Body */
+            body: string;
+            /** Rating */
+            rating: number;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "pending" | "approved" | "rejected";
+            /** Status Label */
+            status_label: string;
+            /** Title */
+            title: string;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+        };
+        /** MyReviewStateOut */
+        MyReviewStateOut: {
+            /** Can Review */
+            can_review: boolean;
+            review: components["schemas"]["MyReviewOut"] | null;
         };
         /** NewsletterSubscribeIn */
         NewsletterSubscribeIn: {
@@ -3298,6 +3710,8 @@ export interface components {
             line_tax: string;
             /** Line Total */
             line_total: string;
+            /** Position */
+            position: number;
             /** Product Name */
             product_name: string;
             /** Product Slug */
@@ -3357,6 +3771,10 @@ export interface components {
             reference: string;
             /** Refunds */
             refunds: components["schemas"]["RefundOut"][];
+            /** Returnable Items */
+            returnable_items: components["schemas"]["ReturnableItemOut"][];
+            /** Returns */
+            returns: components["schemas"]["ReturnOut"][];
             /** Shipments */
             shipments: components["schemas"]["ShipmentOut"][];
             shipping_address: components["schemas"]["OrderAddressOut"];
@@ -3462,6 +3880,32 @@ export interface components {
             /** Total */
             total: number;
         };
+        /** Page[AdminReturnRowOut] */
+        Page_AdminReturnRowOut_: {
+            /** Items */
+            items: components["schemas"]["AdminReturnRowOut"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Pages */
+            pages: number;
+            /** Total */
+            total: number;
+        };
+        /** Page[AdminReviewOut] */
+        Page_AdminReviewOut_: {
+            /** Items */
+            items: components["schemas"]["AdminReviewOut"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Pages */
+            pages: number;
+            /** Total */
+            total: number;
+        };
         /** Page[AuditLogOut] */
         Page_AuditLogOut_: {
             /** Items */
@@ -3557,6 +4001,19 @@ export interface components {
         Page_ProductRowOut_: {
             /** Items */
             items: components["schemas"]["ProductRowOut"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Pages */
+            pages: number;
+            /** Total */
+            total: number;
+        };
+        /** Page[ReviewOut] */
+        Page_ReviewOut_: {
+            /** Items */
+            items: components["schemas"]["ReviewOut"][];
             /** Page */
             page: number;
             /** Page Size */
@@ -4049,6 +4506,11 @@ export interface components {
             /** Wastage Percent */
             wastage_percent?: number | string | null;
         };
+        /** ProductReviewsOut */
+        ProductReviewsOut: {
+            reviews: components["schemas"]["Page_ReviewOut_"];
+            summary: components["schemas"]["ReviewSummaryOut"];
+        };
         /** ProductRowOut */
         ProductRowOut: {
             /** Available */
@@ -4246,6 +4708,141 @@ export interface components {
         RetryPaymentOut: {
             order: components["schemas"]["OrderOut"];
             payment: components["schemas"]["PaymentSessionOut"];
+        };
+        /** ReturnDecisionIn */
+        ReturnDecisionIn: {
+            /**
+             * Note
+             * @default
+             */
+            note: string;
+        };
+        /** ReturnLineIn */
+        ReturnLineIn: {
+            /** Position */
+            position: number;
+            /** Quantity */
+            quantity: number;
+        };
+        /** ReturnLineOut */
+        ReturnLineOut: {
+            /** Position */
+            position: number;
+            /** Product Name */
+            product_name: string;
+            /** Quantity */
+            quantity: number;
+            /** Variant Label */
+            variant_label: string;
+        };
+        /** ReturnOut */
+        ReturnOut: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Id */
+            id: string;
+            /** Items */
+            items: components["schemas"]["ReturnLineOut"][];
+            /**
+             * Kind
+             * @enum {string}
+             */
+            kind: "return" | "exchange";
+            /** Kind Label */
+            kind_label: string;
+            /** Reason */
+            reason: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "requested" | "approved" | "rejected" | "received" | "refunded" | "closed";
+            /** Status Label */
+            status_label: string;
+            /** Store Note */
+            store_note: string | null;
+            /**
+             * Updated At
+             * Format: date-time
+             */
+            updated_at: string;
+        };
+        /** ReturnReceiveIn */
+        ReturnReceiveIn: {
+            /**
+             * Note
+             * @default
+             */
+            note: string;
+            /** Restock Positions */
+            restock_positions?: number[];
+        };
+        /** ReturnRefundIn */
+        ReturnRefundIn: {
+            /** Amount */
+            amount: number | string;
+            /**
+             * Note
+             * @default
+             */
+            note: string;
+        };
+        /** ReturnableItemOut */
+        ReturnableItemOut: {
+            /**
+             * Deadline
+             * Format: date-time
+             */
+            deadline: string;
+            /** Kinds */
+            kinds: ("return" | "exchange")[];
+            /** Position */
+            position: number;
+            /** Product Name */
+            product_name: string;
+            /** Quantity */
+            quantity: number;
+            /** Variant Label */
+            variant_label: string;
+        };
+        /** ReviewIn */
+        ReviewIn: {
+            /** Body */
+            body: string;
+            /** Rating */
+            rating: number;
+            /** Title */
+            title: string;
+        };
+        /** ReviewOut */
+        ReviewOut: {
+            /** Author Name */
+            author_name: string;
+            /** Body */
+            body: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Id */
+            id: string;
+            /** Rating */
+            rating: number;
+            /** Title */
+            title: string;
+            /** Verified Purchase */
+            verified_purchase: boolean;
+        };
+        /** ReviewSummaryOut */
+        ReviewSummaryOut: {
+            /** Average */
+            average: string | null;
+            /** Count */
+            count: number;
         };
         /** RoleIn */
         RoleIn: {
@@ -6361,6 +6958,313 @@ export interface operations {
             };
         };
     };
+    list_returns_api_v1_admin_returns_get: {
+        parameters: {
+            query?: {
+                status?: ("requested" | "approved" | "rejected" | "received" | "refunded" | "closed") | null;
+                page?: number;
+                page_size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_AdminReturnRowOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_return_api_v1_admin_returns__request_id__get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                request_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminReturnOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    approve_return_api_v1_admin_returns__request_id__approve_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                request_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReturnDecisionIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminReturnOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    close_return_api_v1_admin_returns__request_id__close_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                request_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReturnDecisionIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminReturnOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    receive_return_api_v1_admin_returns__request_id__receive_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                request_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReturnReceiveIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminReturnOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    refund_return_api_v1_admin_returns__request_id__refund_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                request_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReturnRefundIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminReturnOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    reject_return_api_v1_admin_returns__request_id__reject_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                request_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReturnDecisionIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminReturnOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_reviews_api_v1_admin_reviews_get: {
+        parameters: {
+            query?: {
+                status?: ("pending" | "approved" | "rejected") | null;
+                page?: number;
+                page_size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_AdminReviewOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    moderate_review_api_v1_admin_reviews__review_id__moderate_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                review_id: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ModerateReviewIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["AdminReviewOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     get_settings_api_v1_admin_settings_get: {
         parameters: {
             query?: never;
@@ -8060,6 +8964,43 @@ export interface operations {
             };
         };
     };
+    request_return_api_v1_orders__reference__returns_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "X-Order-Access-Token"?: string | null;
+            };
+            path: {
+                reference: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateReturnIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OrderOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     report_failure_api_v1_payments_report_failure_post: {
         parameters: {
             query?: never;
@@ -8339,6 +9280,106 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["ProductCardOut"][];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    product_reviews_api_v1_products__slug__reviews_get: {
+        parameters: {
+            query?: {
+                page?: number;
+                page_size?: number;
+            };
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["ProductReviewsOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    my_review_api_v1_products__slug__reviews_mine_get: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MyReviewStateOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    save_my_review_api_v1_products__slug__reviews_mine_put: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                slug: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["ReviewIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["MyReviewStateOut"];
                 };
             };
             /** @description Validation Error */

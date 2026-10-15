@@ -41,7 +41,7 @@ was deliberately not created, so that no data edit can grant new powers.
 | `product_variants` | A purchasable SKU (e.g. ring size 12) | `product_id` FK, `sku` unique, `label`, `size`, `gross_weight_g`, `net_gold_weight_g`, `stone_weight_ct`, `stone_value`, `other_charges`, `other_charges_label`, `fixed_price` (required when product is `fixed`), `huid` (nullable, per piece), `is_default`, `is_active`, `sort_order` |
 | `product_images` | Gallery | `product_id` FK, `storage_key`, `url`, `renditions JSONB` (width → URL), `alt_text`, `width`, `height`, `sort_order`, `is_placeholder` |
 | `product_attributes` | Filterable key/value attributes | `product_id` FK, `key` (e.g. `occasion`, `style`), `value`; unique (`product_id`,`key`,`value`); index (`key`,`value`) |
-| `product_reviews` | Customer reviews (moderated) | `product_id` FK, `user_id` FK, `order_item_id` FK (verified purchase), `rating` CHECK 1–5, `title`, `body`, `status` ∈ {pending, approved, rejected}; unique (`user_id`,`product_id`) |
+| `product_reviews` | Customer reviews (moderated) | `product_id` FK, `user_id` FK, `order_item_id` FK (verified purchase), `rating` CHECK 1–5, `title`, `body`, `author_name` (first name + initial), `status` ∈ {pending, approved, rejected}, `moderation_note`, `moderated_by`, `moderated_at`; unique (`user_id`,`product_id`) |
 
 ### Pricing
 | Table | Purpose | Key columns / constraints |
@@ -76,7 +76,7 @@ was deliberately not created, so that no data edit can grant new powers.
 | `payment_events` | Raw verified webhook events | `provider`, `event_id` unique, `event_type`, `payload JSONB`, `received_at`, `processed_at`, `processing_error` |
 | `refunds` | Refund requests and results | `order_id`, `payment_attempt_id`, `provider_refund_id` unique nullable, `amount`, `status` ∈ {requested, pending, processed, failed}, `reason`, `requested_by` |
 | `shipments` | Dispatch info | `order_id`, `carrier`, `tracking_number`, `tracking_url`, `status` ∈ {pending, shipped, delivered, returned}, `shipped_at`, `delivered_at` |
-| `return_requests` | Returns / exchanges | `order_id`, `user_id`, `kind` ∈ {return, exchange}, `status` ∈ {requested, approved, rejected, received, refunded, closed}, `reason`, `items JSONB`, `admin_note` |
+| `return_requests` | Returns / exchanges | `order_id`, `user_id` (null for guests), `kind` ∈ {return, exchange}, `status` ∈ {requested, approved, rejected, received, refunded, closed}, `reason`, `items JSONB` (position, quantity, name/variant/SKU snapshot, `restock`), `store_note` (shown to the customer), `refund_id` FK, `decided_by/at`, `received_at`; partial unique index: one open request (requested/approved/received) per order |
 
 ### Shipping
 | Table | Purpose | Key columns / constraints |

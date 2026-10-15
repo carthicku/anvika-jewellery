@@ -112,6 +112,7 @@ function order(overrides: Partial<Order> = {}): Order {
     customer_note: null,
     items: [
       {
+        position: 0,
         product_name: 'Om Pendant',
         product_slug: 'om-pendant',
         variant_label: 'One size',
@@ -148,6 +149,8 @@ function order(overrides: Partial<Order> = {}): Order {
     can_pay: true,
     can_cancel: true,
     payment_message: null,
+    returns: [],
+    returnable_items: [],
     ...overrides,
   };
 }
@@ -349,5 +352,79 @@ describe('checkout', { timeout: 20_000 }, () => {
       'href',
       '/checkout',
     );
+  });
+});
+
+describe('returns', { timeout: 20_000 }, () => {
+  it('asks for a return of a delivered piece and shows the request', async () => {
+    const user = userEvent.setup();
+    const delivered = order({
+      status: 'delivered',
+      status_label: 'Delivered',
+      payment_status: 'paid',
+      payment_status_label: 'Paid',
+      can_pay: false,
+      can_cancel: false,
+      returnable_items: [
+        {
+          position: 0,
+          product_name: 'Om Pendant',
+          variant_label: 'One size',
+          quantity: 1,
+          kinds: ['return', 'exchange'],
+          deadline: '2026-10-30T10:00:00Z',
+        },
+      ],
+    });
+    let body: unknown = null;
+    mockFetch({
+      'GET /api/v1/orders/ANV-261015-ABC234': { body: delivered },
+      'POST /api/v1/orders/ANV-261015-ABC234/returns': async (request) => {
+        body = await request.json();
+        return {
+          status: 201,
+          body: {
+            ...delivered,
+            returnable_items: [],
+            returns: [
+              {
+                id: 'r1',
+                kind: 'return',
+                kind_label: 'Return for a refund',
+                status: 'requested',
+                status_label: 'Requested — waiting for our reply',
+                reason: 'Not what I expected',
+                store_note: null,
+                items: [
+                  {
+                    position: 0,
+                    product_name: 'Om Pendant',
+                    variant_label: 'One size',
+                    quantity: 1,
+                  },
+                ],
+                created_at: '2026-10-16T10:00:00Z',
+                updated_at: '2026-10-16T10:00:00Z',
+              },
+            ],
+          },
+        };
+      },
+    });
+    renderRoute('/order-confirmation/ANV-261015-ABC234');
+    await user.click(await screen.findByRole('button', { name: 'Request a return or exchange' }));
+    const dialog = await screen.findByRole('dialog', { name: 'Return or exchange' });
+    const send = within(dialog).getByRole('button', { name: 'Send request' });
+    expect(send).toBeDisabled();
+    await user.selectOptions(within(dialog).getByLabelText('Om Pendant (One size)'), '1');
+    await user.type(within(dialog).getByLabelText(/^Reason/), 'Not what I expected');
+    await user.click(send);
+    expect(await screen.findByText('Requested — waiting for our reply')).toBeVisible();
+    expect(body).toEqual({
+      kind: 'return',
+      reason: 'Not what I expected',
+      items: [{ position: 0, quantity: 1 }],
+    });
+    expect(screen.queryByRole('button', { name: 'Request a return or exchange' })).toBeNull();
   });
 });

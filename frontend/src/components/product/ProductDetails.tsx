@@ -246,10 +246,13 @@ export function ProductJsonLd({
   product,
   variant,
   url,
+  rating,
 }: {
   product: ProductDetail;
   variant: Variant;
   url: string;
+  /** Approved reviews only; omitted from the markup when there are none. */
+  rating?: { count: number; average: string | null };
 }) {
   if (product.is_sample) return null; // never publish structured data for fictional sample products
   const data = {
@@ -271,6 +274,16 @@ export function ProductJsonLd({
               variant.stock_status === 'out_of_stock'
                 ? 'https://schema.org/OutOfStock'
                 : 'https://schema.org/InStock',
+          }
+        : undefined,
+    aggregateRating:
+      rating && rating.count > 0 && rating.average
+        ? {
+            '@type': 'AggregateRating',
+            ratingValue: rating.average,
+            reviewCount: rating.count,
+            bestRating: 5,
+            worstRating: 1,
           }
         : undefined,
   };
