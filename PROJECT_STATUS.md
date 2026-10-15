@@ -1,9 +1,9 @@
 # Project Status
 
 **Last updated:** 2026-10-15
-**Current phase:** Phase 7 — Administration (next)
-**Last verified checkpoint:** Phase 6 — checkout, payments and orders
-(`scripts/check.ps1` all green; 243 backend tests, 44 frontend tests, 42 E2E runs ×2, axe clean)
+**Current phase:** Phase 7 — Administration (in progress: returns, reviews remaining)
+**Last verified checkpoint:** Phase 7 admin (operations, catalogue, settings, UI)
+(`scripts/check.ps1` all green; 291 backend tests, 44 frontend tests, 52 E2E runs ×2, axe clean)
 
 ## What exists
 * Planning documentation, ADRs 0001–0009, task tracker, `CLAUDE.md`, 11 skills.
@@ -33,6 +33,11 @@
   payments only (signature + provider fetch), webhooks, retry, expiry/reconciliation job, late-capture
   handling, cancellation with restock and refund request, confirmation page, order history, emails.
 
+* **Admin (Phase 7)**: `/admin` for staff — dashboard, orders (fulfil, cancel, refund), products with
+  photos and price preview, categories/collections, inventory, gold rates, customers, enquiries,
+  discounts/coupons, delivery, content, settings, staff, audit log. Create the first admin with
+  `python -m app.cli create-admin`.
+
 ## What works (verified — see docs/quality/TEST_RESULTS.md)
 | Item | Evidence |
 |------|----------|
@@ -45,11 +50,12 @@
 | Accounts & access control | `tests/api/test_auth.py`, `test_account.py`, `test_permissions.py`, `e2e/account.spec.ts` |
 | No sideways scrolling on phones | `e2e/smoke.spec.ts` (11 routes), `e2e/cart.spec.ts` |
 | Cart, coupons, price-change rules | `tests/api/test_cart.py`, `cart.test.tsx`, `e2e/cart.spec.ts` |
+| Admin API and screens | `test_admin_ops.py`, `test_admin_catalogue.py`, `test_admin_store.py`, `e2e/admin.spec.ts` |
 | Checkout, payments, webhooks, expiry, cancellation | `tests/api/test_checkout.py`, `test_payments.py`, `test_inventory_concurrency.py`, `checkout.test.tsx`, `e2e/checkout.spec.ts` |
 
 ## Not yet built
-Admin UI (Phase 7: products, inventory, orders/shipments/refunds, coupons, gold rates, settings…)
-and launch prep (Phase 8). Payments have not yet been run with real Razorpay test keys.
+Returns workflow and reviews (rest of Phase 7), optional staff TOTP, and launch prep (Phase 8).
+Payments have not yet been run with real Razorpay test keys.
 
 ## Local ports
 Web **5180**, API **8010**, PostgreSQL **54329** (5173 and 8000 are used by other projects here).
@@ -59,10 +65,9 @@ Nothing blocks development. Needed before launch: brand details, Razorpay test k
 project, SMTP provider, CA review of GST, legal review of policies (ASSUMPTIONS §5).
 
 ## Next step
-Phase 7: admin layout and guard, audit log, dashboard (incl. payment-review orders and stale-rate
-warning), products/variants/images, categories/collections, inventory adjustments, order management
-(status, shipments, refunds via Razorpay), customers, discounts/coupons, gold rates with preview,
-shipping, content, returns, settings, audit viewer, staff users.
+Finish Phase 7: returns/exchange requests (customer request after delivery within the window →
+admin approve/reject → received → restock and refund), verified-purchase reviews with moderation,
+admin component tests; then Phase 8 launch prep.
 
 ## How to resume
 1. Read `CLAUDE.md`, this file, `tasks/PHASE_07_ADMIN_AND_INVENTORY.md`.

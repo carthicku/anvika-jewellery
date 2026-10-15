@@ -97,3 +97,17 @@ New E2E coverage: guest checkout → simulated payment → confirmation → canc
 failed payment → retry → paid (J4); signed-in checkout → order history → cancel; axe scan of the
 checkout page with delivery options. After both runs the dev stock levels were unchanged (test
 orders are cancelled, which restocks them). Razorpay itself was tested against a mocked API only.
+
+### 2026-10-15 — Phase 7 checkpoint (admin, before returns/reviews)
+| Suite | Command | Result |
+|-------|---------|--------|
+| Full static + unit/API + build | `powershell -File scripts/check.ps1` | All checks passed (storefront initial JS 94.5 kB gzip; admin in separate chunks) |
+| Backend | `pytest -q` | 291 passed (+48 admin API tests) |
+| Frontend unit | `vitest run` | 44 passed |
+| End-to-end | `playwright test` ×2 (desktop + mobile) | 52 passed each run |
+
+New E2E coverage (`e2e/admin.spec.ts`): admin sign-in and navigation without sideways scrolling;
+create product → photo upload → publish → visible in store → stock adjustment → archive (J8, J9);
+prepare → cancel → send refund (simulator); customers see "This area is for store staff" (J10);
+axe on dashboard, product editor, orders and gold rates (desktop + phone). The E2E admin is created
+by the dev-only `python -m app.cli e2e-admin` with a fresh random password per run.

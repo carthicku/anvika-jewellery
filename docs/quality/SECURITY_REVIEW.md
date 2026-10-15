@@ -27,10 +27,10 @@ Scope: architecture documents only (no code yet).
 | 8 CSRF | ✅ middleware verified | `test_foundation.py` CSRF tests (missing/mismatched/foreign origin/webhook exemption) |
 | 9 Refresh rotation | ✅ | `test_refresh_rotates_and_detects_reuse`, `test_concurrent_refresh_from_two_tabs_is_not_treated_as_theft` |
 | 10 IDOR | ✅ accounts and orders | `test_customers_cannot_touch_each_others_addresses`, `test_wishlists_are_private`, session revoke scoped to owner |
-| 11 Admin RBAC | ⚠️ guard in place, admin routes pending | `test_every_admin_route_declares_a_permission`, `test_guard_detects_an_unprotected_admin_route`, role taken from DB row |
+| 11 Admin RBAC | ✅ (guard test covers every `/admin` route) | `test_every_admin_route_declares_a_permission`, `test_guard_detects_an_unprotected_admin_route`, `test_staff_permissions_are_limited`, role from DB row; role change/deactivation revokes sessions; last admin protected; admin UI blocks customers (e2e) |
 | 12 Enumeration | ✅ login + reset (registration reveals by design) | `test_login_success_and_wrong_password_are_distinct`, `test_forgot_password_never_reveals_accounts` |
 | 13 SQL injection | ✅ catalogue search | parameterised queries only; `test_search_handles_hostile_input` (quotes, `%`, `_`, backslash, emoji, SQL fragments) |
-| 14 Uploads | ⬜ | |
+| 14 Uploads | ✅ | Admin-only; 10 MB limit (middleware + handler); Pillow re-encodes to WebP, strips EXIF/GPS; JPEG/PNG/WebP only; pixel limit; random keys; storage keys validated (`test_photo_upload_is_reencoded_in_several_sizes`, `test_bad_uploads_are_rejected`, `test_s3_storage_uploads_with_long_cache`) |
 | 15 Secrets | ⚠️ scanner + production config validation verified; log redaction untested | `scripts/check-secrets.py`, `test_settings.py` |
 | 16 Error leakage | ✅ | `test_app_errors_and_unexpected_errors_are_formatted` (no internal detail in 500) |
 | 17 Spam | ✅ contact + newsletter | honeypot, minimum fill time, rate limits: `test_contact_spam_is_silently_dropped`, `test_contact_is_rate_limited` |

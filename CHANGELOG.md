@@ -5,6 +5,13 @@ All notable changes to this project. Format based on [Keep a Changelog](https://
 ## [Unreleased]
 
 ### Added
+- Phase 7 (admin): dashboard with net sales and work queues; order management (prepare, ship with
+  tracking, deliver, cancel, payment-review resolution, partial/full refunds sent to the payment
+  provider, internal notes); product management with variants, photo uploads (re-encoded WebP),
+  live price preview, publish/archive; categories and collections; audited stock adjustments and
+  movement log; gold rates with price-impact preview and large-change confirmation; customers;
+  enquiries; discounts and coupons; delivery methods and PIN-code zones; content page editor;
+  store/announcement/GST/gold-rate-policy settings; staff management; audit log viewer.
 - Phase 6: checkout (guest or signed-in, saved addresses, delivery options by PIN code, billing
   address, order note, terms), idempotent order creation with stock reservation and total
   confirmation, Razorpay REST integration and a development payment simulator, signature +

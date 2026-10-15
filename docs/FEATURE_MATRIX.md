@@ -15,7 +15,7 @@ the test listed**. Update this file whenever a feature changes state.
 | Storefront | Product details, gallery, variants, breakdown | `/products/:slug` | 2/3/5 | ✅ | `test_product_detail_with_variant_breakdowns`, `storefront.test.tsx` product page (add-to-cart arrives in Phase 5) |
 | Storefront | PIN-code delivery check | `/shipping/pincode/{pin}` | 3 | ✅ | `test_content.py` PIN tests, `storefront.test.tsx`, `e2e/browse.spec.ts` |
 | Storefront | Recently viewed | browser storage | 2 | ⚠️ | Implemented (`ProductPage` + `/products?slug=`); no dedicated test yet |
-| Storefront | Supporting & policy pages (editable) | `/about` … `/refund-policy` | 2/7 | ⚠️ | Pages render from DB (`e2e/smoke.spec.ts` all routes); admin editing is Phase 7 |
+| Storefront | Supporting & policy pages (editable) | `/about` … `/refund-policy` | 2/7 | ✅ | Pages render from DB (`e2e/smoke.spec.ts`); edited in Admin → Content (`test_staff_edit_content_pages`) |
 | Storefront | Contact form, newsletter | `/contact`, `/newsletter/*` | 3 | ✅ | `test_content.py` (validation, honeypot, rate limit, idempotency), `storefront.test.tsx` contact form |
 | Storefront | 404 page | `*` | 1 | ✅ | `src/router.test.tsx`, `e2e/smoke.spec.ts` |
 | Accounts | Register / login / logout | `/register`, `/login` | 4 | ✅ | `test_auth.py`, `account.test.tsx`, `e2e/account.spec.ts` |
@@ -38,19 +38,20 @@ the test listed**. Update this file whenever a feature changes state.
 | Orders | Cancellation | `/orders/{ref}/cancel` | 6 | ✅ | `test_cancel_*`, `e2e/checkout.spec.ts` |
 | Orders | Returns / exchanges | `/orders/{ref}/returns` | 7 | ⬜ | |
 | Email | Outbox + templates + file sink + SMTP | jobs | 6 | ⚠️ outbox, templates and file/memory sinks verified; SMTP not tried against a real server | `test_verified_payment_confirms_order_and_sells_stock` (confirmation email), auth email tests |
-| Admin | Auth, RBAC, audit logs | `/admin/*` | 4/7 | ⚠️ | Permission map + route guard test + `create-admin` CLI with audit (`test_permissions.py`); admin UI in Phase 7 |
-| Admin | Dashboard | `/admin` | 7 | ⬜ | |
-| Admin | Products, variants, images | `/admin/products` | 7 | ⬜ | |
-| Admin | Categories, collections | `/admin/categories`, `/admin/collections` | 7 | ⬜ | |
-| Admin | Inventory & movements | `/admin/inventory` | 7 | ⬜ | |
-| Admin | Orders, shipments, refunds | `/admin/orders` | 7 | ⬜ | |
-| Admin | Customers | `/admin/customers` | 7 | ⬜ | |
-| Admin | Discounts, coupons | `/admin/discounts`, `/admin/coupons` | 7 | ⬜ | |
-| Admin | Gold rates (preview, confirm, history) | `/admin/gold-rates` | 7 | ⬜ | |
-| Admin | Shipping methods & zones | `/admin/shipping` | 7 | ⬜ | |
-| Admin | Content pages, reviews moderation | `/admin/content`, `/admin/reviews` | 7 | ⬜ | |
+| Admin | Auth, RBAC, audit logs | `/admin/*` | 4/7 | ✅ | `test_every_admin_route_declares_a_permission`, `test_staff_permissions_are_limited`, audit viewer, `e2e/admin.spec.ts` (customers blocked) |
+| Admin | Dashboard | `/admin` | 7 | ✅ | `test_dashboard_counts_only_paid_money`, e2e |
+| Admin | Products, variants, images | `/admin/products` | 7 | ✅ | `test_admin_catalogue.py` (19), e2e J8 |
+| Admin | Categories, collections | `/admin/categories`, `/admin/collections` | 7 | ✅ | `test_categories_crud_with_safety`, `test_collections_hold_ordered_products` |
+| Admin | Inventory & movements | `/admin/inventory` | 7 | ✅ | `test_stock_adjustments_are_ledgered_and_audited`, `test_stock_cannot_drop_below_reserved`, e2e J9 |
+| Admin | Orders, shipments, refunds | `/admin/orders` | 7 | ✅ (refunds via simulator/mocked Razorpay) | `test_fulfil_a_paid_order_end_to_end`, `test_partial_refund_*`, review resolution tests, e2e cancel + refund |
+| Admin | Customers | `/admin/customers` | 7 | ✅ | `test_customer_list_and_detail` |
+| Admin | Discounts, coupons | `/admin/discounts`, `/admin/coupons` | 7 | ✅ | `test_automatic_discount_changes_prices`, `test_coupons_are_created_uppercase_and_track_usage` |
+| Admin | Gold rates (preview, confirm, history) | `/admin/gold-rates` | 7 | ✅ | `test_gold_rate_preview_shows_every_affected_price`, `test_large_rate_change_needs_confirmation_and_is_audited` |
+| Admin | Shipping methods & zones | `/admin/shipping` | 7 | ✅ | `test_shipping_zones_limit_delivery`, `test_at_least_one_delivery_method_stays_active` |
+| Admin | Content pages, reviews moderation | `/admin/content`, `/admin/reviews` | 7 | ⚠️ content ✅, reviews pending | `test_staff_edit_content_pages` |
 | Admin | Returns | `/admin/returns` | 7 | ⬜ | |
-| Admin | Settings (store, tax, announcement) | `/admin/settings` | 7 | ⬜ | |
+| Admin | Staff users (promote, role, deactivate) | `/admin/staff` | 7 | ✅ | `test_admin_promotes_and_deactivates_staff`, `test_the_last_admin_cannot_be_removed` |
+| Admin | Settings (store, tax, announcement) | `/admin/settings` | 7 | ✅ | `test_tax_settings_change_prices_and_are_audited`, `test_store_details_are_validated`, `test_announcement_links_must_be_safe` |
 | Admin | Optional TOTP MFA | `/account/security` | 7 | ⬜ | |
 | SEO | Metadata, canonical, OG, JSON-LD, sitemap, robots | — | 2/8 | ⚠️ | Titles/descriptions/canonical/OG + JSON-LD (non-sample only) + sitemap (`test_sitemap_lists_public_pages`); robots.txt in Phase 8 |
 | Quality | Playwright journeys J1–J12 | `frontend/e2e` | 8 | ⬜ | |

@@ -25,8 +25,10 @@ owner. Keep it current. Each item states its impact and the plan.
 ## Technical
 * Razorpay has been exercised only against a mocked API in automated tests; a run with real
   test-mode keys is pending (no keys provided). No real money has moved.
-* Refunds are recorded (`requested`) but executed with Razorpay only once the admin refund screen
-  exists (Phase 7). Status/shipment/refund emails also arrive with Phase 7.
+* Refunds are executed from Admin → Orders through the payment gateway; only the simulator and a
+  mocked Razorpay API have been exercised so far.
+* S3-compatible photo storage is unit-tested with botocore's Stubber, not against a real bucket.
+* Staff accounts are created by promoting a registered account; there is no invitation email.
 * The payment simulator remembers simulated payments in memory only; after an API restart the
   reconciliation job cannot see them (development only — no money involved).
 * Guests keep their order access token in `sessionStorage` for the current tab; reopening the
