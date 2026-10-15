@@ -5,7 +5,7 @@ from __future__ import annotations
 from collections.abc import Callable
 from dataclasses import dataclass
 
-from fastapi import Depends, Request
+from fastapi import Depends, Header, Request
 from sqlalchemy.orm import Session
 
 from app.core.client_ip import client_ip
@@ -19,6 +19,7 @@ from app.core.security import AccessTokenExpired, AccessTokenInvalid, decode_acc
 from app.core.time import utcnow
 from app.models import User, UserSession
 from app.services.auth import RequestMeta
+from app.services.payment_gateway import PaymentGateway
 
 
 class SessionExpired(AppError):
@@ -33,6 +34,18 @@ def get_app_settings(request: Request) -> Settings:
     """Settings of the running app (tests create apps with their own settings)."""
     settings: Settings = request.app.state.settings
     return settings
+
+
+def get_gateway(request: Request) -> PaymentGateway:
+    gateway: PaymentGateway = request.app.state.payment_gateway
+    return gateway
+
+
+def get_order_access_token(
+    token: str | None = Header(default=None, alias="X-Order-Access-Token", max_length=100),
+) -> str | None:
+    """Guests prove access to their order with the private token from checkout or the email."""
+    return token
 
 
 def get_request_meta(request: Request) -> RequestMeta:

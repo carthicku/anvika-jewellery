@@ -6,6 +6,7 @@ Goal: a tested sandbox purchase workflow, safe under failures and duplicates.
 - [ ] Models + migration: orders, order_items, order_events, inventory_reservations, payment_attempts,
       payment_events, refunds, shipments, return_requests
 - [ ] Inventory service: reserve / commit / release / restock with row locks + ledger
+- [ ] Optional checkout block when the gold rate is stale (`block_checkout_when_rate_stale`)
 - [ ] Checkout service: quote; order creation (idempotency key, pending-order reuse, expected_total,
       stock, coupon lock, snapshots); guest access token
 - [ ] Payment gateway interface; Razorpay REST client (create order, fetch payment, refund); simulator

@@ -8,7 +8,7 @@ import uuid
 from collections import defaultdict
 from collections.abc import Sequence
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timedelta
 
 from sqlalchemy import or_, select
 from sqlalchemy.dialects.postgresql import distinct_on
@@ -144,3 +144,21 @@ def load_pricing_context(
         collections_by_product=dict(collections),
         category_parent=parents,
     )
+
+
+def stale_rate_purities(
+    db: Session,
+    rates: dict[str, GoldRate],
+    products: Sequence[Product],
+    now: datetime | None = None,
+) -> list[str]:
+    """Purities of weight-based `products` whose newest rate is older than the owner's limit —
+    only when the owner turned on `block_checkout_when_rate_stale` (PRICING_ENGINE.md §7)."""
+    policy = store_settings.get_group(db, "pricing_policy")
+    if not policy.get("block_checkout_when_rate_stale"):
+        return []
+    cutoff = (now or utcnow()) - timedelta(hours=int(policy["gold_rate_stale_after_hours"]))
+    purities = sorted({p.purity for p in products if p.pricing_model == "weight_based"})
+    return [
+        purity for purity in purities if purity in rates and rates[purity].effective_from < cutoff
+    ]

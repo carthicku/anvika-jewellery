@@ -16,19 +16,51 @@ from starlette.concurrency import run_in_threadpool
 
 from app.core.config import Settings
 from app.services import email as email_service
+from app.services import payments
+from app.services.catalogue import refresh_price_cache
+from app.services.payment_gateway import PaymentGateway
 
 logger = logging.getLogger("app.jobs")
 JOB_INTERVAL_SECONDS = 30
+PRICE_REFRESH_EVERY = 20  # runs (≈ 10 minutes)
 
 
-def run_once(session_factory: Callable[[], Session], settings: Settings) -> None:
+def run_once(
+    session_factory: Callable[[], Session],
+    settings: Settings,
+    gateway: PaymentGateway,
+    *,
+    include_unexpired: bool = False,
+) -> payments.ReconcileReport:
+    """Expire/reconcile pending orders, then send queued emails (including the ones those
+    steps just queued)."""
+    with session_factory() as db:
+        report = payments.expire_and_reconcile(
+            db, settings, gateway, include_unexpired=include_unexpired
+        )
+    if report.checked:
+        logger.info("payments reconciled: %s", payments.describe(report))
     email_service.dispatch_pending(session_factory, settings)
+    return report
 
 
-async def job_loop(session_factory: Callable[[], Session], settings: Settings) -> None:
+def refresh_prices(session_factory: Callable[[], Session]) -> None:
+    """Refresh the listing price cache (catches discounts starting/ending)."""
+    with session_factory() as db:
+        refresh_price_cache(db)
+        db.commit()
+
+
+async def job_loop(
+    session_factory: Callable[[], Session], settings: Settings, gateway: PaymentGateway
+) -> None:
+    runs = 0
     while True:
         try:
-            await run_in_threadpool(run_once, session_factory, settings)
+            await run_in_threadpool(run_once, session_factory, settings, gateway)
+            if runs % PRICE_REFRESH_EVERY == 0:
+                await run_in_threadpool(refresh_prices, session_factory)
         except Exception:  # keep the loop alive; the error is logged with a traceback
             logger.exception("background job run failed")
+        runs += 1
         await asyncio.sleep(JOB_INTERVAL_SECONDS)

@@ -114,8 +114,9 @@ class CouponRedemption(UUIDPrimaryKey, Base):
     coupon_id: Mapped[uuid.UUID] = mapped_column(
         UUID(as_uuid=True), ForeignKey("coupons.id", ondelete="RESTRICT"), nullable=False
     )
-    # FK to orders is added with the orders table (Phase 6 migration).
-    order_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), nullable=False, unique=True)
+    order_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("orders.id", ondelete="CASCADE"), nullable=False, unique=True
+    )
     user_id: Mapped[uuid.UUID | None] = mapped_column(UUID(as_uuid=True))
     email: Mapped[str] = mapped_column(String(254), nullable=False)
     amount: Mapped[Decimal] = mapped_column(Numeric(12, 2), nullable=False)

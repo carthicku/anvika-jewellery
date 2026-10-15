@@ -129,8 +129,9 @@ class ProfileIn(StrictIn):
         return normalise_indian_mobile(value) if value else None
 
 
-class AddressIn(StrictIn):
-    label: str | None = Field(default=None, max_length=40)
+class AddressFieldsIn(StrictIn):
+    """A validated Indian postal address (shared by the address book and checkout)."""
+
     full_name: str = Field(min_length=2, max_length=120)
     phone: str = Field(max_length=20)
     line1: str = Field(min_length=3, max_length=200)
@@ -139,8 +140,6 @@ class AddressIn(StrictIn):
     city: str = Field(min_length=2, max_length=80)
     state: str
     pincode: str
-    is_default_shipping: bool = False
-    is_default_billing: bool = False
 
     @field_validator("phone")
     @classmethod
@@ -161,6 +160,12 @@ class AddressIn(StrictIn):
         if not re.fullmatch(r"[1-9][0-9]{5}", value):
             raise ValueError("Enter a valid 6-digit PIN code.")
         return value
+
+
+class AddressIn(AddressFieldsIn):
+    label: str | None = Field(default=None, max_length=40)
+    is_default_shipping: bool = False
+    is_default_billing: bool = False
 
 
 class AddressOut(BaseModel):

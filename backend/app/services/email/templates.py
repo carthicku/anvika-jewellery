@@ -34,6 +34,30 @@ TEMPLATES: dict[str, TemplateSpec] = {
         None,
         "If this wasn't you, reset your password immediately and contact us.",
     ),
+    "order_confirmation": (
+        "Thank you — your order is confirmed",
+        [
+            "Hello {name},",
+            "We've received your payment for order {reference}. Total paid: {total}.",
+            "Items: {items}",
+            "We'll email you again when your order ships.",
+        ],
+        ("View your order", "order_url"),
+        "Please keep this email for your records. Your tax invoice will be shared with your "
+        "shipment.",
+    ),
+    "order_cancelled": (
+        "Your order has been cancelled",
+        [
+            "Hello {name},",
+            "Order {reference} ({total}) has been cancelled.",
+            "Items: {items}",
+            "If you had already paid, a full refund has been requested. We'll email you when it "
+            "is processed; how long it then takes to reach you depends on your bank.",
+        ],
+        ("View your order", "order_url"),
+        "If you didn't ask for this cancellation, please contact us.",
+    ),
 }
 
 

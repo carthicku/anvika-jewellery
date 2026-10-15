@@ -82,8 +82,11 @@ def test_unsafe_request_from_foreign_origin_is_rejected(client: TestClient) -> N
 
 
 def test_webhooks_are_exempt_from_csrf(raw_client: TestClient) -> None:
-    # No webhook route exists yet, so reaching the router gives 404 instead of 403.
-    assert raw_client.post("/api/v1/webhooks/razorpay").status_code == 404
+    # No CSRF header: the request still reaches the webhook, which rejects the missing HMAC
+    # signature itself (400, not the CSRF middleware's 403).
+    response = raw_client.post("/api/v1/webhooks/razorpay", content=b"{}")
+    assert response.status_code == 400
+    assert response.json()["error"]["code"] == "WEBHOOK_SIGNATURE_INVALID"
 
 
 def test_csrf_endpoint_reuses_existing_cookie(raw_client: TestClient) -> None:

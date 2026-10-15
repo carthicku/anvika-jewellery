@@ -16,6 +16,16 @@ from app.models.content import ContactEnquiry, ContentPage, NewsletterSubscriber
 from app.models.email import EmailOutbox
 from app.models.identity import Address, User, UserSession, UserToken, WishlistItem
 from app.models.inventory import InventoryLevel, InventoryMovement
+from app.models.orders import (
+    InventoryReservation,
+    Order,
+    OrderEvent,
+    OrderItem,
+    PaymentAttempt,
+    PaymentEvent,
+    Refund,
+    Shipment,
+)
 from app.models.pricing import Discount, GoldRate
 from app.models.shipping import ShippingMethod, ShippingZone
 from app.models.system import AuditLog, RateLimitBucket, StoreSetting
@@ -38,12 +48,20 @@ __all__ = [
     "GoldRate",
     "InventoryLevel",
     "InventoryMovement",
+    "InventoryReservation",
     "NewsletterSubscriber",
+    "Order",
+    "OrderEvent",
+    "OrderItem",
+    "PaymentAttempt",
+    "PaymentEvent",
     "Product",
     "ProductAttribute",
     "ProductImage",
     "ProductVariant",
     "RateLimitBucket",
+    "Refund",
+    "Shipment",
     "ShippingMethod",
     "ShippingZone",
     "StoreSetting",

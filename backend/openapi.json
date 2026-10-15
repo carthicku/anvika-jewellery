@@ -23,6 +23,77 @@
         "title": "AddToCartIn",
         "type": "object"
       },
+      "AddressFieldsIn": {
+        "additionalProperties": false,
+        "description": "A validated Indian postal address (shared by the address book and checkout).",
+        "properties": {
+          "city": {
+            "maxLength": 80,
+            "minLength": 2,
+            "title": "City",
+            "type": "string"
+          },
+          "full_name": {
+            "maxLength": 120,
+            "minLength": 2,
+            "title": "Full Name",
+            "type": "string"
+          },
+          "landmark": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Landmark"
+          },
+          "line1": {
+            "maxLength": 200,
+            "minLength": 3,
+            "title": "Line1",
+            "type": "string"
+          },
+          "line2": {
+            "anyOf": [
+              {
+                "maxLength": 200,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Line2"
+          },
+          "phone": {
+            "maxLength": 20,
+            "title": "Phone",
+            "type": "string"
+          },
+          "pincode": {
+            "title": "Pincode",
+            "type": "string"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          }
+        },
+        "required": [
+          "full_name",
+          "phone",
+          "line1",
+          "city",
+          "state",
+          "pincode"
+        ],
+        "title": "AddressFieldsIn",
+        "type": "object"
+      },
       "AddressIn": {
         "additionalProperties": false,
         "properties": {
@@ -255,6 +326,25 @@
           "value"
         ],
         "title": "AttributeOut",
+        "type": "object"
+      },
+      "CancelOrderIn": {
+        "additionalProperties": false,
+        "properties": {
+          "reason": {
+            "anyOf": [
+              {
+                "maxLength": 300,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reason"
+          }
+        },
+        "title": "CancelOrderIn",
         "type": "object"
       },
       "CartLineOut": {
@@ -664,6 +754,135 @@
         "title": "ChangePasswordIn",
         "type": "object"
       },
+      "CheckoutOrderOut": {
+        "properties": {
+          "access_token": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Guests only: private token for viewing this order (keep it secret)",
+            "title": "Access Token"
+          },
+          "order": {
+            "$ref": "#/components/schemas/OrderOut"
+          },
+          "payment": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/PaymentSessionOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "payment_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Payment Error"
+          }
+        },
+        "required": [
+          "order",
+          "access_token",
+          "payment",
+          "payment_error"
+        ],
+        "title": "CheckoutOrderOut",
+        "type": "object"
+      },
+      "CheckoutQuoteIn": {
+        "additionalProperties": false,
+        "properties": {
+          "pincode": {
+            "maxLength": 10,
+            "title": "Pincode",
+            "type": "string"
+          },
+          "shipping_method": {
+            "anyOf": [
+              {
+                "maxLength": 40,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Shipping Method"
+          }
+        },
+        "required": [
+          "pincode"
+        ],
+        "title": "CheckoutQuoteIn",
+        "type": "object"
+      },
+      "CheckoutQuoteOut": {
+        "properties": {
+          "cart": {
+            "$ref": "#/components/schemas/CartOut"
+          },
+          "message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Message"
+          },
+          "pincode": {
+            "title": "Pincode",
+            "type": "string"
+          },
+          "serviceable": {
+            "title": "Serviceable",
+            "type": "boolean"
+          },
+          "shipping_method": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Shipping Method"
+          },
+          "shipping_options": {
+            "items": {
+              "$ref": "#/components/schemas/ShippingOptionOut"
+            },
+            "title": "Shipping Options",
+            "type": "array"
+          }
+        },
+        "required": [
+          "cart",
+          "pincode",
+          "serviceable",
+          "message",
+          "shipping_options",
+          "shipping_method"
+        ],
+        "title": "CheckoutQuoteOut",
+        "type": "object"
+      },
       "CollectionOut": {
         "properties": {
           "description": {
@@ -904,6 +1123,79 @@
           "message"
         ],
         "title": "CouponStateOut",
+        "type": "object"
+      },
+      "CreateOrderIn": {
+        "additionalProperties": false,
+        "properties": {
+          "billing_address": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/AddressFieldsIn"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Omit when billing is the same as shipping"
+          },
+          "customer_note": {
+            "anyOf": [
+              {
+                "maxLength": 500,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Customer Note"
+          },
+          "email": {
+            "anyOf": [
+              {
+                "format": "email",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "Required for guests; signed-in customers use their account email",
+            "title": "Email"
+          },
+          "expected_total": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "title": "Expected Total"
+          },
+          "shipping_address": {
+            "$ref": "#/components/schemas/AddressFieldsIn"
+          },
+          "shipping_method": {
+            "maxLength": 40,
+            "title": "Shipping Method",
+            "type": "string"
+          },
+          "terms_accepted": {
+            "title": "Terms Accepted",
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "shipping_address",
+          "shipping_method",
+          "expected_total",
+          "terms_accepted"
+        ],
+        "title": "CreateOrderIn",
         "type": "object"
       },
       "CsrfOut": {
@@ -1362,6 +1654,570 @@
         "title": "OkOut",
         "type": "object"
       },
+      "OrderAddressOut": {
+        "properties": {
+          "city": {
+            "title": "City",
+            "type": "string"
+          },
+          "country": {
+            "default": "IN",
+            "title": "Country",
+            "type": "string"
+          },
+          "full_name": {
+            "title": "Full Name",
+            "type": "string"
+          },
+          "landmark": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Landmark"
+          },
+          "line1": {
+            "title": "Line1",
+            "type": "string"
+          },
+          "line2": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Line2"
+          },
+          "phone": {
+            "title": "Phone",
+            "type": "string"
+          },
+          "pincode": {
+            "title": "Pincode",
+            "type": "string"
+          },
+          "state": {
+            "title": "State",
+            "type": "string"
+          }
+        },
+        "required": [
+          "full_name",
+          "phone",
+          "line1",
+          "city",
+          "state",
+          "pincode"
+        ],
+        "title": "OrderAddressOut",
+        "type": "object"
+      },
+      "OrderEventOut": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "kind": {
+            "title": "Kind",
+            "type": "string"
+          },
+          "note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Note"
+          },
+          "title": {
+            "title": "Title",
+            "type": "string"
+          }
+        },
+        "required": [
+          "kind",
+          "title",
+          "note",
+          "created_at"
+        ],
+        "title": "OrderEventOut",
+        "type": "object"
+      },
+      "OrderItemOut": {
+        "properties": {
+          "image": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ImageOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "line_discount": {
+            "title": "Line Discount",
+            "type": "string"
+          },
+          "line_tax": {
+            "title": "Line Tax",
+            "type": "string"
+          },
+          "line_total": {
+            "title": "Line Total",
+            "type": "string"
+          },
+          "product_name": {
+            "title": "Product Name",
+            "type": "string"
+          },
+          "product_slug": {
+            "title": "Product Slug",
+            "type": "string"
+          },
+          "purity": {
+            "title": "Purity",
+            "type": "string"
+          },
+          "quantity": {
+            "title": "Quantity",
+            "type": "integer"
+          },
+          "sku": {
+            "title": "Sku",
+            "type": "string"
+          },
+          "unit_price": {
+            "title": "Unit Price",
+            "type": "string"
+          },
+          "variant_label": {
+            "title": "Variant Label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "product_name",
+          "product_slug",
+          "variant_label",
+          "sku",
+          "purity",
+          "image",
+          "quantity",
+          "unit_price",
+          "line_discount",
+          "line_tax",
+          "line_total"
+        ],
+        "title": "OrderItemOut",
+        "type": "object"
+      },
+      "OrderOut": {
+        "properties": {
+          "billing_address": {
+            "$ref": "#/components/schemas/OrderAddressOut"
+          },
+          "can_cancel": {
+            "title": "Can Cancel",
+            "type": "boolean"
+          },
+          "can_pay": {
+            "title": "Can Pay",
+            "type": "boolean"
+          },
+          "coupon_code": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Coupon Code"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "customer_name": {
+            "title": "Customer Name",
+            "type": "string"
+          },
+          "customer_note": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Customer Note"
+          },
+          "email": {
+            "title": "Email",
+            "type": "string"
+          },
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/OrderItemOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "paid_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Paid At"
+          },
+          "payment_expires_at": {
+            "format": "date-time",
+            "title": "Payment Expires At",
+            "type": "string"
+          },
+          "payment_message": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Payment Message"
+          },
+          "payment_status": {
+            "enum": [
+              "unpaid",
+              "authorized",
+              "paid",
+              "failed",
+              "refund_pending",
+              "partially_refunded",
+              "refunded"
+            ],
+            "title": "Payment Status",
+            "type": "string"
+          },
+          "payment_status_label": {
+            "title": "Payment Status Label",
+            "type": "string"
+          },
+          "phone": {
+            "title": "Phone",
+            "type": "string"
+          },
+          "reference": {
+            "title": "Reference",
+            "type": "string"
+          },
+          "refunds": {
+            "items": {
+              "$ref": "#/components/schemas/RefundOut"
+            },
+            "title": "Refunds",
+            "type": "array"
+          },
+          "shipments": {
+            "items": {
+              "$ref": "#/components/schemas/ShipmentOut"
+            },
+            "title": "Shipments",
+            "type": "array"
+          },
+          "shipping_address": {
+            "$ref": "#/components/schemas/OrderAddressOut"
+          },
+          "shipping_method": {
+            "$ref": "#/components/schemas/OrderShippingMethodOut"
+          },
+          "status": {
+            "enum": [
+              "pending_payment",
+              "confirmed",
+              "processing",
+              "shipped",
+              "delivered",
+              "cancelled",
+              "expired",
+              "payment_review",
+              "returned"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "status_label": {
+            "title": "Status Label",
+            "type": "string"
+          },
+          "timeline": {
+            "items": {
+              "$ref": "#/components/schemas/OrderEventOut"
+            },
+            "title": "Timeline",
+            "type": "array"
+          },
+          "totals": {
+            "$ref": "#/components/schemas/OrderTotalsOut"
+          }
+        },
+        "required": [
+          "reference",
+          "status",
+          "status_label",
+          "payment_status",
+          "payment_status_label",
+          "created_at",
+          "paid_at",
+          "payment_expires_at",
+          "email",
+          "customer_name",
+          "phone",
+          "shipping_address",
+          "billing_address",
+          "shipping_method",
+          "coupon_code",
+          "customer_note",
+          "items",
+          "totals",
+          "timeline",
+          "shipments",
+          "refunds",
+          "can_pay",
+          "can_cancel",
+          "payment_message"
+        ],
+        "title": "OrderOut",
+        "type": "object"
+      },
+      "OrderShippingMethodOut": {
+        "properties": {
+          "code": {
+            "title": "Code",
+            "type": "string"
+          },
+          "estimated_from": {
+            "format": "date",
+            "title": "Estimated From",
+            "type": "string"
+          },
+          "estimated_to": {
+            "format": "date",
+            "title": "Estimated To",
+            "type": "string"
+          },
+          "max_days": {
+            "title": "Max Days",
+            "type": "integer"
+          },
+          "min_days": {
+            "title": "Min Days",
+            "type": "integer"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "name",
+          "min_days",
+          "max_days",
+          "estimated_from",
+          "estimated_to"
+        ],
+        "title": "OrderShippingMethodOut",
+        "type": "object"
+      },
+      "OrderSummaryOut": {
+        "properties": {
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "first_item_name": {
+            "title": "First Item Name",
+            "type": "string"
+          },
+          "grand_total": {
+            "title": "Grand Total",
+            "type": "string"
+          },
+          "image": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ImageOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "item_count": {
+            "title": "Item Count",
+            "type": "integer"
+          },
+          "payment_status": {
+            "enum": [
+              "unpaid",
+              "authorized",
+              "paid",
+              "failed",
+              "refund_pending",
+              "partially_refunded",
+              "refunded"
+            ],
+            "title": "Payment Status",
+            "type": "string"
+          },
+          "reference": {
+            "title": "Reference",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "pending_payment",
+              "confirmed",
+              "processing",
+              "shipped",
+              "delivered",
+              "cancelled",
+              "expired",
+              "payment_review",
+              "returned"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "status_label": {
+            "title": "Status Label",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reference",
+          "status",
+          "status_label",
+          "payment_status",
+          "created_at",
+          "grand_total",
+          "item_count",
+          "first_item_name",
+          "image"
+        ],
+        "title": "OrderSummaryOut",
+        "type": "object"
+      },
+      "OrderTotalsOut": {
+        "properties": {
+          "automatic_discount": {
+            "title": "Automatic Discount",
+            "type": "string"
+          },
+          "breakdown": {
+            "items": {
+              "$ref": "#/components/schemas/PriceRowOut"
+            },
+            "title": "Breakdown",
+            "type": "array"
+          },
+          "coupon_discount": {
+            "title": "Coupon Discount",
+            "type": "string"
+          },
+          "grand_total": {
+            "title": "Grand Total",
+            "type": "string"
+          },
+          "rounding_adjustment": {
+            "title": "Rounding Adjustment",
+            "type": "string"
+          },
+          "shipping_total": {
+            "title": "Shipping Total",
+            "type": "string"
+          },
+          "subtotal": {
+            "title": "Subtotal",
+            "type": "string"
+          },
+          "tax_total": {
+            "title": "Tax Total",
+            "type": "string"
+          }
+        },
+        "required": [
+          "subtotal",
+          "automatic_discount",
+          "coupon_discount",
+          "tax_total",
+          "shipping_total",
+          "rounding_adjustment",
+          "grand_total",
+          "breakdown"
+        ],
+        "title": "OrderTotalsOut",
+        "type": "object"
+      },
+      "Page_OrderSummaryOut_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/OrderSummaryOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "pages": {
+            "title": "Pages",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total",
+          "pages"
+        ],
+        "title": "Page[OrderSummaryOut]",
+        "type": "object"
+      },
       "Page_ProductCardOut_": {
         "properties": {
           "items": {
@@ -1396,6 +2252,142 @@
           "pages"
         ],
         "title": "Page[ProductCardOut]",
+        "type": "object"
+      },
+      "PaymentFailureIn": {
+        "additionalProperties": false,
+        "properties": {
+          "provider_order_id": {
+            "maxLength": 64,
+            "title": "Provider Order Id",
+            "type": "string"
+          },
+          "provider_payment_id": {
+            "anyOf": [
+              {
+                "maxLength": 128,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Provider Payment Id"
+          },
+          "reference": {
+            "maxLength": 24,
+            "title": "Reference",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reference",
+          "provider_order_id"
+        ],
+        "title": "PaymentFailureIn",
+        "type": "object"
+      },
+      "PaymentPrefillOut": {
+        "properties": {
+          "contact": {
+            "title": "Contact",
+            "type": "string"
+          },
+          "email": {
+            "title": "Email",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "name",
+          "email",
+          "contact"
+        ],
+        "title": "PaymentPrefillOut",
+        "type": "object"
+      },
+      "PaymentResultOut": {
+        "properties": {
+          "message": {
+            "title": "Message",
+            "type": "string"
+          },
+          "order": {
+            "$ref": "#/components/schemas/OrderOut"
+          },
+          "outcome": {
+            "enum": [
+              "paid",
+              "processing",
+              "failed",
+              "review"
+            ],
+            "title": "Outcome",
+            "type": "string"
+          }
+        },
+        "required": [
+          "outcome",
+          "message",
+          "order"
+        ],
+        "title": "PaymentResultOut",
+        "type": "object"
+      },
+      "PaymentSessionOut": {
+        "description": "What the browser needs to open the payment pop-up. Contains no secrets.",
+        "properties": {
+          "amount_paise": {
+            "title": "Amount Paise",
+            "type": "integer"
+          },
+          "currency": {
+            "title": "Currency",
+            "type": "string"
+          },
+          "description": {
+            "title": "Description",
+            "type": "string"
+          },
+          "key_id": {
+            "title": "Key Id",
+            "type": "string"
+          },
+          "prefill": {
+            "$ref": "#/components/schemas/PaymentPrefillOut"
+          },
+          "provider": {
+            "enum": [
+              "razorpay",
+              "simulator"
+            ],
+            "title": "Provider",
+            "type": "string"
+          },
+          "provider_order_id": {
+            "title": "Provider Order Id",
+            "type": "string"
+          },
+          "store_name": {
+            "title": "Store Name",
+            "type": "string"
+          }
+        },
+        "required": [
+          "provider",
+          "key_id",
+          "provider_order_id",
+          "amount_paise",
+          "currency",
+          "store_name",
+          "description",
+          "prefill"
+        ],
+        "title": "PaymentSessionOut",
         "type": "object"
       },
       "PincodeCheckOut": {
@@ -1939,6 +2931,30 @@
         "title": "PublicSettingsOut",
         "type": "object"
       },
+      "RefundOut": {
+        "properties": {
+          "amount": {
+            "title": "Amount",
+            "type": "string"
+          },
+          "created_at": {
+            "format": "date-time",
+            "title": "Created At",
+            "type": "string"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "amount",
+          "status",
+          "created_at"
+        ],
+        "title": "RefundOut",
+        "type": "object"
+      },
       "RegisterIn": {
         "additionalProperties": false,
         "properties": {
@@ -2003,6 +3019,37 @@
         "title": "ResetPasswordIn",
         "type": "object"
       },
+      "RetryPaymentIn": {
+        "additionalProperties": false,
+        "properties": {
+          "reference": {
+            "maxLength": 24,
+            "title": "Reference",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reference"
+        ],
+        "title": "RetryPaymentIn",
+        "type": "object"
+      },
+      "RetryPaymentOut": {
+        "properties": {
+          "order": {
+            "$ref": "#/components/schemas/OrderOut"
+          },
+          "payment": {
+            "$ref": "#/components/schemas/PaymentSessionOut"
+          }
+        },
+        "required": [
+          "order",
+          "payment"
+        ],
+        "title": "RetryPaymentOut",
+        "type": "object"
+      },
       "SessionOut": {
         "properties": {
           "created_at": {
@@ -2048,6 +3095,67 @@
           "current"
         ],
         "title": "SessionOut",
+        "type": "object"
+      },
+      "ShipmentOut": {
+        "properties": {
+          "carrier": {
+            "title": "Carrier",
+            "type": "string"
+          },
+          "delivered_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Delivered At"
+          },
+          "shipped_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Shipped At"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          },
+          "tracking_number": {
+            "title": "Tracking Number",
+            "type": "string"
+          },
+          "tracking_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Tracking Url"
+          }
+        },
+        "required": [
+          "carrier",
+          "tracking_number",
+          "tracking_url",
+          "status",
+          "shipped_at",
+          "delivered_at"
+        ],
+        "title": "ShipmentOut",
         "type": "object"
       },
       "ShippingOptionOut": {
@@ -2117,6 +3225,71 @@
           "estimated_to"
         ],
         "title": "ShippingOptionOut",
+        "type": "object"
+      },
+      "SimulatorPayIn": {
+        "additionalProperties": false,
+        "properties": {
+          "outcome": {
+            "enum": [
+              "success",
+              "failure"
+            ],
+            "title": "Outcome",
+            "type": "string"
+          },
+          "provider_order_id": {
+            "maxLength": 64,
+            "title": "Provider Order Id",
+            "type": "string"
+          },
+          "reference": {
+            "maxLength": 24,
+            "title": "Reference",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reference",
+          "provider_order_id",
+          "outcome"
+        ],
+        "title": "SimulatorPayIn",
+        "type": "object"
+      },
+      "SimulatorPayOut": {
+        "properties": {
+          "provider_order_id": {
+            "title": "Provider Order Id",
+            "type": "string"
+          },
+          "provider_payment_id": {
+            "title": "Provider Payment Id",
+            "type": "string"
+          },
+          "signature": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Signature"
+          },
+          "status": {
+            "title": "Status",
+            "type": "string"
+          }
+        },
+        "required": [
+          "provider_order_id",
+          "provider_payment_id",
+          "signature",
+          "status"
+        ],
+        "title": "SimulatorPayOut",
         "type": "object"
       },
       "SuggestOut": {
@@ -2399,6 +3572,39 @@
           "price"
         ],
         "title": "VariantOut",
+        "type": "object"
+      },
+      "VerifyPaymentIn": {
+        "additionalProperties": false,
+        "properties": {
+          "provider_order_id": {
+            "maxLength": 64,
+            "title": "Provider Order Id",
+            "type": "string"
+          },
+          "provider_payment_id": {
+            "maxLength": 128,
+            "title": "Provider Payment Id",
+            "type": "string"
+          },
+          "reference": {
+            "maxLength": 24,
+            "title": "Reference",
+            "type": "string"
+          },
+          "signature": {
+            "maxLength": 128,
+            "title": "Signature",
+            "type": "string"
+          }
+        },
+        "required": [
+          "reference",
+          "provider_order_id",
+          "provider_payment_id",
+          "signature"
+        ],
+        "title": "VerifyPaymentIn",
         "type": "object"
       },
       "WishlistMergeIn": {
@@ -3172,6 +4378,102 @@
         ]
       }
     },
+    "/api/v1/checkout/orders": {
+      "post": {
+        "description": "Re-price the cart, check `expected_total`, reserve stock and create a pending order, then\nopen a payment with the provider. Repeating the same Idempotency-Key returns the same order.",
+        "operationId": "create_order_api_v1_checkout_orders_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Idempotency-Key",
+            "required": true,
+            "schema": {
+              "pattern": "^[A-Za-z0-9_-]{16,64}$",
+              "title": "Idempotency-Key",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckoutOrderOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Order",
+        "tags": [
+          "checkout"
+        ]
+      }
+    },
+    "/api/v1/checkout/quote": {
+      "post": {
+        "description": "Delivery options and the full price breakdown for a PIN code. Changes nothing.",
+        "operationId": "quote_api_v1_checkout_quote_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CheckoutQuoteIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CheckoutQuoteOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Quote",
+        "tags": [
+          "checkout"
+        ]
+      }
+    },
     "/api/v1/collections": {
       "get": {
         "operationId": "collections_api_v1_collections_get",
@@ -3726,6 +5028,437 @@
         "summary": "Newsletter Unsubscribe",
         "tags": [
           "content"
+        ]
+      }
+    },
+    "/api/v1/orders": {
+      "get": {
+        "operationId": "list_my_orders_api_v1_orders_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "maximum": 1000,
+              "minimum": 1,
+              "title": "Page",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 10,
+              "maximum": 50,
+              "minimum": 1,
+              "title": "Page Size",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_OrderSummaryOut_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List My Orders",
+        "tags": [
+          "orders"
+        ]
+      }
+    },
+    "/api/v1/orders/{reference}": {
+      "get": {
+        "description": "Your own order, or a guest order with its private access token. Anything else is 404.",
+        "operationId": "get_order_api_v1_orders__reference__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reference",
+            "required": true,
+            "schema": {
+              "title": "Reference",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Order-Access-Token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Order-Access-Token"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Order",
+        "tags": [
+          "orders"
+        ]
+      }
+    },
+    "/api/v1/orders/{reference}/cancel": {
+      "post": {
+        "description": "Cancel before payment, or after payment until we start preparing the order.",
+        "operationId": "cancel_order_api_v1_orders__reference__cancel_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "reference",
+            "required": true,
+            "schema": {
+              "title": "Reference",
+              "type": "string"
+            }
+          },
+          {
+            "in": "header",
+            "name": "X-Order-Access-Token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Order-Access-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CancelOrderIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OrderOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Cancel Order",
+        "tags": [
+          "orders"
+        ]
+      }
+    },
+    "/api/v1/payments/report-failure": {
+      "post": {
+        "description": "The pop-up reported a failure. Only what the provider confirms is recorded.",
+        "operationId": "report_failure_api_v1_payments_report_failure_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Order-Access-Token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Order-Access-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaymentFailureIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentResultOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Report Failure",
+        "tags": [
+          "payments"
+        ]
+      }
+    },
+    "/api/v1/payments/retry": {
+      "post": {
+        "description": "A new payment for a still-pending order (same order, same amount, stock still held).",
+        "operationId": "retry_payment_api_v1_payments_retry_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Order-Access-Token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Order-Access-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RetryPaymentIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RetryPaymentOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Retry Payment",
+        "tags": [
+          "payments"
+        ]
+      }
+    },
+    "/api/v1/payments/simulator/pay": {
+      "post": {
+        "description": "DEVELOPMENT/TEST ONLY: what the payment pop-up would return. No money moves. Returns 404\nunless PAYMENT_PROVIDER=simulator (which production settings refuse).",
+        "operationId": "simulator_pay_api_v1_payments_simulator_pay_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Order-Access-Token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Order-Access-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SimulatorPayIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SimulatorPayOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Simulator Pay",
+        "tags": [
+          "payments"
+        ]
+      }
+    },
+    "/api/v1/payments/verify": {
+      "post": {
+        "description": "Called by the checkout page after the payment pop-up reports success. The signature is\nchecked against the provider order id WE stored, then the payment is fetched from the\nprovider; only a captured payment for the exact amount confirms the order.",
+        "operationId": "verify_payment_api_v1_payments_verify_post",
+        "parameters": [
+          {
+            "in": "header",
+            "name": "X-Order-Access-Token",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "X-Order-Access-Token"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyPaymentIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaymentResultOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Verify Payment",
+        "tags": [
+          "payments"
         ]
       }
     },

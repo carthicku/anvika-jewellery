@@ -212,15 +212,38 @@ def deactivate_user(args: argparse.Namespace, settings: Settings) -> int:
     return 0
 
 
-@command("run-jobs", "Run background jobs once now (send pending emails).")
+@command("run-jobs", "Run background jobs once now (expire/reconcile orders, send emails).")
 def run_jobs(_args: argparse.Namespace, settings: Settings) -> int:
     from app.core.db import make_engine, make_session_factory
-    from app.services import email as email_service
+    from app.jobs import refresh_prices, run_once
+    from app.services.payment_gateway import make_gateway
 
     factory = make_session_factory(make_engine(settings.database_url, pool_size=1, max_overflow=0))
-    sent = email_service.dispatch_pending(factory, settings)
-    print(f"Emails processed: {sent}")
+    report = run_once(factory, settings, make_gateway(settings))
+    refresh_prices(factory)
+    print(
+        f"Orders checked: {report.checked}, paid: {report.paid}, expired: {report.expired}, "
+        f"review: {report.review}, provider errors: {report.errors}"
+    )
     return 0
+
+
+@command(
+    "reconcile-payments",
+    "Ask the payment provider about EVERY pending order now (not only overdue ones).",
+)
+def reconcile_payments(_args: argparse.Namespace, settings: Settings) -> int:
+    from app.core.db import make_engine, make_session_factory
+    from app.jobs import run_once
+    from app.services.payment_gateway import make_gateway
+
+    factory = make_session_factory(make_engine(settings.database_url, pool_size=1, max_overflow=0))
+    report = run_once(factory, settings, make_gateway(settings), include_unexpired=True)
+    print(
+        f"Orders checked: {report.checked}, paid: {report.paid}, expired: {report.expired}, "
+        f"review: {report.review}, provider errors: {report.errors}"
+    )
+    return 1 if report.errors else 0
 
 
 def main(argv: list[str] | None = None) -> int:

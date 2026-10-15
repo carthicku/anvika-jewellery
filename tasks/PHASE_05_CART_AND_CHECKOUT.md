@@ -6,7 +6,8 @@ Goal: reliable, backend-calculated cart totals with transparent price changes.
 - [x] Models + migration: carts, cart_items, coupons, coupon_redemptions
 - [x] Pricing engine: automatic discounts (best per line), coupons (percent with cap / flat, min order,
       validity window, limits), coupon allocation (largest remainder), per-component tax, rounding to rupee
-- [x] Pricing context loader (rates, tax settings, discounts) + `gold_rate_stale` handling
+- [x] Pricing context loader (rates, tax settings, discounts)
+- [ ] `gold_rate_stale` handling (dashboard warning + optional checkout block) → moved to Phase 6/7
 - [x] Cart service: guest cookie token (hashed), add/update/remove with stock + quantity limits,
       merge on login, price-change detection (increase blocks, decrease auto-applies), accept-prices
 - [x] Cart API + coupon endpoints

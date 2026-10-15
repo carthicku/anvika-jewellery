@@ -27,6 +27,7 @@ from app.core.middleware import (
     SecurityHeadersMiddleware,
 )
 from app.jobs import job_loop
+from app.services.payment_gateway import make_gateway
 
 API_PREFIX = "/api/v1"
 logger = logging.getLogger("app")
@@ -46,7 +47,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     async def lifespan(app: FastAPI) -> AsyncIterator[None]:
         logger.info("Starting %s API (env=%s)", settings.store_name, settings.app_env)
         jobs = (
-            asyncio.create_task(job_loop(app.state.session_factory, settings))
+            asyncio.create_task(
+                job_loop(app.state.session_factory, settings, app.state.payment_gateway)
+            )
             if settings.background_jobs_enabled
             else None
         )
@@ -69,6 +72,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.settings = settings
     app.state.engine = engine
     app.state.session_factory = make_session_factory(engine)
+    app.state.payment_gateway = make_gateway(settings)
 
     register_exception_handlers(app)
 

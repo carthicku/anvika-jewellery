@@ -48,7 +48,11 @@ from app.services.pricing import (
     UnitPrice,
     price_order,
 )
-from app.services.pricing_context import PricingContext, load_pricing_context
+from app.services.pricing_context import (
+    PricingContext,
+    load_pricing_context,
+    stale_rate_purities,
+)
 
 CART_COOKIE = "cart_token"
 CART_COOKIE_DAYS = 60
@@ -188,6 +192,7 @@ class PricedCart:
     coupon: Coupon | None
     coupon_message: str | None
     shipping: ShippingInput | None
+    stale_purities: list[str]
 
 
 def _load_lines(db: Session, cart: Cart) -> list[tuple[CartItem, ProductVariant, Product]]:
@@ -282,7 +287,8 @@ def price_cart(
         if coupon is not None and order.coupon_error:
             template = COUPON_MESSAGES.get(order.coupon_error, "This coupon can't be used.")
             coupon_message = template.format(min=format_inr(coupon.min_order_amount or ZERO))
-    return PricedCart(lines, order, coupon, coupon_message, ship)
+    stale = stale_rate_purities(db, ctx.rates, [p for _, _, p in rows])
+    return PricedCart(lines, order, coupon, coupon_message, ship, stale)
 
 
 def _line_message(line: PricedLine) -> str | None:
@@ -298,7 +304,14 @@ def _line_message(line: PricedLine) -> str | None:
     return None
 
 
-def cart_view(db: Session, cart: Cart | None, user: User | None) -> CartOut:
+def cart_view(
+    db: Session,
+    cart: Cart | None,
+    user: User | None,
+    *,
+    shipping_input: ShippingInput | None = None,
+    priced: PricedCart | None = None,
+) -> CartOut:
     if cart is None:
         return CartOut(
             lines=[],
@@ -309,8 +322,13 @@ def cart_view(db: Session, cart: Cart | None, user: User | None) -> CartOut:
             blocking_issues=[],
             notices=[],
         )
-    priced = price_cart(db, cart, user)
+    priced = priced or price_cart(db, cart, user, shipping_input=shipping_input)
     blocking: list[str] = []
+    if priced.stale_purities:
+        blocking.append(
+            f"Gold prices for {', '.join(priced.stale_purities)} are being updated. "
+            "Checkout for these pieces will reopen shortly — please try again later."
+        )
     notices: list[str] = []
     out_lines: list[CartLineOut] = []
     order_lines = {lp.key: lp for lp in priced.order.lines} if priced.order else {}
