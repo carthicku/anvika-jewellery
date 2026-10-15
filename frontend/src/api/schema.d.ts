@@ -366,6 +366,47 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/v1/checkout/orders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Create Order
+         * @description Re-price the cart, check `expected_total`, reserve stock and create a pending order, then
+         *     open a payment with the provider. Repeating the same Idempotency-Key returns the same order.
+         */
+        post: operations["create_order_api_v1_checkout_orders_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/checkout/quote": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Quote
+         * @description Delivery options and the full price breakdown for a PIN code. Changes nothing.
+         */
+        post: operations["quote_api_v1_checkout_quote_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/v1/collections": {
         parameters: {
             query?: never;
@@ -570,6 +611,146 @@ export interface paths {
         put?: never;
         /** Newsletter Unsubscribe */
         post: operations["newsletter_unsubscribe_api_v1_newsletter_unsubscribe_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/orders": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /** List My Orders */
+        get: operations["list_my_orders_api_v1_orders_get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/orders/{reference}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        /**
+         * Get Order
+         * @description Your own order, or a guest order with its private access token. Anything else is 404.
+         */
+        get: operations["get_order_api_v1_orders__reference__get"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/orders/{reference}/cancel": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Cancel Order
+         * @description Cancel before payment, or after payment until we start preparing the order.
+         */
+        post: operations["cancel_order_api_v1_orders__reference__cancel_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/payments/report-failure": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Report Failure
+         * @description The pop-up reported a failure. Only what the provider confirms is recorded.
+         */
+        post: operations["report_failure_api_v1_payments_report_failure_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/payments/retry": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Retry Payment
+         * @description A new payment for a still-pending order (same order, same amount, stock still held).
+         */
+        post: operations["retry_payment_api_v1_payments_retry_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/payments/simulator/pay": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Simulator Pay
+         * @description DEVELOPMENT/TEST ONLY: what the payment pop-up would return. No money moves. Returns 404
+         *     unless PAYMENT_PROVIDER=simulator (which production settings refuse).
+         */
+        post: operations["simulator_pay_api_v1_payments_simulator_pay_post"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/v1/payments/verify": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        /**
+         * Verify Payment
+         * @description Called by the checkout page after the payment pop-up reports success. The signature is
+         *     checked against the provider order id WE stored, then the payment is fetched from the
+         *     provider; only a captured payment for the exact amount confirms the order.
+         */
+        post: operations["verify_payment_api_v1_payments_verify_post"];
         delete?: never;
         options?: never;
         head?: never;
@@ -781,6 +962,28 @@ export interface components {
              */
             variant_id: string;
         };
+        /**
+         * AddressFieldsIn
+         * @description A validated Indian postal address (shared by the address book and checkout).
+         */
+        AddressFieldsIn: {
+            /** City */
+            city: string;
+            /** Full Name */
+            full_name: string;
+            /** Landmark */
+            landmark?: string | null;
+            /** Line1 */
+            line1: string;
+            /** Line2 */
+            line2?: string | null;
+            /** Phone */
+            phone: string;
+            /** Pincode */
+            pincode: string;
+            /** State */
+            state: string;
+        };
         /** AddressIn */
         AddressIn: {
             /** City */
@@ -856,6 +1059,11 @@ export interface components {
             key: string;
             /** Value */
             value: string;
+        };
+        /** CancelOrderIn */
+        CancelOrderIn: {
+            /** Reason */
+            reason?: string | null;
         };
         /** CartLineOut */
         CartLineOut: {
@@ -965,6 +1173,39 @@ export interface components {
             /** New Password */
             new_password: string;
         };
+        /** CheckoutOrderOut */
+        CheckoutOrderOut: {
+            /**
+             * Access Token
+             * @description Guests only: private token for viewing this order (keep it secret)
+             */
+            access_token: string | null;
+            order: components["schemas"]["OrderOut"];
+            payment: components["schemas"]["PaymentSessionOut"] | null;
+            /** Payment Error */
+            payment_error: string | null;
+        };
+        /** CheckoutQuoteIn */
+        CheckoutQuoteIn: {
+            /** Pincode */
+            pincode: string;
+            /** Shipping Method */
+            shipping_method?: string | null;
+        };
+        /** CheckoutQuoteOut */
+        CheckoutQuoteOut: {
+            cart: components["schemas"]["CartOut"];
+            /** Message */
+            message: string | null;
+            /** Pincode */
+            pincode: string;
+            /** Serviceable */
+            serviceable: boolean;
+            /** Shipping Method */
+            shipping_method: string | null;
+            /** Shipping Options */
+            shipping_options: components["schemas"]["ShippingOptionOut"][];
+        };
         /** CollectionOut */
         CollectionOut: {
             /** Description */
@@ -1046,6 +1287,25 @@ export interface components {
             code: string;
             /** Message */
             message: string | null;
+        };
+        /** CreateOrderIn */
+        CreateOrderIn: {
+            /** @description Omit when billing is the same as shipping */
+            billing_address?: components["schemas"]["AddressFieldsIn"] | null;
+            /** Customer Note */
+            customer_note?: string | null;
+            /**
+             * Email
+             * @description Required for guests; signed-in customers use their account email
+             */
+            email?: string | null;
+            /** Expected Total */
+            expected_total: number | string;
+            shipping_address: components["schemas"]["AddressFieldsIn"];
+            /** Shipping Method */
+            shipping_method: string;
+            /** Terms Accepted */
+            terms_accepted: boolean;
         };
         /** CsrfOut */
         CsrfOut: {
@@ -1226,6 +1486,209 @@ export interface components {
              */
             ok: boolean;
         };
+        /** OrderAddressOut */
+        OrderAddressOut: {
+            /** City */
+            city: string;
+            /**
+             * Country
+             * @default IN
+             */
+            country: string;
+            /** Full Name */
+            full_name: string;
+            /** Landmark */
+            landmark?: string | null;
+            /** Line1 */
+            line1: string;
+            /** Line2 */
+            line2?: string | null;
+            /** Phone */
+            phone: string;
+            /** Pincode */
+            pincode: string;
+            /** State */
+            state: string;
+        };
+        /** OrderEventOut */
+        OrderEventOut: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Kind */
+            kind: string;
+            /** Note */
+            note: string | null;
+            /** Title */
+            title: string;
+        };
+        /** OrderItemOut */
+        OrderItemOut: {
+            image: components["schemas"]["ImageOut"] | null;
+            /** Line Discount */
+            line_discount: string;
+            /** Line Tax */
+            line_tax: string;
+            /** Line Total */
+            line_total: string;
+            /** Product Name */
+            product_name: string;
+            /** Product Slug */
+            product_slug: string;
+            /** Purity */
+            purity: string;
+            /** Quantity */
+            quantity: number;
+            /** Sku */
+            sku: string;
+            /** Unit Price */
+            unit_price: string;
+            /** Variant Label */
+            variant_label: string;
+        };
+        /** OrderOut */
+        OrderOut: {
+            billing_address: components["schemas"]["OrderAddressOut"];
+            /** Can Cancel */
+            can_cancel: boolean;
+            /** Can Pay */
+            can_pay: boolean;
+            /** Coupon Code */
+            coupon_code: string | null;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Customer Name */
+            customer_name: string;
+            /** Customer Note */
+            customer_note: string | null;
+            /** Email */
+            email: string;
+            /** Items */
+            items: components["schemas"]["OrderItemOut"][];
+            /** Paid At */
+            paid_at: string | null;
+            /**
+             * Payment Expires At
+             * Format: date-time
+             */
+            payment_expires_at: string;
+            /** Payment Message */
+            payment_message: string | null;
+            /**
+             * Payment Status
+             * @enum {string}
+             */
+            payment_status: "unpaid" | "authorized" | "paid" | "failed" | "refund_pending" | "partially_refunded" | "refunded";
+            /** Payment Status Label */
+            payment_status_label: string;
+            /** Phone */
+            phone: string;
+            /** Reference */
+            reference: string;
+            /** Refunds */
+            refunds: components["schemas"]["RefundOut"][];
+            /** Shipments */
+            shipments: components["schemas"]["ShipmentOut"][];
+            shipping_address: components["schemas"]["OrderAddressOut"];
+            shipping_method: components["schemas"]["OrderShippingMethodOut"];
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "pending_payment" | "confirmed" | "processing" | "shipped" | "delivered" | "cancelled" | "expired" | "payment_review" | "returned";
+            /** Status Label */
+            status_label: string;
+            /** Timeline */
+            timeline: components["schemas"]["OrderEventOut"][];
+            totals: components["schemas"]["OrderTotalsOut"];
+        };
+        /** OrderShippingMethodOut */
+        OrderShippingMethodOut: {
+            /** Code */
+            code: string;
+            /**
+             * Estimated From
+             * Format: date
+             */
+            estimated_from: string;
+            /**
+             * Estimated To
+             * Format: date
+             */
+            estimated_to: string;
+            /** Max Days */
+            max_days: number;
+            /** Min Days */
+            min_days: number;
+            /** Name */
+            name: string;
+        };
+        /** OrderSummaryOut */
+        OrderSummaryOut: {
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** First Item Name */
+            first_item_name: string;
+            /** Grand Total */
+            grand_total: string;
+            image: components["schemas"]["ImageOut"] | null;
+            /** Item Count */
+            item_count: number;
+            /**
+             * Payment Status
+             * @enum {string}
+             */
+            payment_status: "unpaid" | "authorized" | "paid" | "failed" | "refund_pending" | "partially_refunded" | "refunded";
+            /** Reference */
+            reference: string;
+            /**
+             * Status
+             * @enum {string}
+             */
+            status: "pending_payment" | "confirmed" | "processing" | "shipped" | "delivered" | "cancelled" | "expired" | "payment_review" | "returned";
+            /** Status Label */
+            status_label: string;
+        };
+        /** OrderTotalsOut */
+        OrderTotalsOut: {
+            /** Automatic Discount */
+            automatic_discount: string;
+            /** Breakdown */
+            breakdown: components["schemas"]["PriceRowOut"][];
+            /** Coupon Discount */
+            coupon_discount: string;
+            /** Grand Total */
+            grand_total: string;
+            /** Rounding Adjustment */
+            rounding_adjustment: string;
+            /** Shipping Total */
+            shipping_total: string;
+            /** Subtotal */
+            subtotal: string;
+            /** Tax Total */
+            tax_total: string;
+        };
+        /** Page[OrderSummaryOut] */
+        Page_OrderSummaryOut_: {
+            /** Items */
+            items: components["schemas"]["OrderSummaryOut"][];
+            /** Page */
+            page: number;
+            /** Page Size */
+            page_size: number;
+            /** Pages */
+            pages: number;
+            /** Total */
+            total: number;
+        };
         /** Page[ProductCardOut] */
         Page_ProductCardOut_: {
             /** Items */
@@ -1238,6 +1701,59 @@ export interface components {
             pages: number;
             /** Total */
             total: number;
+        };
+        /** PaymentFailureIn */
+        PaymentFailureIn: {
+            /** Provider Order Id */
+            provider_order_id: string;
+            /** Provider Payment Id */
+            provider_payment_id?: string | null;
+            /** Reference */
+            reference: string;
+        };
+        /** PaymentPrefillOut */
+        PaymentPrefillOut: {
+            /** Contact */
+            contact: string;
+            /** Email */
+            email: string;
+            /** Name */
+            name: string;
+        };
+        /** PaymentResultOut */
+        PaymentResultOut: {
+            /** Message */
+            message: string;
+            order: components["schemas"]["OrderOut"];
+            /**
+             * Outcome
+             * @enum {string}
+             */
+            outcome: "paid" | "processing" | "failed" | "review";
+        };
+        /**
+         * PaymentSessionOut
+         * @description What the browser needs to open the payment pop-up. Contains no secrets.
+         */
+        PaymentSessionOut: {
+            /** Amount Paise */
+            amount_paise: number;
+            /** Currency */
+            currency: string;
+            /** Description */
+            description: string;
+            /** Key Id */
+            key_id: string;
+            prefill: components["schemas"]["PaymentPrefillOut"];
+            /**
+             * Provider
+             * @enum {string}
+             */
+            provider: "razorpay" | "simulator";
+            /** Provider Order Id */
+            provider_order_id: string;
+            /** Store Name */
+            store_name: string;
         };
         /** PincodeCheckOut */
         PincodeCheckOut: {
@@ -1398,6 +1914,18 @@ export interface components {
             /** Whatsapp */
             whatsapp: string | null;
         };
+        /** RefundOut */
+        RefundOut: {
+            /** Amount */
+            amount: string;
+            /**
+             * Created At
+             * Format: date-time
+             */
+            created_at: string;
+            /** Status */
+            status: string;
+        };
         /** RegisterIn */
         RegisterIn: {
             /**
@@ -1419,6 +1947,16 @@ export interface components {
             /** Token */
             token: string;
         };
+        /** RetryPaymentIn */
+        RetryPaymentIn: {
+            /** Reference */
+            reference: string;
+        };
+        /** RetryPaymentOut */
+        RetryPaymentOut: {
+            order: components["schemas"]["OrderOut"];
+            payment: components["schemas"]["PaymentSessionOut"];
+        };
         /** SessionOut */
         SessionOut: {
             /**
@@ -1439,6 +1977,21 @@ export interface components {
              * Format: date-time
              */
             last_used_at: string;
+        };
+        /** ShipmentOut */
+        ShipmentOut: {
+            /** Carrier */
+            carrier: string;
+            /** Delivered At */
+            delivered_at: string | null;
+            /** Shipped At */
+            shipped_at: string | null;
+            /** Status */
+            status: string;
+            /** Tracking Number */
+            tracking_number: string;
+            /** Tracking Url */
+            tracking_url: string | null;
         };
         /** ShippingOptionOut */
         ShippingOptionOut: {
@@ -1466,6 +2019,29 @@ export interface components {
             min_days: number;
             /** Name */
             name: string;
+        };
+        /** SimulatorPayIn */
+        SimulatorPayIn: {
+            /**
+             * Outcome
+             * @enum {string}
+             */
+            outcome: "success" | "failure";
+            /** Provider Order Id */
+            provider_order_id: string;
+            /** Reference */
+            reference: string;
+        };
+        /** SimulatorPayOut */
+        SimulatorPayOut: {
+            /** Provider Order Id */
+            provider_order_id: string;
+            /** Provider Payment Id */
+            provider_payment_id: string;
+            /** Signature */
+            signature: string | null;
+            /** Status */
+            status: string;
         };
         /** SuggestOut */
         SuggestOut: {
@@ -1552,6 +2128,17 @@ export interface components {
             stock_status: "in_stock" | "low_stock" | "out_of_stock";
             /** Stone Weight Ct */
             stone_weight_ct: string | null;
+        };
+        /** VerifyPaymentIn */
+        VerifyPaymentIn: {
+            /** Provider Order Id */
+            provider_order_id: string;
+            /** Provider Payment Id */
+            provider_payment_id: string;
+            /** Reference */
+            reference: string;
+            /** Signature */
+            signature: string;
         };
         /** WishlistMergeIn */
         WishlistMergeIn: {
@@ -2179,6 +2766,74 @@ export interface operations {
             };
         };
     };
+    create_order_api_v1_checkout_orders_post: {
+        parameters: {
+            query?: never;
+            header: {
+                "Idempotency-Key": string;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CreateOrderIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CheckoutOrderOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    quote_api_v1_checkout_quote_post: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CheckoutQuoteIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["CheckoutQuoteOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
     collections_api_v1_collections_get: {
         parameters: {
             query?: never;
@@ -2601,6 +3256,248 @@ export interface operations {
                 };
                 content: {
                     "application/json": components["schemas"]["OkOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    list_my_orders_api_v1_orders_get: {
+        parameters: {
+            query?: {
+                page?: number;
+                page_size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["Page_OrderSummaryOut_"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    get_order_api_v1_orders__reference__get: {
+        parameters: {
+            query?: never;
+            header?: {
+                "X-Order-Access-Token"?: string | null;
+            };
+            path: {
+                reference: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OrderOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    cancel_order_api_v1_orders__reference__cancel_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "X-Order-Access-Token"?: string | null;
+            };
+            path: {
+                reference: string;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["CancelOrderIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["OrderOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    report_failure_api_v1_payments_report_failure_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "X-Order-Access-Token"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["PaymentFailureIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentResultOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    retry_payment_api_v1_payments_retry_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "X-Order-Access-Token"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["RetryPaymentIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["RetryPaymentOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    simulator_pay_api_v1_payments_simulator_pay_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "X-Order-Access-Token"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["SimulatorPayIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["SimulatorPayOut"];
+                };
+            };
+            /** @description Validation Error */
+            422: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["HTTPValidationError"];
+                };
+            };
+        };
+    };
+    verify_payment_api_v1_payments_verify_post: {
+        parameters: {
+            query?: never;
+            header?: {
+                "X-Order-Access-Token"?: string | null;
+            };
+            path?: never;
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["VerifyPaymentIn"];
+            };
+        };
+        responses: {
+            /** @description Successful Response */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "application/json": components["schemas"]["PaymentResultOut"];
                 };
             };
             /** @description Validation Error */

@@ -84,3 +84,16 @@ wrong-password message, and "no page scrolls sideways on a phone" for 10 routes.
 
 New E2E coverage: cart journey (one-of-a-kind quantity limit, add two pieces, change quantity,
 WELCOME5 coupon with cap, remove line, no sideways scrolling with items) and expired-coupon message.
+
+### 2026-10-15 — Phase 6 checkpoint (checkout, payments, orders)
+| Suite | Command | Result |
+|-------|---------|--------|
+| Full static + unit/API + build | `powershell -File scripts/check.ps1` | All checks passed (initial JS 94 kB gzip; checkout chunk 5.4 kB gzip) |
+| Backend | `pytest -q` | 243 passed (21 checkout, 31 payment/webhook/expiry/cancel, 1 two-connection concurrency) |
+| Frontend unit | `vitest run` | 44 passed (6 files; 5 new checkout tests) |
+| End-to-end | `playwright test` ×2 (desktop + mobile, rate limits off, simulator) | 42 passed each run |
+
+New E2E coverage: guest checkout → simulated payment → confirmation → cancellation (J3, J11);
+failed payment → retry → paid (J4); signed-in checkout → order history → cancel; axe scan of the
+checkout page with delivery options. After both runs the dev stock levels were unchanged (test
+orders are cancelled, which restocks them). Razorpay itself was tested against a mocked API only.

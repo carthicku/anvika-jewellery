@@ -1,4 +1,4 @@
-import { Heart, LogOut, MapPin, ShieldCheck, User, UserRound } from 'lucide-react';
+import { Heart, LogOut, MapPin, Package, ShieldCheck, User, UserRound } from 'lucide-react';
 import { Navigate, NavLink, Outlet, useLocation } from 'react-router';
 
 import { useLogout, useMe, useResendVerification } from '@/api/queries/account';
@@ -11,6 +11,7 @@ import { errorMessage } from '@/lib/forms';
 
 const NAV = [
   { to: '/account', label: 'Overview', icon: UserRound, end: true },
+  { to: '/account/orders', label: 'Orders', icon: Package },
   { to: '/account/profile', label: 'Profile', icon: User },
   { to: '/account/addresses', label: 'Addresses', icon: MapPin },
   { to: '/account/wishlist', label: 'Wishlist', icon: Heart },

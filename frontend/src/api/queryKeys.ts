@@ -21,4 +21,7 @@ export const queryKeys = {
   suggest: (q: string) => ['suggest', q] as const,
   content: (slug: string) => ['content', slug] as const,
   pincode: (pin: string) => ['pincode', pin] as const,
+  checkoutQuote: (pin: string, method: string) => ['checkout', 'quote', pin, method] as const,
+  orders: ['orders'] as const,
+  order: (reference: string) => ['order', reference] as const,
 };

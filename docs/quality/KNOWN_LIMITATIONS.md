@@ -23,7 +23,14 @@ owner. Keep it current. Each item states its impact and the plan.
   pre-rendering or an edge function to be fully reliable.
 
 ## Technical
-* Until Phase 6, "Proceed to checkout" is visible but disabled with an explanation.
+* Razorpay has been exercised only against a mocked API in automated tests; a run with real
+  test-mode keys is pending (no keys provided). No real money has moved.
+* Refunds are recorded (`requested`) but executed with Razorpay only once the admin refund screen
+  exists (Phase 7). Status/shipment/refund emails also arrive with Phase 7.
+* The payment simulator remembers simulated payments in memory only; after an API restart the
+  reconciliation job cannot see them (development only — no money involved).
+* Guests keep their order access token in `sessionStorage` for the current tab; reopening the
+  order later needs the link from the confirmation email.
 * Admin TOTP MFA: planned for Phase 7, not yet implemented.
 * Registration reveals whether an email already has an account (`EMAIL_IN_USE`) — a usability
   trade-off mitigated by rate limiting. Passwords are not checked against breached-password lists.

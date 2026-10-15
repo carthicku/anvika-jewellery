@@ -5,6 +5,13 @@ All notable changes to this project. Format based on [Keep a Changelog](https://
 ## [Unreleased]
 
 ### Added
+- Phase 6: checkout (guest or signed-in, saved addresses, delivery options by PIN code, billing
+  address, order note, terms), idempotent order creation with stock reservation and total
+  confirmation, Razorpay REST integration and a development payment simulator, signature +
+  provider verification, webhooks, failure/retry, expiry and reconciliation job
+  (`reconcile-payments` CLI), late-capture handling, customer cancellation with restock and refund
+  request, order confirmation page (guest private link), account order history and detail with
+  timeline, order confirmation/cancellation emails, optional stale-gold-rate checkout block.
 - Phase 5: shopping cart for guests and customers (merged at sign-in) with backend-calculated
   totals, quantity limits by stock, price-increase acceptance, price-drop notices, coupons
   (WELCOME5/EXPIRED10 samples), estimated shipping; add to cart / buy now on product pages with a

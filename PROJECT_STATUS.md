@@ -1,9 +1,9 @@
 # Project Status
 
-**Last updated:** 2026-10-14
-**Current phase:** Phase 6 — Checkout, payments and orders (next)
-**Last verified checkpoint:** Phase 5 — cart and pricing
-(`scripts/check.ps1` all green; 190 backend tests, 39 frontend tests, 34 E2E runs ×2, axe clean)
+**Last updated:** 2026-10-15
+**Current phase:** Phase 7 — Administration (next)
+**Last verified checkpoint:** Phase 6 — checkout, payments and orders
+(`scripts/check.ps1` all green; 243 backend tests, 44 frontend tests, 42 E2E runs ×2, axe clean)
 
 ## What exists
 * Planning documentation, ADRs 0001–0009, task tracker, `CLAUDE.md`, 11 skills.
@@ -28,6 +28,11 @@
   with estimated shipping, coupons, price-increase acceptance, stock/quantity limits; add to cart and
   buy now on product pages.
 
+* **Checkout & orders (Phase 6)**: checkout for guests and customers, idempotent order creation with
+  stock reservation and total confirmation, Razorpay REST client + development simulator, verified
+  payments only (signature + provider fetch), webhooks, retry, expiry/reconciliation job, late-capture
+  handling, cancellation with restock and refund request, confirmation page, order history, emails.
+
 ## What works (verified — see docs/quality/TEST_RESULTS.md)
 | Item | Evidence |
 |------|----------|
@@ -40,10 +45,11 @@
 | Accounts & access control | `tests/api/test_auth.py`, `test_account.py`, `test_permissions.py`, `e2e/account.spec.ts` |
 | No sideways scrolling on phones | `e2e/smoke.spec.ts` (11 routes), `e2e/cart.spec.ts` |
 | Cart, coupons, price-change rules | `tests/api/test_cart.py`, `cart.test.tsx`, `e2e/cart.spec.ts` |
+| Checkout, payments, webhooks, expiry, cancellation | `tests/api/test_checkout.py`, `test_payments.py`, `test_inventory_concurrency.py`, `checkout.test.tsx`, `e2e/checkout.spec.ts` |
 
 ## Not yet built
-Checkout, payments and orders (Phase 6), admin UI (Phase 7), launch prep (Phase 8). The cart's
-"Proceed to checkout" button is disabled with an explanation until Phase 6.
+Admin UI (Phase 7: products, inventory, orders/shipments/refunds, coupons, gold rates, settings…)
+and launch prep (Phase 8). Payments have not yet been run with real Razorpay test keys.
 
 ## Local ports
 Web **5180**, API **8010**, PostgreSQL **54329** (5173 and 8000 are used by other projects here).
@@ -53,13 +59,13 @@ Nothing blocks development. Needed before launch: brand details, Razorpay test k
 project, SMTP provider, CA review of GST, legal review of policies (ASSUMPTIONS §5).
 
 ## Next step
-Phase 6: orders, order items (immutable snapshots), reservations, payment attempts/events, refunds,
-shipments; idempotent order creation with stock reservation and expected-total check; Razorpay REST
-client + development simulator; signature verification, webhooks, retries, expiry/reconciliation
-jobs; checkout page, simulated payment dialog, order confirmation and order history.
+Phase 7: admin layout and guard, audit log, dashboard (incl. payment-review orders and stale-rate
+warning), products/variants/images, categories/collections, inventory adjustments, order management
+(status, shipments, refunds via Razorpay), customers, discounts/coupons, gold rates with preview,
+shipping, content, returns, settings, audit viewer, staff users.
 
 ## How to resume
-1. Read `CLAUDE.md`, this file, `tasks/PHASE_06_PAYMENTS_AND_ORDERS.md`.
+1. Read `CLAUDE.md`, this file, `tasks/PHASE_07_ADMIN_AND_INVENTORY.md`.
 2. Terminal 1: `npm run db:start` (repo root).
 3. Terminal 2: `cd backend && .venv/Scripts/python -m uvicorn app.main:app --reload --port 8010`
    (for `npm run e2e`, start it with `RATE_LIMIT_ENABLED=false` — see docs/development/TESTING.md).

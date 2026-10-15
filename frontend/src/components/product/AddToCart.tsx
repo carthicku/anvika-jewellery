@@ -31,7 +31,7 @@ export function AddToCart({ product, variant }: { product: ProductDetail; varian
       {
         onSuccess: () => {
           if (thenCheckout) {
-            void navigate('/cart');
+            void navigate('/checkout');
           } else {
             notify(
               `Added ${product.name}${variant.size ? ` (${variant.label})` : ''} to your cart`,

@@ -13,6 +13,7 @@ import {
   type CartLine,
 } from '@/api/queries/cart';
 import { Container, PageHeader, PageMeta } from '@/components/layout/Page';
+import { PriceSummary } from '@/components/orders/PriceSummary';
 import { ProductImage } from '@/components/product/ProductImage';
 import { Button } from '@/components/ui/Button';
 import { Alert, Badge, EmptyState, ErrorState, Skeleton } from '@/components/ui/Feedback';
@@ -215,38 +216,11 @@ function Summary({ cart }: { cart: Cart }) {
       </div>
       {totals && (
         <>
-          <table className="mt-6 w-full text-sm">
-            <caption className="sr-only">Price summary</caption>
-            <tbody>
-              {totals.breakdown.map((row) => {
-                const paise = totals.breakdown.some((r) => hasPaise(r.amount));
-                const negative = row.amount.startsWith('-');
-                return (
-                  <tr
-                    key={row.key}
-                    className={cn(
-                      row.key === 'total' && 'border-t border-line text-base font-medium',
-                    )}
-                  >
-                    <th scope="row" className="py-1.5 text-left font-normal">
-                      {row.key === 'total'
-                        ? 'Total (incl. GST)'
-                        : row.key === 'shipping'
-                          ? `Shipping (${totals.shipping_label ?? 'estimated'})`
-                          : row.label}
-                    </th>
-                    <td className={cn('tabular py-1.5 text-right', negative && 'text-success')}>
-                      {row.key === 'shipping' && row.amount === '0.00'
-                        ? 'Free'
-                        : negative
-                          ? `− ${formatMoney(row.amount.slice(1), { paise })}`
-                          : formatMoney(row.amount, { paise })}
-                    </td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
+          <PriceSummary
+            className="mt-6"
+            rows={totals.breakdown}
+            shippingLabel={totals.shipping_label}
+          />
           {totals.free_shipping_above && totals.shipping_fee !== '0.00' && (
             <p className="mt-2 text-xs text-ink-muted">
               Free {totals.shipping_label?.toLowerCase() ?? 'delivery'} on orders above{' '}
@@ -255,14 +229,22 @@ function Summary({ cart }: { cart: Cart }) {
           )}
         </>
       )}
-      <Button size="lg" className="mt-6 w-full" disabled aria-describedby="checkout-note">
-        Proceed to checkout <ArrowRight className="size-4" aria-hidden="true" />
-      </Button>
-      <p id="checkout-note" className="mt-2 text-xs text-ink-muted">
-        {cart.can_checkout
-          ? 'Online checkout opens in the next release of this store.'
-          : 'Resolve the items highlighted in your cart to continue.'}
-      </p>
+      {cart.can_checkout ? (
+        <Button asChild size="lg" className="mt-6 w-full">
+          <Link to="/checkout">
+            Proceed to checkout <ArrowRight className="size-4" aria-hidden="true" />
+          </Link>
+        </Button>
+      ) : (
+        <>
+          <Button size="lg" className="mt-6 w-full" disabled aria-describedby="checkout-note">
+            Proceed to checkout <ArrowRight className="size-4" aria-hidden="true" />
+          </Button>
+          <p id="checkout-note" className="mt-2 text-xs text-ink-muted">
+            Resolve the items highlighted in your cart to continue.
+          </p>
+        </>
+      )}
       <Link
         to="/collections"
         className="mt-4 block text-center text-sm underline underline-offset-4"

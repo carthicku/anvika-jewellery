@@ -108,18 +108,19 @@ Legend: 🌐 public · 👤 signed-in customer · 🔑 staff/admin (permission i
 | POST | `/wishlist/merge` | 👤 | Merge the guest (browser) wishlist, max 50 slugs |
 
 ### Checkout & payments
-| POST | `/checkout/quote` | 🌐 | Address PIN, shipping method → full breakdown (no side effects) |
-| POST | `/checkout/orders` | 🌐 (`Idempotency-Key`) | Validates cart + `expected_total`, reserves stock, creates pending order and provider order; returns order reference, guest access token (guests), and checkout data |
-| POST | `/payments/verify` | 🌐 (order access) | Verifies checkout signature + fetches payment → marks paid |
-| POST | `/payments/retry` | 🌐 (order access) | New provider order for a still-pending order |
-| POST | `/payments/simulator/pay` | 🌐 **dev/test only** | Simulator "pop-up" result (success / failure) |
+| POST | `/checkout/quote` | 🌐 | `{pincode, shipping_method?}` → `{cart (priced with that method), serviceable, message, shipping_options, shipping_method}` (no side effects) |
+| POST | `/checkout/orders` | 🌐 (`Idempotency-Key`, 16–64 chars) | `{email (guests), shipping_address, billing_address?, shipping_method, expected_total, terms_accepted, customer_note?}`. Re-prices, reserves stock, creates the pending order, then the provider order. Returns `{order, access_token (guests only), payment (pop-up data) \| null, payment_error}`. Errors: `409 PRICE_CHANGED` (`details.grand_total`), `CART_NOT_READY` (`details.blocking_issues`), `CART_EMPTY`, `OUT_OF_STOCK`, `IDEMPOTENCY_KEY_REUSED`, `PAYMENT_IN_PROGRESS`; `422 COUPON_USAGE_LIMIT`, field errors (`shipping_address.pincode`, …) |
+| POST | `/payments/verify` | 🌐 (order access) | `{reference, provider_order_id, provider_payment_id, signature}` → signature checked against the stored provider order, payment fetched from the provider → `{outcome: paid\|processing\|failed\|review, message, order}`; `400 PAYMENT_VERIFICATION_FAILED` |
+| POST | `/payments/report-failure` | 🌐 (order access) | Pop-up reported a failure; records only what the provider confirms |
+| POST | `/payments/retry` | 🌐 (order access) | New provider order for a still-pending order (`409 ORDER_NOT_PAYABLE`, `PAYMENT_IN_PROGRESS`) |
+| POST | `/payments/simulator/pay` | 🌐 **dev/test only** (404 with a real provider) | Simulator "pop-up" result (success / failure) |
 | POST | `/webhooks/razorpay` | 🔒 HMAC | Razorpay events (idempotent by event id) |
 
 ### Orders
 | GET | `/orders` | 👤 | Own orders (paginated) |
 | GET | `/orders/{reference}` | 👤 owner, or 🌐 with `X-Order-Access-Token` | Order detail + timeline |
-| POST | `/orders/{reference}/cancel` | owner / guest token | Cancel when eligible |
-| POST | `/orders/{reference}/returns` | 👤 owner | Return/exchange request when eligible |
+| POST | `/orders/{reference}/cancel` | owner / guest token | `{reason?}`. Unpaid → released; paid & not yet processing → restocked + full refund requested. `409 CANNOT_CANCEL`, `PAYMENT_IN_PROGRESS` |
+| POST | `/orders/{reference}/returns` | 👤 owner | Return/exchange request when eligible (Phase 7) |
 
 ### Content & engagement
 | GET | `/settings/public` | 🌐 | Store name, announcement, contact placeholders, payment provider mode |

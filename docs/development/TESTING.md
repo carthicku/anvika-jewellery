@@ -44,7 +44,9 @@ npm run e2e          # starts the Vite dev server automatically; backend must al
 npm run e2e -- --ui  # interactive mode
 ```
 E2E tests create their own customers through the API (`/auth/register`) and use seeded products.
-They never perform real financial transactions.
+They never perform real financial transactions: checkout tests pay with the development simulator,
+then cancel each order, which puts the piece back in stock — so repeated runs don't use up the
+sample catalogue.
 
 ## Static checks
 | Check | Command |

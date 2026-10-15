@@ -19,7 +19,10 @@ Goal: the owner can run the store without editing code.
 - [ ] Gold rates: current, history, preview of affected prices, large-change confirmation
 - [ ] Shipping methods & zones
 - [ ] Content pages editor (markdown, preview), reviews moderation (+ customer review submission)
-- [ ] Returns workflow (customer request + admin decisions + restock)
+- [ ] Returns workflow (customer request + admin decisions + restock) incl. `return_requests` table
+- [ ] Order status / shipment / refund emails (triggered by admin actions)
+- [ ] Execute requested refunds with Razorpay (`payments.refund`), refund webhooks end to end
+- [ ] Dashboard list of `payment_review` orders and stale gold-rate warning
 - [ ] Settings (store info placeholders, announcement, tax rates, thresholds)
 - [ ] Audit logs viewer; staff user management (admin only)
 - [ ] Optional TOTP MFA for staff/admin

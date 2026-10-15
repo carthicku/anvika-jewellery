@@ -82,6 +82,23 @@ When `PAYMENT_PROVIDER=simulator`:
   code runs.
 * Settings validation refuses to start the app with the simulator when `APP_ENV=production`.
 
+## 3a. Implementation notes (Phase 6)
+* Code: `services/payment_gateway.py` (Razorpay REST client + simulator), `services/payments.py`
+  (`start_payment`, `verify_checkout`, `report_failure`, `retry_payment`, `mark_order_paid`,
+  `sync_payment`, webhooks, `expire_and_reconcile`), `services/checkout.py`, `services/orders.py`.
+* `POST /payments/report-failure` lets the pop-up's failure callback record the failure — the backend
+  fetches the payment from the provider and records only what the provider says.
+* A **different** captured payment for an order that is already paid creates a `refunds` row
+  (`requested`, reason "Duplicate payment …") for an admin to execute.
+* A newer checkout from the same cart replaces an unpaid pending order (it becomes `expired`,
+  stock released, flagged `superseded`); a capture for a replaced or cancelled order always goes to
+  `payment_review`.
+* Webhook payloads are stored **sanitised** (ids, amounts, status, method, error code/description;
+  no card, VPA, bank, email or phone fields).
+* Simulator payment ids are signed with `SIMULATOR_SECRET`. Its list of payments per provider order
+  lives in memory, so reconciliation (`run-jobs`, `reconcile-payments`) only finds simulated payments
+  made in the same running process. Restarting the API also changes the default random secret.
+
 ## 4. Data stored
 | Stored | Not stored |
 |--------|-----------|

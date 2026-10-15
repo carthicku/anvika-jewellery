@@ -23,21 +23,21 @@ the test listed**. Update this file whenever a feature changes state.
 | Accounts | Forgot / reset password | `/forgot-password`, `/reset-password` | 4 | ✅ | `test_forgot_password_never_reveals_accounts`, `test_reset_password_flow`, expiry + single-use tests |
 | Accounts | Profile, addresses | `/account/profile`, `/account/addresses` | 4 | ✅ | `test_account.py`, `account.test.tsx`, `e2e/account.spec.ts` |
 | Accounts | Security: change password, sessions | `/account/security` | 4 | ✅ | `test_change_password_keeps_current_session_only`, `test_list_and_revoke_sessions`, `test_logout_all` |
-| Accounts | Order history & detail with timeline | `/account/orders` | 6 | ⬜ | |
+| Accounts | Order history & detail with timeline | `/account/orders` | 6 | ✅ | `test_signed_in_order_uses_account_email_and_is_private`, `e2e/checkout.spec.ts` (signed-in journey) |
 | Wishlist | Guest (browser) + signed-in + merge | `/wishlist`, `/account/wishlist` | 2/4 | ✅ | `test_wishlist_add_remove_and_merge`, `test_wishlists_are_private`, `account.test.tsx` (merge on sign-in, server save), `e2e/browse.spec.ts` |
 | Cart | Server cart, guest cookie, merge on login | `/cart` | 5 | ✅ | `tests/api/test_cart.py` (17), `cart.test.tsx`, `e2e/cart.spec.ts` |
 | Pricing | Engine (fixed, weight-based, making, wastage, stones, tax, rounding) | service | 3 | ✅ | `tests/unit/test_pricing.py` (37 tests incl. worked example) |
 | Pricing | Automatic discounts + coupons | `/cart/coupon` | 5 | ✅ | `test_pricing.py`, `test_valid_coupon_applies_with_cap`, `test_invalid_coupons_explain_why`, `test_coupon_below_minimum_is_kept_but_not_applied`, `e2e/cart.spec.ts` |
 | Pricing | Price-change acceptance | `/cart/accept-prices` | 5 | ✅ | `test_price_increase_blocks_checkout_until_accepted`, `test_price_decrease_is_good_news_and_does_not_block`, `cart.test.tsx` |
-| Checkout | Quote, address, shipping, terms, idempotent order creation | `/checkout` | 6 | ⬜ | |
-| Payments | Razorpay order + verify + fetch | `/payments/verify` | 6 | ⬜ | |
-| Payments | Webhooks (idempotent) | `/webhooks/razorpay` | 6 | ⬜ | |
-| Payments | Retry, expiry, reconciliation, late capture | jobs | 6 | ⬜ | |
-| Payments | Dev simulator (non-production) | `/payments/simulator/pay` | 6 | ⬜ | |
-| Orders | Confirmation page (owner / guest token) | `/order-confirmation/:ref` | 6 | ⬜ | |
-| Orders | Cancellation | `/orders/{ref}/cancel` | 6 | ⬜ | |
+| Checkout | Quote, address, shipping, terms, idempotent order creation | `/checkout` | 6 | ✅ | `tests/api/test_checkout.py` (21), `checkout.test.tsx`, `e2e/checkout.spec.ts` |
+| Payments | Razorpay order + verify + fetch | `/payments/verify` | 6 | ✅ (mocked Razorpay; real test keys pending) | `test_full_checkout_against_mocked_razorpay`, `test_forged_signature_is_rejected`, `test_amount_mismatch_never_marks_paid` |
+| Payments | Webhooks (idempotent) | `/webhooks/razorpay` | 6 | ✅ | `test_webhook_capture_confirms_once_and_ignores_duplicates`, `test_webhook_with_bad_signature_is_rejected_and_not_stored` |
+| Payments | Retry, expiry, reconciliation, late capture | jobs | 6 | ✅ | `test_failed_payment_can_be_retried`, `test_unpaid_order_expires_and_releases_stock_and_coupon`, `test_late_capture_*`, `test_provider_outage_never_expires_an_order_blindly` |
+| Payments | Dev simulator (non-production) | `/payments/simulator/pay` | 6 | ✅ | `test_simulator_endpoint_is_unavailable_with_a_real_provider`, production settings test |
+| Orders | Confirmation page (owner / guest token) | `/order-confirmation/:ref` | 6 | ✅ | `test_guest_order_needs_its_access_token`, `e2e/checkout.spec.ts` |
+| Orders | Cancellation | `/orders/{ref}/cancel` | 6 | ✅ | `test_cancel_*`, `e2e/checkout.spec.ts` |
 | Orders | Returns / exchanges | `/orders/{ref}/returns` | 7 | ⬜ | |
-| Email | Outbox + templates + file sink + SMTP | jobs | 6 | ⬜ | |
+| Email | Outbox + templates + file sink + SMTP | jobs | 6 | ⚠️ outbox, templates and file/memory sinks verified; SMTP not tried against a real server | `test_verified_payment_confirms_order_and_sells_stock` (confirmation email), auth email tests |
 | Admin | Auth, RBAC, audit logs | `/admin/*` | 4/7 | ⚠️ | Permission map + route guard test + `create-admin` CLI with audit (`test_permissions.py`); admin UI in Phase 7 |
 | Admin | Dashboard | `/admin` | 7 | ⬜ | |
 | Admin | Products, variants, images | `/admin/products` | 7 | ⬜ | |

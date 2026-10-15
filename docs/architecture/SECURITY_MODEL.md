@@ -13,7 +13,7 @@ access, and secrets (JWT key, Razorpay keys, SMTP and DB passwords).
 | # | Threat | Control | Where |
 |---|--------|---------|-------|
 | 1 | Price/total tampering from the browser | Prices recalculated server-side; browser `expected_total` used only as a consent check; Razorpay amount from DB | `services/pricing.py`, `services/checkout.py` |
-| 2 | Fake payment success (forged redirect/callback) | HMAC signature with server-stored order id + payment fetched from Razorpay + amount/currency/status checks | `services/payments/` |
+| 2 | Fake payment success (forged redirect/callback) | HMAC signature with server-stored order id + payment fetched from Razorpay + amount/currency/status checks | `services/payments.py`, `services/payment_gateway.py` |
 | 3 | Forged or replayed webhooks | HMAC over raw body; unique `event_id`; idempotent processing | `routes/webhooks.py` |
 | 4 | Overselling / race conditions | Row locks, CHECK constraints, single transaction | `services/inventory.py` |
 | 5 | Duplicate orders | `Idempotency-Key` unique; reuse of pending order | `services/checkout.py` |

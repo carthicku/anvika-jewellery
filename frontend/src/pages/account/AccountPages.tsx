@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Heart, MapPin, Monitor, Pencil, Plus, ShieldCheck, Trash2 } from 'lucide-react';
+import { Heart, MapPin, Monitor, Package, Pencil, Plus, ShieldCheck, Trash2 } from 'lucide-react';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router';
@@ -38,6 +38,12 @@ export function AccountOverviewPage() {
   if (!user) return null;
   const defaultAddress = addresses.data?.find((a) => a.is_default_shipping);
   const cards = [
+    {
+      to: '/account/orders',
+      icon: Package,
+      title: 'Orders',
+      text: 'Track, pay for or cancel orders',
+    },
     {
       to: '/account/profile',
       icon: Pencil,
@@ -80,9 +86,6 @@ export function AccountOverviewPage() {
             </li>
           ))}
         </ul>
-        <p className="mt-8 text-sm text-ink-muted">
-          Order history will appear here once online ordering opens.
-        </p>
       </AccountSection>
     </>
   );

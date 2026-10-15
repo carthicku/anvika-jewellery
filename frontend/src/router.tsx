@@ -66,6 +66,18 @@ export const routes: RouteObject[] = [
         }),
       },
       {
+        path: 'checkout',
+        lazy: async () => ({
+          Component: (await import('@/pages/checkout/CheckoutPage')).CheckoutPage,
+        }),
+      },
+      {
+        path: 'order-confirmation/:reference',
+        lazy: async () => ({
+          Component: (await import('@/pages/orders/OrderPages')).OrderConfirmationPage,
+        }),
+      },
+      {
         path: 'contact',
         lazy: async () => ({
           Component: (await import('@/pages/storefront/ContactPage')).ContactPage,
@@ -113,6 +125,18 @@ export const routes: RouteObject[] = [
             path,
             lazy: async () => ({ Component: (await import('@/pages/account/AccountPages'))[name] }),
           })),
+          {
+            path: 'orders',
+            lazy: async () => ({
+              Component: (await import('@/pages/orders/OrderPages')).AccountOrdersPage,
+            }),
+          },
+          {
+            path: 'orders/:reference',
+            lazy: async () => ({
+              Component: (await import('@/pages/orders/OrderPages')).AccountOrderDetailPage,
+            }),
+          },
         ],
       },
       { path: '*', element: <NotFoundPage /> },

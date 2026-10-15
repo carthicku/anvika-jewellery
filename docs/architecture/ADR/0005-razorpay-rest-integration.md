@@ -9,14 +9,14 @@ surface we need is small (create order, fetch payment, create refund). Razorpay 
 yet available, but automated tests and local end-to-end testing still need a payment step.
 
 ## Decision
-- `backend/app/services/payments/razorpay.py` calls `https://api.razorpay.com/v1` with `httpx` using
+- `backend/app/services/payment_gateway.py` (`RazorpayGateway`) calls `https://api.razorpay.com/v1` with `httpx` using
   HTTP Basic auth (key id + key secret, backend only).
 - Checkout signature: `HMAC_SHA256(razorpay_order_id + "|" + razorpay_payment_id, key_secret)`.
 - Webhook signature: `HMAC_SHA256(raw_request_body, webhook_secret)` from `X-Razorpay-Signature`;
   `X-Razorpay-Event-Id` is stored with a unique constraint for idempotency.
 - After a valid checkout signature, the backend **also fetches the payment** from Razorpay and checks
   `status`, `amount`, `currency` and `order_id` before marking an order paid.
-- `PAYMENT_PROVIDER=simulator` enables `backend/app/services/payments/simulator.py`, which mimics
+- `PAYMENT_PROVIDER=simulator` enables `backend/app/services/payment_gateway.py` (`SimulatorGateway`), which mimics
   Razorpay's signatures using a local secret. It is rejected at startup when `APP_ENV=production`,
   the UI shows a "SIMULATED PAYMENT — no money moves" notice, and such orders keep
   `provider='simulator'` permanently.

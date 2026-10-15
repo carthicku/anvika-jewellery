@@ -48,3 +48,28 @@ test('keyboard users can reach the main content and open search', async ({ page,
   // Focus returns to the button that opened the dialog.
   expect(await focused()).toBe('Search');
 });
+
+test('no serious accessibility violations on the checkout page (with delivery options)', async ({
+  page,
+  isMobile,
+}) => {
+  await page.goto('/products/om-pendant');
+  await (
+    isMobile
+      ? page.getByRole('button', { name: 'Add Om Pendant to cart' })
+      : page.getByRole('button', { name: 'Add to cart', exact: true })
+  ).click();
+  await expect(page.getByRole('link', { name: /^Cart, [1-9]/ }).first()).toBeVisible();
+  await page.goto('/checkout');
+  await page.getByLabel(/^PIN code/).fill('560001');
+  await expect(page.getByRole('radio', { name: /Standard delivery/ })).toBeChecked();
+  const results = await new AxeBuilder({ page })
+    .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'wcag22aa'])
+    .analyze();
+  const serious = results.violations.filter(
+    (v) => v.impact === 'serious' || v.impact === 'critical',
+  );
+  expect(
+    serious.map((v) => `${v.id}: ${v.help} (${v.nodes.map((n) => n.target.join(' ')).join(', ')})`),
+  ).toEqual([]);
+});
