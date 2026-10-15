@@ -129,6 +129,7 @@ def get_dashboard(
         paid_orders=d.paid_orders,
         paid_revenue=d.paid_revenue,
         refunded=d.refunded,
+        net_revenue=d.net_revenue,
         paid_orders_today=d.paid_orders_today,
         pending_payment=d.pending_payment,
         payment_review=d.payment_review,

@@ -63,6 +63,8 @@ class DashboardOut(BaseModel):
     paid_orders: int
     paid_revenue: MoneyStr
     refunded: MoneyStr
+    # Paid in the period minus refunds processed in the period.
+    net_revenue: MoneyStr
     paid_orders_today: int
     pending_payment: int
     payment_review: int

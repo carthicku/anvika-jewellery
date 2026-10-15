@@ -334,6 +334,9 @@ def test_dashboard_counts_only_paid_money(
     assert Decimal(after["paid_revenue"]) - Decimal(before["paid_revenue"]) == Decimal(
         paid["order"]["totals"]["grand_total"]
     )
+    assert Decimal(after["net_revenue"]) == Decimal(after["paid_revenue"]) - Decimal(
+        after["refunded"]
+    )
     assert after["pending_payment"] == before["pending_payment"] + 1
     assert after["to_fulfil"] == before["to_fulfil"] + 1
     assert any(b["product_slug"] == "everyday-gold-band" for b in after["best_sellers"])

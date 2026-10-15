@@ -176,6 +176,53 @@ def create_customer(args: argparse.Namespace, settings: Settings) -> int:
     return _create_user(settings, args.email, args.name, "customer")
 
 
+def _e2e_args(parser: argparse.ArgumentParser) -> None:
+    parser.add_argument("--output", required=True, help="JSON file to write (must be git-ignored)")
+
+
+E2E_ADMIN_EMAIL = "e2e-admin@example.com"
+
+
+@command(
+    "e2e-admin",
+    "DEVELOPMENT ONLY: create/reset the end-to-end test admin with a new random password.",
+    _e2e_args,
+)
+def e2e_admin(args: argparse.Namespace, settings: Settings) -> int:
+    """Used by Playwright's global setup. The password is random on every run and written only to
+    the given (git-ignored) file, so no admin password ever exists in the source code."""
+    import json
+    import secrets
+    from pathlib import Path
+
+    from sqlalchemy import select
+
+    from app.core.security import hash_password
+    from app.models import User
+    from app.services.auth import revoke_all_sessions
+
+    if settings.is_production:
+        print("e2e-admin is disabled in production.")
+        return 2
+    password = secrets.token_urlsafe(24)
+    with _session(settings) as db:
+        user = db.scalar(select(User).where(User.email == E2E_ADMIN_EMAIL))
+        if user is None:
+            user = User(email=E2E_ADMIN_EMAIL, full_name="E2E Admin", role="admin")
+            db.add(user)
+        user.password_hash = hash_password(password)
+        user.role = "admin"
+        user.is_active = True
+        db.flush()
+        revoke_all_sessions(db, user.id, "e2e_reset")
+        db.commit()
+    out = Path(args.output)
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(json.dumps({"email": E2E_ADMIN_EMAIL, "password": password}), encoding="utf-8")
+    print(f"E2E admin ready ({E2E_ADMIN_EMAIL}); credentials written to {out}.")
+    return 0
+
+
 def _email_arg(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--email", required=True)
 

@@ -3178,6 +3178,10 @@
             "title": "Low Stock",
             "type": "array"
           },
+          "net_revenue": {
+            "title": "Net Revenue",
+            "type": "string"
+          },
           "paid_orders": {
             "title": "Paid Orders",
             "type": "integer"
@@ -3227,6 +3231,7 @@
           "paid_orders",
           "paid_revenue",
           "refunded",
+          "net_revenue",
           "paid_orders_today",
           "pending_payment",
           "payment_review",

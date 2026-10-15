@@ -42,6 +42,7 @@ class Dashboard:
     paid_orders: int
     paid_revenue: Decimal
     refunded: Decimal
+    net_revenue: Decimal
     paid_orders_today: int
     pending_payment: int
     payment_review: int
@@ -134,6 +135,7 @@ def build(db: Session, date_from: datetime | None, date_to: datetime | None) -> 
         paid_orders=paid_orders,
         paid_revenue=paid_revenue or ZERO,
         refunded=refunded or ZERO,
+        net_revenue=(paid_revenue or ZERO) - (refunded or ZERO),
         paid_orders_today=paid_today,
         pending_payment=count("pending_payment"),
         payment_review=len(review_orders),
