@@ -39,7 +39,10 @@ Tick an item only with evidence. Record the date and who verified it.
 
 ## Quality
 - [ ] `scripts/check` all green (lint, types, unit, API tests) — results recorded in TEST_RESULTS.md.
-- [ ] Playwright journeys J1–J12 pass against staging.
+- [ ] `docker build` of `backend/` succeeds and `docker compose -f deploy/docker-compose.prod.yml up -d`
+      starts both containers healthy (never run so far — no Docker on the dev machine).
+- [ ] Playwright journeys J1–J12 pass against staging
+      (`E2E_BASE_URL=https://staging… npx playwright test -c playwright.prod.config.ts`).
 - [ ] Accessibility: axe scans pass, plus a manual keyboard pass of checkout.
 - [ ] Lighthouse (mobile) on home, listing and product pages recorded in PERFORMANCE_REVIEW.md.
 - [ ] `pip-audit` and `npm audit --omit=dev` reviewed; no known high/critical issues unaddressed.
@@ -48,7 +51,27 @@ Tick an item only with evidence. Record the date and who verified it.
 ## Go-live
 - [ ] The first administrator was created with `create-admin`; staff accounts were given least
       privilege.
-- [ ] Uptime monitoring and alert contacts configured.
-- [ ] `robots.txt` allows the storefront and disallows `/account`, `/checkout`, `/admin`, `/cart`.
+- [ ] Uptime monitoring and alert contacts configured; daily `verify-integrity` cron with an alert
+      (MONITORING.md).
+- [ ] `ALLOW_SEARCH_INDEXING=true` set on the live site only; `/robots.txt` then allows the
+      storefront, disallows `/account`, `/checkout`, `/admin`, `/cart` and lists the sitemap.
       Sitemap submitted to Google Search Console.
 - [ ] Post-deploy smoke test: home, product, add to cart, checkout up to payment, admin login.
+
+## Walkthrough 2026-10-15 (development machine, before staging)
+Boxes above stay unticked until checked in the real environment. What could be checked locally:
+| Item | Local result | Still needed |
+|------|--------------|--------------|
+| Business & legal | Placeholders only; `catalogue-report --samples` lists 31 published sample products (exit 1, as designed) | All owner items |
+| `APP_ENV=production` refuses unsafe config | ✅ `test_settings.py` (simulator, weak/missing secrets, insecure cookies refused) | Set real values |
+| No secrets in Git | ✅ `scripts/check-secrets.py` clean | Enable GitHub secret scanning |
+| RLS on all tables, no policies | ✅ `verify-rls` OK (dev DB); `test_every_application_table_has_row_level_security` | Run `verify-rls` on Supabase; disable the Data API |
+| Payments | ✅ simulator + mocked Razorpay API (`test_payments.py`, E2E) | Razorpay test keys on staging; webhook delivery; live activation |
+| CSP / headers | ✅ verified behind Caddy locally (E2E with CSP active) | Re-check Razorpay hosts with the real checkout script on staging |
+| Email | ✅ outbox, templates, file/memory sinks; `send-test-email` reports the sink honestly | SMTP provider, SPF/DKIM/DMARC, inbox test |
+| Backups / restore | ⏳ documented in BACKUP_AND_RESTORE.md, not exercised | Enable Supabase backups; test a restore |
+| Migrations | ✅ `alembic upgrade head` on an empty test DB every test run; `alembic check` clean | Run on Supabase before switching traffic |
+| Quality gates | ✅ `scripts/check.ps1` green; E2E 62 passed on dev and on the production build behind Caddy; axe clean; Lighthouse recorded; `npm audit`/`pip-audit` clean | Repeat on staging; manual keyboard pass of checkout by a person |
+| Data integrity | ✅ `verify-integrity` OK on the dev DB after all E2E runs | Schedule it daily |
+| Docker images | ⏳ not built (Docker unavailable) | Build and start on the server/CI |
+| robots/indexing | ✅ `/robots.txt` blocks everything by default; private areas disallowed when enabled (tests) | Turn indexing on at launch |

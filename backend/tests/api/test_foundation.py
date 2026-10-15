@@ -162,3 +162,22 @@ def test_logs_never_contain_secrets() -> None:
     assert data["headers"]["Accept"] == "json" and data["order"] == "ANV-1"
     text = TextFormatter("%(message)s").format(record)
     assert "hunter2" not in text and "Bearer xyz" not in text and "[REDACTED]" in text
+
+
+def test_client_ip_trusts_only_the_configured_proxy_hops(app: FastAPI) -> None:
+    from starlette.requests import Request
+
+    from app.core.client_ip import client_ip
+
+    def ip(forwarded: str | None, trusted: int) -> str:
+        app.state.settings = app.state.settings.model_copy(update={"trusted_proxy_count": trusted})
+        headers = [(b"x-forwarded-for", forwarded.encode())] if forwarded else []
+        scope = {"type": "http", "app": app, "headers": headers, "client": ("10.0.0.2", 1234)}
+        return client_ip(Request(scope))
+
+    # Without a trusted proxy the header is ignored (anyone can send it).
+    assert ip("1.2.3.4", 0) == "10.0.0.2"
+    # Behind one proxy (Caddy overwrites the header), the last hop is the real visitor; anything a
+    # visitor prepends is ignored.
+    assert ip("6.6.6.6, 203.0.113.9", 1) == "203.0.113.9"
+    assert ip(None, 1) == "10.0.0.2"

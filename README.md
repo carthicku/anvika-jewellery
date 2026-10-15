@@ -9,8 +9,12 @@ A production-oriented e-commerce platform for a gold jewellery retailer in India
   itemised gold price breakdown, wishlist, cart, guest and account checkout.
 * **Payments**: Razorpay, with server-side signature verification, signed webhooks and idempotent
   order processing. A clearly isolated payment simulator is available for local development.
-* **Admin dashboard**: products, images, variants, inventory, orders, gold rates, coupons, shipping,
-  content, settings and audit logs.
+* **After-sales**: order tracking, cancellation, returns/exchanges with restock and refunds, and
+  verified-purchase reviews published only after staff approval.
+* **Admin dashboard**: products, images, variants, inventory, orders, returns, reviews, gold rates,
+  coupons, shipping, content, settings, staff roles and audit logs.
+* **Operations**: data-integrity and RLS checks, a production web-server config (Caddy) and
+  container files — see [DEPLOYMENT.md](docs/operations/DEPLOYMENT.md). **Not deployed yet.**
 
 | Layer | Technology |
 |-------|-----------|
@@ -20,7 +24,8 @@ A production-oriented e-commerce platform for a gold jewellery retailer in India
 | Tests | pytest, Vitest + Testing Library, Playwright |
 
 ## Project status
-See **[PROJECT_STATUS.md](PROJECT_STATUS.md)**. Work proceeds in phases, tracked in
+See **[PROJECT_STATUS.md](PROJECT_STATUS.md)** and the delivery report
+**[docs/DELIVERY_REPORT.md](docs/DELIVERY_REPORT.md)**. Work proceeded in phases, tracked in
 [tasks/MASTER_TASKS.md](tasks/MASTER_TASKS.md).
 
 ## Quick start

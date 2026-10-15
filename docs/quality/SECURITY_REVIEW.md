@@ -23,7 +23,7 @@ Scope: architecture documents only (no code yet).
 | 4 Overselling protection | ✅ | `test_only_one_of_two_simultaneous_checkouts_gets_the_last_piece` (two real connections), `test_last_piece_goes_to_the_first_buyer`, DB CHECK `reserved <= on_hand` |
 | 5 Duplicate orders | ✅ | `test_same_idempotency_key_returns_the_same_order`, `test_unchanged_cart_reuses_the_pending_order`, `test_idempotency_key_cannot_be_replayed_by_another_cart`, `test_verifying_twice_is_harmless`, frontend reuses the key for identical retries |
 | 6 Brute-force protection | ✅ | Argon2id; `test_login_is_rate_limited_per_account`; per-IP limits on login/register/forgot/reset |
-| 7 XSS / CSP | ⚠️ partial | Markdown rendered without raw HTML (react-markdown default); JSON-LD escapes `<`; CSP pending deploy config |
+| 7 XSS / CSP | ✅ (CSP verified locally behind Caddy) | Markdown rendered without raw HTML (react-markdown default); JSON-LD escapes `<`; `deploy/Caddyfile` CSP; full E2E suite (62 tests) passes against the production build behind Caddy with the CSP active and the smoke test failing on any CSP console violation. Razorpay's checkout script itself was not loaded (simulator) — re-check hosts on staging |
 | 8 CSRF | ✅ middleware verified | `test_foundation.py` CSRF tests (missing/mismatched/foreign origin/webhook exemption) |
 | 9 Refresh rotation | ✅ | `test_refresh_rotates_and_detects_reuse`, `test_concurrent_refresh_from_two_tabs_is_not_treated_as_theft` |
 | 10 IDOR | ✅ accounts and orders | `test_customers_cannot_touch_each_others_addresses`, `test_wishlists_are_private`, session revoke scoped to owner |
@@ -31,15 +31,15 @@ Scope: architecture documents only (no code yet).
 | 12 Enumeration | ✅ login + reset (registration reveals by design) | `test_login_success_and_wrong_password_are_distinct`, `test_forgot_password_never_reveals_accounts` |
 | 13 SQL injection | ✅ catalogue search | parameterised queries only; `test_search_handles_hostile_input` (quotes, `%`, `_`, backslash, emoji, SQL fragments) |
 | 14 Uploads | ✅ | Admin-only; 10 MB limit (middleware + handler); Pillow re-encodes to WebP, strips EXIF/GPS; JPEG/PNG/WebP only; pixel limit; random keys; storage keys validated (`test_photo_upload_is_reencoded_in_several_sizes`, `test_bad_uploads_are_rejected`, `test_s3_storage_uploads_with_long_cache`) |
-| 15 Secrets | ⚠️ scanner + production config validation verified; log redaction untested | `scripts/check-secrets.py`, `test_settings.py` |
+| 15 Secrets | ✅ | `scripts/check-secrets.py`, `test_settings.py`, `test_logs_never_contain_secrets` (JSON and text log formats) |
 | 16 Error leakage | ✅ | `test_app_errors_and_unexpected_errors_are_formatted` (no internal detail in 500) |
 | 17 Spam | ✅ contact + newsletter | honeypot, minimum fill time, rate limits: `test_contact_spam_is_silently_dropped`, `test_contact_is_rate_limited` |
-| 18 Security headers | ⚠️ API headers verified; SPA CSP/HSTS pending deploy config | `test_security_headers_present` |
-| 19 CORS | ⬜ | |
+| 18 Security headers | ✅ API + web server (local) | `test_security_headers_present`; Caddy headers checked with curl on `localhost:5190` (CSP, HSTS, nosniff, DENY, Referrer-Policy, no `Server`); HSTS only meaningful over real HTTPS (staging) |
+| 19 CORS | ✅ | Same-origin deployment; `test_cors_allows_only_listed_origins` (listed origin gets credentials, foreign origin gets no CORS headers) |
 | 20 Guest order access | ✅ | 256-bit HMAC-derived token, only its hash stored; header `X-Order-Access-Token`; email link uses a URL fragment (never sent to servers or logs); `test_guest_order_needs_its_access_token`, other customers get 404 |
-| 21 Admin money safeguards | ⬜ | |
+| 21 Admin money safeguards | ✅ | `test_large_rate_change_needs_confirmation_and_is_audited`, `test_unpaid_orders_cannot_be_fulfilled`, staff get 403 on refunds (`test_partial_refund_is_requested_then_sent_to_the_provider`, `test_return_for_refund_end_to_end`), refunds capped at the refundable amount, no endpoint sets `payment_status` |
 | 22 Supabase RLS | ✅ RLS on every table (local) | `test_every_application_table_has_row_level_security`; disabling the Data API is a deployment step |
-| 23 Dependency audit | ⬜ | |
+| 23 Dependency audit | ✅ 2026-10-15 | `npm audit` (all and `--omit=dev`): 0 vulnerabilities; `pip-audit -r requirements.txt` and full environment: no known vulnerabilities. Repeat at every release |
 
 ### 2026-10-14 — Authentication review (Phase 4)
 Scope: `app/core/security.py`, `app/services/auth.py`, `app/api/deps.py`, auth/account routes, cookies.
@@ -66,3 +66,17 @@ Scope: `app/services/returns.py`, `app/services/reviews.py`, `routes/orders.py` 
 | Privacy | Public reviews show first name + initial only, never the email (`test_only_delivered_buyers_can_review_and_staff_approve_first`) |
 | Spam | Review writes rate-limited (10/hour per client) |
 | Admin routes | All declare permissions (guard test); every decision audited |
+
+### 2026-10-15 — Launch-preparation review (Phase 8)
+Scope: deployment files, web-server headers, robots/indexing, operations commands, dependencies.
+| Finding | Severity | Resolution |
+|---------|----------|-----------|
+| A missing `/assets/*` file fell back to `index.html` **with a one-year immutable cache** | Medium (availability after releases) | Assets are served without the SPA fallback; missing ones return a plain 404 with no long cache (checked with curl) |
+| Product detail responses were cacheable for 60 s, so a sold-out piece could still look available | Low (backend rejects the add anyway) | `Cache-Control: no-cache` on product detail and reviews |
+| Staging copies could be indexed by search engines | Low | `robots.txt` disallows everything unless `ALLOW_SEARCH_INDEXING=true`; private areas always disallowed; pages also send `noindex` |
+| Clients could spoof `X-Forwarded-For` to dodge per-IP rate limits | Medium | Caddy overwrites `X-Forwarded-For` with the connecting address; backend trusts exactly one hop (`TRUSTED_PROXY_COUNT=1`) |
+| CSP allowed Google Fonts although fonts are self-hosted | Low | Removed; `font-src 'self'`, `object-src 'none'` added |
+| Backend container | — | Non-root user, read-only root filesystem, `no-new-privileges`, health check (compose file **not executed**: Docker unavailable here) |
+Operations checks added: `verify-integrity` (stock ledger, reservations, order totals, payments,
+refunds, stalled jobs, failed emails), `verify-rls` (RLS on, no policies). Both report OK on the
+development database after all E2E runs.

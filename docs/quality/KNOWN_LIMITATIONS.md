@@ -28,6 +28,16 @@ owner. Keep it current. Each item states its impact and the plan.
 * Refunds are executed from Admin → Orders through the payment gateway; only the simulator and a
   mocked Razorpay API have been exercised so far.
 * S3-compatible photo storage is unit-tested with botocore's Stubber, not against a real bucket.
+* **Docker not verified**: `backend/Dockerfile` and `deploy/docker-compose.prod.yml` have never been
+  built or run (Docker is not installed on the development machine). The Caddyfile was validated
+  and exercised locally with the official Caddy binary. Build and start the stack on staging first.
+* **Mobile loading speed**: Lighthouse mobile performance 79–83, LCP ≈ 3.5–3.8 s under simulated
+  slow 4G (desktop 94–99). A client-rendered SPA must run its JavaScript before requesting images;
+  pre-rendering public pages is the planned improvement. Measured locally only (PERFORMANCE_REVIEW).
+* API timings with 1,000 products were measured in-process against local PostgreSQL, not on
+  Supabase's production tier or over the internet.
+* No manual (human) keyboard and screen-reader pass has been recorded yet; automated keyboard and
+  axe checks pass.
 * Staff accounts are created by promoting a registered account; there is no invitation email.
 * The payment simulator remembers simulated payments in memory only; after an API restart the
   reconciliation job cannot see them (development only — no money involved).

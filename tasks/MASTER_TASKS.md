@@ -14,7 +14,7 @@ Phase details are in the linked files. Milestones and acceptance criteria are in
 | 5 Cart & pricing | [PHASE_05_CART_AND_CHECKOUT.md](PHASE_05_CART_AND_CHECKOUT.md) | ✅ complete |
 | 6 Checkout, payments & orders | [PHASE_06_PAYMENTS_AND_ORDERS.md](PHASE_06_PAYMENTS_AND_ORDERS.md) | ✅ complete |
 | 7 Administration | [PHASE_07_ADMIN_AND_INVENTORY.md](PHASE_07_ADMIN_AND_INVENTORY.md) | ✅ done (TOTP deferred) |
-| 8 Quality & launch prep | [PHASE_08_POLISH_AND_LAUNCH.md](PHASE_08_POLISH_AND_LAUNCH.md) | ⬜ |
+| 8 Quality & launch prep | [PHASE_08_POLISH_AND_LAUNCH.md](PHASE_08_POLISH_AND_LAUNCH.md) | ✅ code-complete locally; launch needs owner inputs |
 
 > Phase numbering note: the brief lists "Cart and pricing" (5) and "Checkout, payments and orders"
 > (6). Files `PHASE_05_CART_AND_CHECKOUT.md` covers cart + pricing + coupons, and

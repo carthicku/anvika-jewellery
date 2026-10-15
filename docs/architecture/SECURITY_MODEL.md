@@ -43,12 +43,14 @@ script-src 'self' https://checkout.razorpay.com;
 frame-src https://api.razorpay.com https://checkout.razorpay.com;
 connect-src 'self' https://lumberjack.razorpay.com;
 img-src 'self' data: https:;
-style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
-font-src 'self' https://fonts.gstatic.com;
-frame-ancestors 'none'; base-uri 'self'; form-action 'self'
+style-src 'self' 'unsafe-inline';
+font-src 'self';
+object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'
 ```
 Razorpay host names must be re-checked against Razorpay's current documentation when the CSP is
-deployed (listed as an item in the production checklist).
+deployed (listed as an item in the production checklist). Fonts are self-hosted, so no font CDN is
+allowed. `'unsafe-inline'` for styles is needed for React `style` attributes; scripts allow no inline
+code. The policy lives in `deploy/Caddyfile`.
 
 ## 4. Logging and privacy
 * Structured JSON logs with `request_id`, method, path, status, duration, and user id (not email).
@@ -58,6 +60,6 @@ deployed (listed as an item in the production checklist).
   [`BACKUP_AND_RESTORE.md`](../operations/BACKUP_AND_RESTORE.md#data-retention).
 
 ## 5. Known gaps (also in KNOWN_LIMITATIONS)
-* Admin MFA is planned (Phase 7), not yet implemented.
+* Admin MFA is not built (deferred; see KNOWN_LIMITATIONS for the mitigations).
 * No WAF / bot management. Use the hosting provider's protection at launch.
 * No automated malware scanning of uploads beyond image re-encoding.

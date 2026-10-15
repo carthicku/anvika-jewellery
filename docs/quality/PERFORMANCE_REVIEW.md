@@ -9,8 +9,8 @@ here with the date, tool, environment and numbers. Do not estimate.
 | JavaScript size | Route-level code splitting (admin and account chunks lazy-loaded); check `vite build` output sizes |
 | Images | Uploads re-encoded to WebP at several widths (400/800/1200/1600) with `srcset`; lazy-loading below the fold; explicit `width`/`height` to prevent layout shift |
 | Fonts | Self-hosted, Latin subset, `font-display: swap`, preload of the two most-used files |
-| API | Indexed filters, `selectinload` for related rows, pagination, `price_from` cache for price sorting, HTTP caching headers on public catalogue GETs (`Cache-Control: public, max-age=60`) |
-| Database | `EXPLAIN ANALYZE` of the listing and search queries with 1,000+ products (seed `--bulk` option) |
+| API | Indexed filters, `selectinload` for related rows, pagination, `price_from` cache for price sorting, HTTP caching on public catalogue GETs: listings/home `public, max-age=60`; product detail and reviews `no-cache` (stock, price and newly published reviews must be current) |
+| Database | `EXPLAIN ANALYZE` of the listing and search queries with 1,000+ products (`scripts/perf_catalogue.py` on a `*_perf` database) |
 | SEO / SPA limits | The SPA renders on the client. Crawlers that run JavaScript (Google) index it. For others, pre-rendering of public routes is a future improvement (KNOWN_LIMITATIONS) |
 
 ## Measurements
@@ -28,4 +28,65 @@ Actions taken: route-level code splitting (all routes except home are lazy); the
 form was rewritten without zod/react-hook-form so those libraries stay out of the initial bundle
 (initial bundle 248 kB → 150 kB gzip).
 
-Not yet measured: Lighthouse/Core Web Vitals and API latency under load (Phase 8).
+Lighthouse and API timings: see the 2026-10-15 entries below.
+
+### 2026-10-15 — Lighthouse, production build behind the production web server
+Environment: `npm run build` served by Caddy 2.10.2 with `deploy/Caddyfile` (CSP, compression,
+caching) on `localhost:5190`, local API and PostgreSQL 17, sample catalogue. Lighthouse 12.8.2,
+headless Chromium; "mobile" = Lighthouse default (Moto G-class device, 4× CPU slowdown, slow 4G),
+"desktop" = `--preset=desktop`. Machine benchmark index ≈ 2,000. Local network, so real-world
+latency to a server in India is **not** included.
+
+First run (before fixes):
+| Page | Mobile perf | Desktop perf | CLS (desktop / mobile) | Cause |
+|------|-----------:|-------------:|------------------------|-------|
+| Home | 48* | 84 | 0.296 / 0.041 | announcement bar appeared after the settings request and pushed the page down |
+| Rings listing | 60 | 79 | 0.461 / 0.963 | footer visible while loading, then pushed down by the product grid |
+| Om Pendant | 83 | 77 | 0.601 / 0.040 | same as above |
+\* the very first run was noisy (TBT 1,970 ms); repeated runs gave 76–77.
+
+Fixes: the announcement bar's space is reserved while settings load; `<main>` is at least one
+screen tall so the footer stays below the fold while a page loads; product details now revalidate
+on every request (`Cache-Control: no-cache`) so stock and price are never up to 60 s stale.
+
+After the fixes (`ALLOW_SEARCH_INDEXING=true` so the SEO score reflects the live configuration):
+| Page | Mobile perf / LCP / TBT / CLS | Desktop perf / LCP / CLS | Accessibility | Best practices | SEO |
+|------|------------------------------|--------------------------|--------------:|---------------:|----:|
+| Home | 79 / 3.5 s / 290 ms / 0 | 94 / 0.8 s / 0.14 | 100 | 100 | 100 |
+| Rings listing | 79 / 3.7 s / 220 ms / 0.039 | 99 / 0.7 s / 0.003 | 100 | 100 | 100 |
+| Om Pendant | 79 / 3.8 s / 210 ms / 0 | 99 / 0.8 s / 0.003 | 100 | 100 | 100 |
+| About | 83 / 3.7 s / 70 ms / 0.007 | 99 / 0.8 s / 0.003 | 100 | 100 | 100 |
+| Search "ring" | 83 / 3.6 s / 110 ms / 0.028 | 99 / 0.8 s / 0.054 | 100 | 100 | 69 (`noindex` on purpose) |
+
+Remaining gap: mobile LCP ≈ 3.5–3.8 s under simulated slow 4G (target for "good" is ≤ 2.5 s). The
+SPA must download and run its JavaScript before it can request the hero/product image. The main
+bundle is lean (298 kB raw, 93 kB gzip; two thirds is React itself — source-map-explorer), so the
+next step is pre-rendering the public pages (KNOWN_LIMITATIONS), not trimming code. The desktop
+home CLS (0.14) comes from the hero section settling after its image loads; the image has explicit
+dimensions, so this needs a closer look once real photography replaces the illustrations.
+
+### 2026-10-15 — Catalogue API with 1,000 products
+`scripts/perf_catalogue.py` on a separate `anvika_perf` database (seed + 969 copies of the sample
+products, `ANALYZE`d). In-process requests (FastAPI TestClient → local PostgreSQL 17), 60 requests
+per endpoint after a warm-up. This measures the application and database work, not the network,
+and not Supabase's production tier (re-run there before launch).
+
+| Endpoint | p50 | p95 | max |
+|----------|----:|----:|----:|
+| Listing (default) | 48.6 ms | 62.6 ms | 91.1 ms |
+| Listing, category + price sort | 48.7 ms | 57.4 ms | 68.4 ms |
+| Listing, filters | 43.1 ms | 56.1 ms | 61.9 ms |
+| Search "gold ring" | 56.5 ms | 70.5 ms | 140.4 ms |
+| Facets (category) | 23.7 ms | 30.8 ms | 35.4 ms |
+| Facets (search) | 54.3 ms | 75.4 ms | 75.8 ms |
+| Product detail | 23.9 ms | 31.5 ms | 41.8 ms |
+| Home | 44.0 ms | 55.1 ms | 64.6 ms |
+
+Target "listing p95 < 300 ms with 1,000 products": met locally (62.6 ms). `EXPLAIN ANALYZE` of
+the default listing page: sequential scan of 1,000 rows + top-N heapsort, 1.1 ms execution — the
+database is not the bottleneck at this size; most of the time is building priced cards in Python.
+Indexes on `(status, category_id)` and `published_at` take over as the catalogue grows.
+
+### 2026-10-15 — Bundle
+Storefront initial JS 93 kB gzip (target < 200 kB ✅). Admin, account, checkout, content and
+after-sales screens are separate chunks.

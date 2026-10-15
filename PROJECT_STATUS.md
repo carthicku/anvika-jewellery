@@ -1,9 +1,10 @@
 # Project Status
 
 **Last updated:** 2026-10-15
-**Current phase:** Phase 8 — Launch preparation (next)
-**Last verified checkpoint:** Phase 7 complete — admin plus returns and reviews
-(`scripts/check.ps1` all green; 298 backend tests, 48 frontend tests, 56 E2E passed + 2 skipped by design, axe clean)
+**Current phase:** All phases complete locally — waiting on owner inputs to deploy
+**Last verified checkpoint:** Phase 8 — launch preparation (see docs/DELIVERY_REPORT.md)
+(`scripts/check.ps1` all green; 308 backend tests, 48 frontend tests, 62 E2E passed + 4 skipped by
+design on the dev server and on the production build behind Caddy; axe clean; Lighthouse recorded)
 
 ## What exists
 * Planning documentation, ADRs 0001–0009, task tracker, `CLAUDE.md`, 11 skills.
@@ -43,6 +44,12 @@
   stock) → refund or complete; verified-purchase reviews with moderation (only approved reviews
   are public; rating summary and structured data use approved reviews only).
 
+* **Launch preparation (Phase 8)**: `robots.txt` (indexing off until launch), operations commands
+  (`verify-integrity`, `verify-rls`, `catalogue-report`, `send-test-email`), production web-server
+  config (`deploy/Caddyfile`, verified locally), backend `Dockerfile` and compose file (not built —
+  no Docker here), full journey E2E, Lighthouse and API performance measurements, production
+  checklist walkthrough, delivery report.
+
 ## What works (verified — see docs/quality/TEST_RESULTS.md)
 | Item | Evidence |
 |------|----------|
@@ -57,10 +64,13 @@
 | Cart, coupons, price-change rules | `tests/api/test_cart.py`, `cart.test.tsx`, `e2e/cart.spec.ts` |
 | Admin API and screens | `test_admin_ops.py`, `test_admin_catalogue.py`, `test_admin_store.py`, `admin.test.tsx`, `e2e/admin.spec.ts` |
 | Returns and reviews | `tests/api/test_aftercare.py`, `checkout.test.tsx` (return form), `admin.test.tsx`, `e2e/admin.spec.ts` (return and review journeys) |
+| Production build behind the production web server | `playwright.prod.config.ts` against Caddy + `deploy/Caddyfile` (62 passed); DEPLOYMENT.md §6 |
+| Operations checks | `tests/api/test_ops_cli.py`; `verify-integrity`/`verify-rls` OK on dev data |
 | Checkout, payments, webhooks, expiry, cancellation | `tests/api/test_checkout.py`, `test_payments.py`, `test_inventory_concurrency.py`, `checkout.test.tsx`, `e2e/checkout.spec.ts` |
 
 ## Not yet built
-Optional staff TOTP (deferred, see KNOWN_LIMITATIONS) and launch prep (Phase 8).
+Optional staff TOTP (deferred, see KNOWN_LIMITATIONS). Not deployed: Docker image never built here
+(no Docker); real Razorpay, Supabase, SMTP and HTTPS need the owner's accounts.
 Payments have not yet been run with real Razorpay test keys.
 
 ## Local ports
@@ -71,8 +81,9 @@ Nothing blocks development. Needed before launch: brand details, Razorpay test k
 project, SMTP provider, CA review of GST, legal review of policies (ASSUMPTIONS §5).
 
 ## Next step
-Phase 8 launch prep (`tasks/PHASE_08_POLISH_AND_LAUNCH.md`): remaining E2E journeys, security/performance/SEO
-reviews, robots.txt, deployment files, operational CLI checks, production checklist, final report.
+Owner: provide the items in docs/DELIVERY_REPORT.md §5. Then deploy to staging following
+docs/operations/DEPLOYMENT.md and work through PRODUCTION_CHECKLIST.md. Optional engineering next
+steps: pre-render public pages (mobile LCP), staff TOTP.
 
 ## How to resume
 1. Read `CLAUDE.md`, this file, `tasks/PHASE_08_POLISH_AND_LAUNCH.md`.

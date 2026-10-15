@@ -5,6 +5,19 @@ All notable changes to this project. Format based on [Keep a Changelog](https://
 ## [Unreleased]
 
 ### Added
+- Phase 8 (launch preparation): `robots.txt` with `ALLOW_SEARCH_INDEXING` (off by default);
+  operations commands `verify-integrity`, `verify-rls`, `catalogue-report [--samples]`,
+  `send-test-email`; backend `Dockerfile`, `deploy/Caddyfile` (HTTPS, CSP, security headers,
+  caching) and `deploy/docker-compose.prod.yml`; E2E journeys J6/J7/J9/J12 and a Playwright config
+  for running the suite against a built site; `scripts/perf_catalogue.py`; delivery report.
+
+### Fixed
+- Product filter counts returned an error (500) when searching.
+- Product pages could show stock/prices up to 60 s old (now always revalidated).
+- Pages jumped while loading (late announcement bar, footer pushed down): layout shift ≈ 0 now.
+- Accessibility: invalid `aria-label` on the loading grid; heading order on listing pages.
+
+### Added (earlier)
 - Phase 7 (after-sales): customers can ask for a return or exchange of delivered pieces within
   each piece's window; staff approve/reject, mark items received (choosing which go back into
   stock) and refund through the normal refund flow, with emails at each step. Verified-purchase

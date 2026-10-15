@@ -43,10 +43,35 @@ cd frontend
 npm run e2e          # starts the Vite dev server automatically; backend must already be running
 npm run e2e -- --ui  # interactive mode
 ```
+Specs: `smoke` (every route, no CSP violations), `browse`, `account`, `cart`, `checkout`,
+`journeys` (J6/J9 sell-out, J7 gold-rate change, J12 keyboard + 375/768/1280 px), `admin` (J8,
+J9, J10, fulfilment, refunds, returns, reviews) and `accessibility` (axe). Shared helpers live in
+`e2e/helpers.ts`.
+
 E2E tests create their own customers through the API (`/auth/register`) and use seeded products.
 They never perform real financial transactions: checkout tests pay with the development simulator,
 then cancel each order, which puts the piece back in stock — so repeated runs don't use up the
-sample catalogue.
+sample catalogue. Tests that change shared sample data (stock levels, gold rates, reviews) put it
+back in a `finally` block or a clean-up step, through the same audited admin screens. After a run,
+`python -m app.cli verify-integrity` should still report OK.
+
+### Against a production build (or staging)
+`playwright.prod.config.ts` runs the same suite against an already running site — for example the
+production build behind the real `deploy/Caddyfile` (CSP, headers, caching) on `localhost:5190`:
+```bash
+cd frontend && npm run build
+# Caddy with deploy/Caddyfile, SITE_DOMAIN=http://localhost:5190, root → frontend/dist,
+# reverse_proxy → 127.0.0.1:8010 (see TEST_RESULTS 2026-10-15 for the exact run)
+# backend: ALLOWED_ORIGINS must include the site's origin, e.g. http://localhost:5180,http://localhost:5190
+E2E_BASE_URL=http://localhost:5190 npx playwright test -c playwright.prod.config.ts
+```
+Use it on staging (simulator payments) before every release. **Never against the live store**: the
+tests place orders and change sample stock and rates.
+
+## Performance
+`scripts/perf_catalogue.py` times the catalogue API with ~1,000 products. It only runs against a
+database whose name ends in `_perf` (it adds copies of the sample products). Results go in
+[PERFORMANCE_REVIEW.md](../quality/PERFORMANCE_REVIEW.md); Lighthouse runs are recorded there too.
 
 ## Static checks
 | Check | Command |

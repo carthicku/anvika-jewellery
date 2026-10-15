@@ -50,7 +50,9 @@ backend/    FastAPI app (app/core, models, schemas, services, api/v1/routes), al
 frontend/   React app (src/api, components, pages, lib, styles), e2e/ (Playwright)
 docs/       product, design, architecture (+ADR), development, operations, quality
 tasks/      MASTER_TASKS.md + one file per phase
-scripts/    localdb.mjs (embedded PostgreSQL), check.ps1/check.sh, check-secrets.py, check_docs.py
+deploy/     Caddyfile, docker-compose.prod.yml, .env.example (production web server + stack)
+scripts/    localdb.mjs (embedded PostgreSQL), check.ps1/check.sh, check-secrets.py, check_docs.py,
+            perf_catalogue.py (timings on a *_perf database)
 ```
 
 ## Commands (Windows paths; on macOS/Linux use `.venv/bin/python`)
@@ -65,10 +67,12 @@ scripts/    localdb.mjs (embedded PostgreSQL), check.ps1/check.sh, check-secrets
 | Backend tests | `.venv/Scripts/python -m pytest -q` (backend; DB must be running) |
 | Lint / types (backend) | `.venv/Scripts/python -m ruff check . && .venv/Scripts/python -m mypy app` |
 | Export the API contract | `.venv/Scripts/python -m app.cli export-openapi` (backend) |
+| Data checks | `.venv/Scripts/python -m app.cli verify-integrity` / `verify-rls` / `catalogue-report --samples` (backend) |
 | Frontend dev | `npm run dev` (frontend) → http://localhost:5180 |
 | Generate API types | `npm run gen:api` (frontend) |
 | Frontend checks | `npm run typecheck && npm run lint && npm test` (frontend) |
-| E2E | `npm run e2e` (frontend; backend running with the simulator) |
+| E2E | `npm run e2e` (frontend; backend running with the simulator, `RATE_LIMIT_ENABLED=false`) |
+| E2E vs a built site | `E2E_BASE_URL=… npx playwright test -c playwright.prod.config.ts` (never the live store) |
 | Everything | `powershell -File scripts/check.ps1` (root) |
 | Docs/skills consistency | `py -3.13 scripts/check_docs.py` (root) |
 

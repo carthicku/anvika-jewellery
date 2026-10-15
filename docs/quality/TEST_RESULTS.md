@@ -131,3 +131,24 @@ tests then had nothing to buy). Fixed by making the test return the piece with a
 adjustment and restoring the dev stock (adjustment, not a reset). Stock after the final run: 9
 on hand, 0 reserved — unchanged. One `vitest` run timed out while the machine was busy and passed
 unchanged on re-run.
+
+### 2026-10-15 — Phase 8 (launch preparation)
+| Suite | Command | Result |
+|-------|---------|--------|
+| Full static + unit/API + build | `powershell -File scripts/check.ps1` | All checks passed |
+| Backend | `pytest -q` | 308 passed (+10: robots, facets-with-search regression, CORS allow-list, log redaction, client-IP trust, 5 operations commands; the product-detail cache header was added to an existing test) |
+| Frontend unit | `vitest run` | 48 passed |
+| End-to-end, dev server | `npx playwright test` (desktop + mobile) | 62 passed, 4 skipped by design |
+| End-to-end, production build behind Caddy 2.10.2 + `deploy/Caddyfile` (CSP active) | `E2E_BASE_URL=http://localhost:5190 npx playwright test -c playwright.prod.config.ts` | 62 passed, 4 skipped by design (first run: 35 failed — the API only accepted writes from origin :5180, i.e. CSRF/Origin protection working; re-run with `ALLOWED_ORIGINS` including :5190: 61 passed, 1 axe failure fixed, then all passed) |
+| New journeys | `e2e/journeys.spec.ts` ×2 runs | J6/J9 sell-out, J7 gold-rate change, J12 keyboard + 375/768/1280 px: 6 passed, 2 skipped by design, both runs |
+| Dependency audit | `npm audit`, `npm audit --omit=dev`, `pip-audit -r requirements.txt`, `pip-audit` | 0 / 0 / none / none |
+| Data checks after all runs | `verify-integrity`, `verify-rls` (dev DB) | OK, OK |
+| Lighthouse, API timings | see PERFORMANCE_REVIEW 2026-10-15 | recorded |
+
+Defects found by this phase's testing and fixed (each with a test where testable):
+`/products/facets?q=…` returned 500 (regression test fails without the fix); product detail
+cached 60 s, so a sold-out piece still showed "Add to cart" (found by the J9 E2E); layout shift up
+to 0.96 (Lighthouse); `aria-label` on a role-less loading `div` (axe, production build only);
+listing heading order (Lighthouse); a missing hashed asset would have been served as `index.html`
+with a one-year cache (curl against Caddy). Not run: Docker build/compose (Docker not installed),
+real Razorpay/Supabase/SMTP (no owner accounts).

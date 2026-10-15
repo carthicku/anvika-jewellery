@@ -10,7 +10,7 @@
 flowchart LR
     U[Shoppers] -->|HTTPS 443| C[Caddy reverse proxy<br/>auto TLS · static files]
     C -->|/ → frontend/dist| S[(static SPA files)]
-    C -->|/api, /media, /sitemap.xml| A[FastAPI container<br/>uvicorn 2 workers]
+    C -->|/api, /media, /sitemap.xml, /robots.txt| A[FastAPI container<br/>uvicorn 2 workers]
     A --> D[(Supabase PostgreSQL 17<br/>ap-south-1 Mumbai)]
     A --> R[Razorpay]
     A --> M[SMTP provider]
@@ -45,7 +45,10 @@ flowchart LR
 4. **Email**: follow [EMAIL_SETUP.md](EMAIL_SETUP.md).
 5. **Secrets**: create `/opt/store/backend.env` on the server (permissions `600`) with all production
    variables from [ENVIRONMENT_VARIABLES.md](../development/ENVIRONMENT_VARIABLES.md).
-   `APP_ENV=production`.
+   `APP_ENV=production`. Keep `ALLOW_SEARCH_INDEXING=false` on staging and until launch day.
+6. **Server layout**: clone the repository to `/opt/store` (only `deploy/` is used on the server),
+   `cp deploy/.env.example deploy/.env` and set `SITE_DOMAIN`, `APEX_DOMAIN`, `BACKEND_IMAGE`.
+   The built storefront goes in `/opt/store/site`.
 
 ## 3. Release procedure (every deploy)
 ```bash
@@ -71,6 +74,24 @@ Then run the post-deploy checks in the [production checklist](PRODUCTION_CHECKLI
   expand/contract rules, so the previous version remains compatible with the newer schema.
 * Database: restore only for data corruption (see BACKUP_AND_RESTORE.md). It is a last resort.
 
-## 5. Files (created in Phase 8)
-`backend/Dockerfile`, `deploy/docker-compose.prod.yml`, `deploy/Caddyfile` (security headers, CSP,
-caching: `index.html` no-cache; hashed assets `immutable`, 1 year).
+## 5. Files
+| File | What it does |
+|------|--------------|
+| `backend/Dockerfile` | Python 3.13 slim image, pinned dependencies, non-root user, health check, `uvicorn` with 2 workers (background jobs run inside; SKIP LOCKED makes that safe) |
+| `deploy/docker-compose.prod.yml` | `backend` (read-only filesystem, no new privileges, `TRUSTED_PROXY_COUNT=1`, JSON logs) and `caddy` (ports 80/443, certificates kept in a volume) |
+| `deploy/Caddyfile` | Automatic HTTPS; bare domain → `www` redirect; CSP and security headers; `/api`, `/media`, `/sitemap.xml`, `/robots.txt` → backend; storefront from `/srv/site` with SPA fallback; `/assets/*` cached one year (missing files are a plain 404, never `index.html`); everything else `no-cache`; overwrites `X-Forwarded-For` so visitors can't spoof their IP |
+| `deploy/.env.example` | Non-secret compose variables (domains, image tag) |
+| `frontend/playwright.prod.config.ts` | Runs the E2E suite against staging before a release (never the live store) |
+
+## 6. What has been verified (2026-10-15) — and what has not
+| Item | Status |
+|------|--------|
+| `deploy/Caddyfile` syntax | ✅ `caddy validate` (Caddy 2.10.2, official binary, checksum verified) |
+| Caddy behaviour (headers, CSP, caching, SPA fallback, proxying, compression) | ✅ ran the production build behind this Caddyfile on `localhost:5190` (only the domain, site root and backend address substituted); curl checks + the full E2E suite: 62 passed |
+| Automatic HTTPS / certificates, HSTS over real TLS | ⏳ needs a real domain (staging) |
+| `backend/Dockerfile` builds and starts | ⏳ **not verified** — Docker is not installed on the development machine. First thing to do on the server/CI: `docker build`, then `docker compose up` and the smoke test |
+| `docker-compose.prod.yml` | ⏳ not executed (same reason) |
+| Supabase, Razorpay test/live keys, SMTP, DNS | ⏳ owner accounts needed (see PRODUCTION_CHECKLIST) |
+
+The site is **not live**. Do not describe it as deployed until §6's open items are done and the
+production checklist is complete.

@@ -53,5 +53,32 @@ the test listed**. Update this file whenever a feature changes state.
 | Admin | Staff users (promote, role, deactivate) | `/admin/staff` | 7 | ✅ | `test_admin_promotes_and_deactivates_staff`, `test_the_last_admin_cannot_be_removed` |
 | Admin | Settings (store, tax, announcement) | `/admin/settings` | 7 | ✅ | `test_tax_settings_change_prices_and_are_audited`, `test_store_details_are_validated`, `test_announcement_links_must_be_safe` |
 | Admin | Optional TOTP MFA | `/account/security` | 7 | ⬜ deferred (KNOWN_LIMITATIONS) | |
-| SEO | Metadata, canonical, OG, JSON-LD, sitemap, robots | — | 2/8 | ⚠️ | Titles/descriptions/canonical/OG + JSON-LD (non-sample only) + sitemap (`test_sitemap_lists_public_pages`); robots.txt in Phase 8 |
-| Quality | Playwright journeys J1–J12 | `frontend/e2e` | 8 | ⬜ | |
+| SEO | Metadata, canonical, OG, JSON-LD, sitemap, robots | — | 2/8 | ✅ (client-rendered; pre-rendering is future work) | JSON-LD (non-sample only; `aggregateRating` only from approved reviews), `test_sitemap_lists_public_pages`, `test_robots_blocks_everything_until_indexing_is_allowed`, private pages `noindex`; Lighthouse SEO 100 on indexable pages (PERFORMANCE_REVIEW) |
+| Quality | Playwright journeys J1–J12 | `frontend/e2e` | 8 | ✅ locally (dev + production build behind Caddy) | 62 E2E tests × 2 targets; journey → test map in USER_JOURNEYS.md; manual keyboard pass by a person still open |
+| Operations | Integrity/RLS/catalogue/email checks | `python -m app.cli …` | 8 | ✅ | `test_ops_cli.py` |
+| Operations | Deployment files | `backend/Dockerfile`, `deploy/` | 8 | ⚠️ Caddyfile verified locally; Docker image/compose never built (no Docker) | DEPLOYMENT.md §6 |
+
+## Launch-readiness criteria (ACCEPTANCE_CRITERIA.md) — status 2026-10-15
+| # | Status | Evidence / reason |
+|---|--------|-------------------|
+| L1 Routes | ✅ | `e2e/smoke.spec.ts` (every storefront route, 404 page, no CSP violations) |
+| L2 Discovery | ✅ | `e2e/browse.spec.ts` (J1), `journeys.spec.ts` |
+| L3 Data from backend | ✅ | E2E run against the seeded DB; product fixtures exist only in unit tests |
+| L4 Backend totals | ✅ | `test_browser_supplied_prices_are_rejected`, `test_browser_cannot_send_prices`; the frontend formats money strings only |
+| L5 Gold pricing configurable/auditable | ✅ | pricing unit tests, `test_large_rate_change_needs_confirmation_and_is_audited`, `test_order_snapshot_does_not_change_when_gold_rate_changes` |
+| L6 Authentication | ✅ | `test_auth.py` (rate limit, reset, session revoke, refresh rotation) |
+| L7 Customers isolated | ✅ | `test_customers_cannot_touch_each_others_addresses`, `test_wishlists_are_private`, `test_customers_cannot_change_other_carts`, `test_guest_order_needs_its_access_token`, `test_return_rules` |
+| L8 Admin enforced server-side | ✅ | `test_every_admin_route_declares_a_permission`, role matrix, staff/customer 403 tests |
+| L9 Product & inventory management | ✅ | admin API tests, `e2e/admin.spec.ts` (J8/J9), `journeys.spec.ts` |
+| L10 Checkout validation | ✅ | `test_checkout.py` |
+| L11 Payment status only from verified events | ✅ (mocked Razorpay) | `test_payments.py`; real Razorpay test keys: **Unverified** (owner keys needed) |
+| L12 Duplicate callbacks | ✅ | `test_webhook_capture_confirms_once_and_ignores_duplicates`, `test_verifying_twice_is_harmless` |
+| L13 Order history | ✅ | `test_signed_in_order_uses_account_email_and_is_private`, `e2e/checkout.spec.ts` (signed-in history) |
+| L14 Failure handling | ✅ | `router.test.tsx` (retryable error state), `checkout.test.tsx` (price change, idempotent retry); E2E failure paths (failed payment, sold out, price change) |
+| L15 Migrations | ✅ | fresh `alembic upgrade head` per test session; `alembic check` in `check.ps1`; Supabase run **Unverified** |
+| L16 Production build | ✅ / ⚠️ | `npm run build` ✅; backend Docker image **Unverified** (no Docker) |
+| L17 Tests executed | ✅ | TEST_RESULTS.md (dates, counts, failures on the way) |
+| L18 Known failures documented | ✅ | KNOWN_LIMITATIONS.md |
+| L19 No secrets | ✅ | `scripts/check-secrets.py`, `.gitignore` review |
+| L20 Backup & recovery documented | ✅ documented / restore **Unverified** | BACKUP_AND_RESTORE.md; a restore must be rehearsed on Supabase |
+| L21 Deployment verified as far as possible | ✅ as far as possible | DEPLOYMENT.md §6 lists what was and wasn't verified |
