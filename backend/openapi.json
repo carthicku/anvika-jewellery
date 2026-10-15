@@ -303,6 +303,239 @@
         "title": "AdjustStockIn",
         "type": "object"
       },
+      "AdminCategoryOut": {
+        "properties": {
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "is_active": {
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "parent_id": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Id"
+          },
+          "product_count": {
+            "title": "Product Count",
+            "type": "integer"
+          },
+          "seo_description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seo Description"
+          },
+          "seo_title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seo Title"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          },
+          "sort_order": {
+            "title": "Sort Order",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "slug",
+          "parent_id",
+          "description",
+          "sort_order",
+          "is_active",
+          "seo_title",
+          "seo_description",
+          "product_count"
+        ],
+        "title": "AdminCategoryOut",
+        "type": "object"
+      },
+      "AdminCollectionOut": {
+        "properties": {
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "is_active": {
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "is_featured": {
+            "title": "Is Featured",
+            "type": "boolean"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "product_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Product Ids",
+            "type": "array"
+          },
+          "seo_description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seo Description"
+          },
+          "seo_title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seo Title"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          },
+          "sort_order": {
+            "title": "Sort Order",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "slug",
+          "description",
+          "is_active",
+          "is_featured",
+          "sort_order",
+          "seo_title",
+          "seo_description",
+          "product_ids"
+        ],
+        "title": "AdminCollectionOut",
+        "type": "object"
+      },
+      "AdminImageOut": {
+        "properties": {
+          "alt_text": {
+            "title": "Alt Text",
+            "type": "string"
+          },
+          "height": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Height"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "is_placeholder": {
+            "title": "Is Placeholder",
+            "type": "boolean"
+          },
+          "renditions": {
+            "additionalProperties": {
+              "type": "string"
+            },
+            "title": "Renditions",
+            "type": "object"
+          },
+          "sort_order": {
+            "title": "Sort Order",
+            "type": "integer"
+          },
+          "url": {
+            "title": "Url",
+            "type": "string"
+          },
+          "width": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Width"
+          }
+        },
+        "required": [
+          "id",
+          "url",
+          "alt_text",
+          "width",
+          "height",
+          "renditions",
+          "sort_order",
+          "is_placeholder"
+        ],
+        "title": "AdminImageOut",
+        "type": "object"
+      },
       "AdminOrderEventOut": {
         "properties": {
           "actor_type": {
@@ -513,6 +746,283 @@
         "title": "AdminOrderRowOut",
         "type": "object"
       },
+      "AdminProductOut": {
+        "properties": {
+          "attributes": {
+            "items": {
+              "$ref": "#/components/schemas/AttributeIn"
+            },
+            "title": "Attributes",
+            "type": "array"
+          },
+          "care_instructions": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Care Instructions"
+          },
+          "category_id": {
+            "title": "Category Id",
+            "type": "string"
+          },
+          "certification_details": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Certification Details"
+          },
+          "collection_ids": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Collection Ids",
+            "type": "array"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "exchange_eligible": {
+            "title": "Exchange Eligible",
+            "type": "boolean"
+          },
+          "hallmark_details": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hallmark Details"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "images": {
+            "items": {
+              "$ref": "#/components/schemas/AdminImageOut"
+            },
+            "title": "Images",
+            "type": "array"
+          },
+          "is_bestseller": {
+            "title": "Is Bestseller",
+            "type": "boolean"
+          },
+          "is_featured": {
+            "title": "Is Featured",
+            "type": "boolean"
+          },
+          "is_sample": {
+            "title": "Is Sample",
+            "type": "boolean"
+          },
+          "making_charge_type": {
+            "enum": [
+              "per_gram",
+              "percent",
+              "flat",
+              "none"
+            ],
+            "title": "Making Charge Type",
+            "type": "string"
+          },
+          "making_charge_value": {
+            "title": "Making Charge Value",
+            "type": "string"
+          },
+          "metal_colour": {
+            "enum": [
+              "yellow",
+              "white",
+              "rose",
+              "two_tone"
+            ],
+            "title": "Metal Colour",
+            "type": "string"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "pricing_model": {
+            "enum": [
+              "fixed",
+              "weight_based"
+            ],
+            "title": "Pricing Model",
+            "type": "string"
+          },
+          "publish_problems": {
+            "items": {
+              "type": "string"
+            },
+            "title": "Publish Problems",
+            "type": "array"
+          },
+          "published_at": {
+            "anyOf": [
+              {
+                "format": "date-time",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Published At"
+          },
+          "purity": {
+            "enum": [
+              "24K",
+              "22K",
+              "18K",
+              "14K"
+            ],
+            "title": "Purity",
+            "type": "string"
+          },
+          "return_eligible": {
+            "title": "Return Eligible",
+            "type": "boolean"
+          },
+          "return_window_days": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Return Window Days"
+          },
+          "seo_description": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seo Description"
+          },
+          "seo_title": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seo Title"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "draft",
+              "active",
+              "archived"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "stone_details": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stone Details"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          },
+          "variants": {
+            "items": {
+              "$ref": "#/components/schemas/AdminVariantOut"
+            },
+            "title": "Variants",
+            "type": "array"
+          },
+          "wastage_percent": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Wastage Percent"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "slug",
+          "category_id",
+          "status",
+          "metal_colour",
+          "purity",
+          "pricing_model",
+          "making_charge_type",
+          "making_charge_value",
+          "wastage_percent",
+          "description",
+          "stone_details",
+          "hallmark_details",
+          "certification_details",
+          "care_instructions",
+          "return_eligible",
+          "exchange_eligible",
+          "return_window_days",
+          "is_featured",
+          "is_bestseller",
+          "is_sample",
+          "seo_title",
+          "seo_description",
+          "attributes",
+          "collection_ids",
+          "variants",
+          "images",
+          "publish_problems",
+          "published_at",
+          "updated_at"
+        ],
+        "title": "AdminProductOut",
+        "type": "object"
+      },
       "AdminRefundOut": {
         "properties": {
           "amount": {
@@ -559,6 +1069,172 @@
         "title": "AdminRefundOut",
         "type": "object"
       },
+      "AdminVariantOut": {
+        "properties": {
+          "fixed_price": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fixed Price"
+          },
+          "gross_weight_g": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gross Weight G"
+          },
+          "huid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Huid"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "is_active": {
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "is_default": {
+            "title": "Is Default",
+            "type": "boolean"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "net_gold_weight_g": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Net Gold Weight G"
+          },
+          "on_hand": {
+            "title": "On Hand",
+            "type": "integer"
+          },
+          "other_charges": {
+            "title": "Other Charges",
+            "type": "string"
+          },
+          "other_charges_label": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Other Charges Label"
+          },
+          "price_error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price Error"
+          },
+          "reserved": {
+            "title": "Reserved",
+            "type": "integer"
+          },
+          "size": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size"
+          },
+          "sku": {
+            "title": "Sku",
+            "type": "string"
+          },
+          "sort_order": {
+            "title": "Sort Order",
+            "type": "integer"
+          },
+          "stone_value": {
+            "title": "Stone Value",
+            "type": "string"
+          },
+          "stone_weight_ct": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stone Weight Ct"
+          },
+          "unit_price": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Unit Price"
+          }
+        },
+        "required": [
+          "id",
+          "sku",
+          "label",
+          "size",
+          "gross_weight_g",
+          "net_gold_weight_g",
+          "stone_weight_ct",
+          "stone_value",
+          "other_charges",
+          "other_charges_label",
+          "fixed_price",
+          "huid",
+          "is_default",
+          "is_active",
+          "sort_order",
+          "on_hand",
+          "reserved",
+          "unit_price",
+          "price_error"
+        ],
+        "title": "AdminVariantOut",
+        "type": "object"
+      },
       "AnnouncementOut": {
         "properties": {
           "enabled": {
@@ -587,6 +1263,29 @@
           "link"
         ],
         "title": "AnnouncementOut",
+        "type": "object"
+      },
+      "AttributeIn": {
+        "additionalProperties": false,
+        "properties": {
+          "key": {
+            "maxLength": 40,
+            "minLength": 1,
+            "title": "Key",
+            "type": "string"
+          },
+          "value": {
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Value",
+            "type": "string"
+          }
+        },
+        "required": [
+          "key",
+          "value"
+        ],
+        "title": "AttributeIn",
         "type": "object"
       },
       "AttributeOut": {
@@ -711,6 +1410,27 @@
           "quantity"
         ],
         "title": "BestSellerOut",
+        "type": "object"
+      },
+      "Body_upload_image_api_v1_admin_products__product_id__images_post": {
+        "properties": {
+          "alt_text": {
+            "default": "",
+            "maxLength": 200,
+            "title": "Alt Text",
+            "type": "string"
+          },
+          "file": {
+            "contentMediaType": "application/octet-stream",
+            "description": "JPEG, PNG or WebP, up to 10 MB",
+            "title": "File",
+            "type": "string"
+          }
+        },
+        "required": [
+          "file"
+        ],
+        "title": "Body_upload_image_api_v1_admin_products__product_id__images_post",
         "type": "object"
       },
       "CancelOrderIn": {
@@ -1020,6 +1740,93 @@
         "title": "CartTotalsOut",
         "type": "object"
       },
+      "CategoryIn": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "is_active": {
+            "default": true,
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "name": {
+            "maxLength": 80,
+            "minLength": 2,
+            "title": "Name",
+            "type": "string"
+          },
+          "parent_id": {
+            "anyOf": [
+              {
+                "format": "uuid",
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Parent Id"
+          },
+          "seo_description": {
+            "anyOf": [
+              {
+                "maxLength": 300,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seo Description"
+          },
+          "seo_title": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seo Title"
+          },
+          "slug": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Slug"
+          },
+          "sort_order": {
+            "default": 0,
+            "maximum": 1000.0,
+            "minimum": 0.0,
+            "title": "Sort Order",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "CategoryIn",
+        "type": "object"
+      },
       "CategoryOut": {
         "properties": {
           "description": {
@@ -1266,6 +2073,95 @@
           "shipping_method"
         ],
         "title": "CheckoutQuoteOut",
+        "type": "object"
+      },
+      "CollectionIn": {
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "is_active": {
+            "default": true,
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "is_featured": {
+            "default": false,
+            "title": "Is Featured",
+            "type": "boolean"
+          },
+          "name": {
+            "maxLength": 80,
+            "minLength": 2,
+            "title": "Name",
+            "type": "string"
+          },
+          "product_ids": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "maxItems": 500,
+            "title": "Product Ids",
+            "type": "array"
+          },
+          "seo_description": {
+            "anyOf": [
+              {
+                "maxLength": 300,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seo Description"
+          },
+          "seo_title": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seo Title"
+          },
+          "slug": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Slug"
+          },
+          "sort_order": {
+            "default": 0,
+            "maximum": 1000.0,
+            "minimum": 0.0,
+            "title": "Sort Order",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "name"
+        ],
+        "title": "CollectionIn",
         "type": "object"
       },
       "CollectionOut": {
@@ -2151,6 +3047,26 @@
         "title": "HomeOut",
         "type": "object"
       },
+      "ImageOrderIn": {
+        "additionalProperties": false,
+        "properties": {
+          "image_ids": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "maxItems": 30,
+            "minItems": 1,
+            "title": "Image Ids",
+            "type": "array"
+          }
+        },
+        "required": [
+          "image_ids"
+        ],
+        "title": "ImageOrderIn",
+        "type": "object"
+      },
       "ImageOut": {
         "properties": {
           "alt": {
@@ -2202,6 +3118,21 @@
           "alt"
         ],
         "title": "ImageOut",
+        "type": "object"
+      },
+      "ImageUpdateIn": {
+        "additionalProperties": false,
+        "properties": {
+          "alt_text": {
+            "maxLength": 200,
+            "title": "Alt Text",
+            "type": "string"
+          }
+        },
+        "required": [
+          "alt_text"
+        ],
+        "title": "ImageUpdateIn",
         "type": "object"
       },
       "InventoryRowOut": {
@@ -3345,6 +4276,42 @@
         "title": "Page[ProductCardOut]",
         "type": "object"
       },
+      "Page_ProductRowOut_": {
+        "properties": {
+          "items": {
+            "items": {
+              "$ref": "#/components/schemas/ProductRowOut"
+            },
+            "title": "Items",
+            "type": "array"
+          },
+          "page": {
+            "title": "Page",
+            "type": "integer"
+          },
+          "page_size": {
+            "title": "Page Size",
+            "type": "integer"
+          },
+          "pages": {
+            "title": "Pages",
+            "type": "integer"
+          },
+          "total": {
+            "title": "Total",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "items",
+          "page",
+          "page_size",
+          "total",
+          "pages"
+        ],
+        "title": "Page[ProductRowOut]",
+        "type": "object"
+      },
       "PaymentAttemptOut": {
         "properties": {
           "amount_paise": {
@@ -3582,6 +4549,75 @@
         "title": "PincodeCheckOut",
         "type": "object"
       },
+      "PreviewVariantIn": {
+        "additionalProperties": false,
+        "properties": {
+          "fixed_price": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fixed Price"
+          },
+          "label": {
+            "default": "Standard",
+            "maxLength": 80,
+            "title": "Label",
+            "type": "string"
+          },
+          "net_gold_weight_g": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Net Gold Weight G"
+          },
+          "other_charges": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "default": "0",
+            "title": "Other Charges"
+          },
+          "stone_value": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "default": "0",
+            "title": "Stone Value"
+          }
+        },
+        "title": "PreviewVariantIn",
+        "type": "object"
+      },
       "PriceImpactOut": {
         "properties": {
           "new_price": {
@@ -3709,6 +4745,118 @@
         "title": "PriceOut",
         "type": "object"
       },
+      "PricePreviewIn": {
+        "additionalProperties": false,
+        "properties": {
+          "making_charge_type": {
+            "default": "none",
+            "enum": [
+              "per_gram",
+              "percent",
+              "flat",
+              "none"
+            ],
+            "title": "Making Charge Type",
+            "type": "string"
+          },
+          "making_charge_value": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "default": "0",
+            "title": "Making Charge Value"
+          },
+          "pricing_model": {
+            "enum": [
+              "fixed",
+              "weight_based"
+            ],
+            "title": "Pricing Model",
+            "type": "string"
+          },
+          "purity": {
+            "enum": [
+              "24K",
+              "22K",
+              "18K",
+              "14K"
+            ],
+            "title": "Purity",
+            "type": "string"
+          },
+          "variants": {
+            "items": {
+              "$ref": "#/components/schemas/PreviewVariantIn"
+            },
+            "maxItems": 50,
+            "minItems": 1,
+            "title": "Variants",
+            "type": "array"
+          },
+          "wastage_percent": {
+            "anyOf": [
+              {
+                "maximum": 100.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Wastage Percent"
+          }
+        },
+        "required": [
+          "purity",
+          "pricing_model",
+          "variants"
+        ],
+        "title": "PricePreviewIn",
+        "type": "object"
+      },
+      "PricePreviewOut": {
+        "properties": {
+          "gold_rate_per_gram": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gold Rate Per Gram"
+          },
+          "note": {
+            "title": "Note",
+            "type": "string"
+          },
+          "variants": {
+            "items": {
+              "$ref": "#/components/schemas/VariantPriceOut"
+            },
+            "title": "Variants",
+            "type": "array"
+          }
+        },
+        "required": [
+          "gold_rate_per_gram",
+          "variants",
+          "note"
+        ],
+        "title": "PricePreviewOut",
+        "type": "object"
+      },
       "PriceRowOut": {
         "properties": {
           "amount": {
@@ -3830,6 +4978,264 @@
           "is_new"
         ],
         "title": "ProductCardOut",
+        "type": "object"
+      },
+      "ProductCreateIn": {
+        "additionalProperties": false,
+        "properties": {
+          "attributes": {
+            "items": {
+              "$ref": "#/components/schemas/AttributeIn"
+            },
+            "maxItems": 30,
+            "title": "Attributes",
+            "type": "array"
+          },
+          "care_instructions": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Care Instructions"
+          },
+          "category_id": {
+            "format": "uuid",
+            "title": "Category Id",
+            "type": "string"
+          },
+          "certification_details": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Certification Details"
+          },
+          "collection_ids": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "maxItems": 30,
+            "title": "Collection Ids",
+            "type": "array"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "exchange_eligible": {
+            "default": false,
+            "title": "Exchange Eligible",
+            "type": "boolean"
+          },
+          "hallmark_details": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hallmark Details"
+          },
+          "is_bestseller": {
+            "default": false,
+            "title": "Is Bestseller",
+            "type": "boolean"
+          },
+          "is_featured": {
+            "default": false,
+            "title": "Is Featured",
+            "type": "boolean"
+          },
+          "making_charge_type": {
+            "default": "none",
+            "enum": [
+              "per_gram",
+              "percent",
+              "flat",
+              "none"
+            ],
+            "title": "Making Charge Type",
+            "type": "string"
+          },
+          "making_charge_value": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "default": "0",
+            "title": "Making Charge Value"
+          },
+          "metal_colour": {
+            "default": "yellow",
+            "enum": [
+              "yellow",
+              "white",
+              "rose",
+              "two_tone"
+            ],
+            "title": "Metal Colour",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 160,
+            "minLength": 2,
+            "title": "Name",
+            "type": "string"
+          },
+          "pricing_model": {
+            "enum": [
+              "fixed",
+              "weight_based"
+            ],
+            "title": "Pricing Model",
+            "type": "string"
+          },
+          "purity": {
+            "enum": [
+              "24K",
+              "22K",
+              "18K",
+              "14K"
+            ],
+            "title": "Purity",
+            "type": "string"
+          },
+          "return_eligible": {
+            "default": false,
+            "title": "Return Eligible",
+            "type": "boolean"
+          },
+          "return_window_days": {
+            "anyOf": [
+              {
+                "maximum": 365.0,
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Return Window Days"
+          },
+          "seo_description": {
+            "anyOf": [
+              {
+                "maxLength": 300,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seo Description"
+          },
+          "seo_title": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seo Title"
+          },
+          "slug": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Slug"
+          },
+          "status": {
+            "default": "draft",
+            "enum": [
+              "draft",
+              "active",
+              "archived"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "stone_details": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stone Details"
+          },
+          "variants": {
+            "items": {
+              "$ref": "#/components/schemas/VariantCreateIn"
+            },
+            "maxItems": 50,
+            "minItems": 1,
+            "title": "Variants",
+            "type": "array"
+          },
+          "wastage_percent": {
+            "anyOf": [
+              {
+                "maximum": 100.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Wastage Percent"
+          }
+        },
+        "required": [
+          "name",
+          "category_id",
+          "purity",
+          "pricing_model",
+          "variants"
+        ],
+        "title": "ProductCreateIn",
         "type": "object"
       },
       "ProductDetailOut": {
@@ -4039,6 +5445,356 @@
           "published_at"
         ],
         "title": "ProductDetailOut",
+        "type": "object"
+      },
+      "ProductIn": {
+        "additionalProperties": false,
+        "properties": {
+          "attributes": {
+            "items": {
+              "$ref": "#/components/schemas/AttributeIn"
+            },
+            "maxItems": 30,
+            "title": "Attributes",
+            "type": "array"
+          },
+          "care_instructions": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Care Instructions"
+          },
+          "category_id": {
+            "format": "uuid",
+            "title": "Category Id",
+            "type": "string"
+          },
+          "certification_details": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Certification Details"
+          },
+          "collection_ids": {
+            "items": {
+              "format": "uuid",
+              "type": "string"
+            },
+            "maxItems": 30,
+            "title": "Collection Ids",
+            "type": "array"
+          },
+          "description": {
+            "anyOf": [
+              {
+                "maxLength": 5000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Description"
+          },
+          "exchange_eligible": {
+            "default": false,
+            "title": "Exchange Eligible",
+            "type": "boolean"
+          },
+          "hallmark_details": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hallmark Details"
+          },
+          "is_bestseller": {
+            "default": false,
+            "title": "Is Bestseller",
+            "type": "boolean"
+          },
+          "is_featured": {
+            "default": false,
+            "title": "Is Featured",
+            "type": "boolean"
+          },
+          "making_charge_type": {
+            "default": "none",
+            "enum": [
+              "per_gram",
+              "percent",
+              "flat",
+              "none"
+            ],
+            "title": "Making Charge Type",
+            "type": "string"
+          },
+          "making_charge_value": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "default": "0",
+            "title": "Making Charge Value"
+          },
+          "metal_colour": {
+            "default": "yellow",
+            "enum": [
+              "yellow",
+              "white",
+              "rose",
+              "two_tone"
+            ],
+            "title": "Metal Colour",
+            "type": "string"
+          },
+          "name": {
+            "maxLength": 160,
+            "minLength": 2,
+            "title": "Name",
+            "type": "string"
+          },
+          "pricing_model": {
+            "enum": [
+              "fixed",
+              "weight_based"
+            ],
+            "title": "Pricing Model",
+            "type": "string"
+          },
+          "purity": {
+            "enum": [
+              "24K",
+              "22K",
+              "18K",
+              "14K"
+            ],
+            "title": "Purity",
+            "type": "string"
+          },
+          "return_eligible": {
+            "default": false,
+            "title": "Return Eligible",
+            "type": "boolean"
+          },
+          "return_window_days": {
+            "anyOf": [
+              {
+                "maximum": 365.0,
+                "minimum": 0.0,
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Return Window Days"
+          },
+          "seo_description": {
+            "anyOf": [
+              {
+                "maxLength": 300,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seo Description"
+          },
+          "seo_title": {
+            "anyOf": [
+              {
+                "maxLength": 120,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Seo Title"
+          },
+          "slug": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Slug"
+          },
+          "status": {
+            "default": "draft",
+            "enum": [
+              "draft",
+              "active",
+              "archived"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "stone_details": {
+            "anyOf": [
+              {
+                "maxLength": 2000,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stone Details"
+          },
+          "wastage_percent": {
+            "anyOf": [
+              {
+                "maximum": 100.0,
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Wastage Percent"
+          }
+        },
+        "required": [
+          "name",
+          "category_id",
+          "purity",
+          "pricing_model"
+        ],
+        "title": "ProductIn",
+        "type": "object"
+      },
+      "ProductRowOut": {
+        "properties": {
+          "available": {
+            "title": "Available",
+            "type": "integer"
+          },
+          "category": {
+            "title": "Category",
+            "type": "string"
+          },
+          "id": {
+            "title": "Id",
+            "type": "string"
+          },
+          "image": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/ImageOut"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "is_sample": {
+            "title": "Is Sample",
+            "type": "boolean"
+          },
+          "name": {
+            "title": "Name",
+            "type": "string"
+          },
+          "price_from": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Price From"
+          },
+          "pricing_model": {
+            "enum": [
+              "fixed",
+              "weight_based"
+            ],
+            "title": "Pricing Model",
+            "type": "string"
+          },
+          "purity": {
+            "enum": [
+              "24K",
+              "22K",
+              "18K",
+              "14K"
+            ],
+            "title": "Purity",
+            "type": "string"
+          },
+          "slug": {
+            "title": "Slug",
+            "type": "string"
+          },
+          "status": {
+            "enum": [
+              "draft",
+              "active",
+              "archived"
+            ],
+            "title": "Status",
+            "type": "string"
+          },
+          "updated_at": {
+            "format": "date-time",
+            "title": "Updated At",
+            "type": "string"
+          },
+          "variant_count": {
+            "title": "Variant Count",
+            "type": "integer"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "slug",
+          "status",
+          "category",
+          "purity",
+          "pricing_model",
+          "variant_count",
+          "available",
+          "price_from",
+          "image",
+          "is_sample",
+          "updated_at"
+        ],
+        "title": "ProductRowOut",
         "type": "object"
       },
       "ProfileIn": {
@@ -4977,6 +6733,333 @@
         "title": "ValidationError",
         "type": "object"
       },
+      "VariantCreateIn": {
+        "additionalProperties": false,
+        "properties": {
+          "fixed_price": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fixed Price"
+          },
+          "gross_weight_g": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gross Weight G"
+          },
+          "huid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "BIS hallmark unique ID, if the owner records it",
+            "title": "Huid"
+          },
+          "initial_stock": {
+            "default": 0,
+            "maximum": 10000.0,
+            "minimum": 0.0,
+            "title": "Initial Stock",
+            "type": "integer"
+          },
+          "is_active": {
+            "default": true,
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "is_default": {
+            "default": false,
+            "title": "Is Default",
+            "type": "boolean"
+          },
+          "label": {
+            "default": "Standard",
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Label",
+            "type": "string"
+          },
+          "net_gold_weight_g": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Net Gold Weight G"
+          },
+          "other_charges": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "default": "0",
+            "title": "Other Charges"
+          },
+          "other_charges_label": {
+            "anyOf": [
+              {
+                "maxLength": 80,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Other Charges Label"
+          },
+          "size": {
+            "anyOf": [
+              {
+                "maxLength": 20,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size"
+          },
+          "sku": {
+            "title": "Sku",
+            "type": "string"
+          },
+          "sort_order": {
+            "default": 0,
+            "maximum": 1000.0,
+            "minimum": 0.0,
+            "title": "Sort Order",
+            "type": "integer"
+          },
+          "stone_value": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "default": "0",
+            "title": "Stone Value"
+          },
+          "stone_weight_ct": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stone Weight Ct"
+          }
+        },
+        "required": [
+          "sku"
+        ],
+        "title": "VariantCreateIn",
+        "type": "object"
+      },
+      "VariantIn": {
+        "additionalProperties": false,
+        "properties": {
+          "fixed_price": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Fixed Price"
+          },
+          "gross_weight_g": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Gross Weight G"
+          },
+          "huid": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "description": "BIS hallmark unique ID, if the owner records it",
+            "title": "Huid"
+          },
+          "is_active": {
+            "default": true,
+            "title": "Is Active",
+            "type": "boolean"
+          },
+          "is_default": {
+            "default": false,
+            "title": "Is Default",
+            "type": "boolean"
+          },
+          "label": {
+            "default": "Standard",
+            "maxLength": 80,
+            "minLength": 1,
+            "title": "Label",
+            "type": "string"
+          },
+          "net_gold_weight_g": {
+            "anyOf": [
+              {
+                "exclusiveMinimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Net Gold Weight G"
+          },
+          "other_charges": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "default": "0",
+            "title": "Other Charges"
+          },
+          "other_charges_label": {
+            "anyOf": [
+              {
+                "maxLength": 80,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Other Charges Label"
+          },
+          "size": {
+            "anyOf": [
+              {
+                "maxLength": 20,
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Size"
+          },
+          "sku": {
+            "title": "Sku",
+            "type": "string"
+          },
+          "sort_order": {
+            "default": 0,
+            "maximum": 1000.0,
+            "minimum": 0.0,
+            "title": "Sort Order",
+            "type": "integer"
+          },
+          "stone_value": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              }
+            ],
+            "default": "0",
+            "title": "Stone Value"
+          },
+          "stone_weight_ct": {
+            "anyOf": [
+              {
+                "minimum": 0.0,
+                "type": "number"
+              },
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stone Weight Ct"
+          }
+        },
+        "required": [
+          "sku"
+        ],
+        "title": "VariantIn",
+        "type": "object"
+      },
       "VariantOut": {
         "properties": {
           "available_quantity": {
@@ -5070,6 +7153,51 @@
           "price"
         ],
         "title": "VariantOut",
+        "type": "object"
+      },
+      "VariantPriceOut": {
+        "properties": {
+          "breakdown": {
+            "items": {
+              "$ref": "#/components/schemas/PriceRowOut"
+            },
+            "title": "Breakdown",
+            "type": "array"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          },
+          "label": {
+            "title": "Label",
+            "type": "string"
+          },
+          "total": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Total"
+          }
+        },
+        "required": [
+          "label",
+          "total",
+          "breakdown",
+          "error"
+        ],
+        "title": "VariantPriceOut",
         "type": "object"
       },
       "VerifyPaymentIn": {
@@ -5236,6 +7364,323 @@
         "summary": "List Audit Logs",
         "tags": [
           "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/catalogue/price-preview": {
+      "post": {
+        "description": "What customers would pay with these inputs and today's rate and tax. Nothing is saved.",
+        "operationId": "price_preview_api_v1_admin_catalogue_price_preview_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PricePreviewIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PricePreviewOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Price Preview",
+        "tags": [
+          "admin-catalogue"
+        ]
+      }
+    },
+    "/api/v1/admin/categories": {
+      "get": {
+        "operationId": "list_categories_api_v1_admin_categories_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AdminCategoryOut"
+                  },
+                  "title": "Response List Categories Api V1 Admin Categories Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Categories",
+        "tags": [
+          "admin-catalogue"
+        ]
+      },
+      "post": {
+        "operationId": "create_category_api_v1_admin_categories_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminCategoryOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Category",
+        "tags": [
+          "admin-catalogue"
+        ]
+      }
+    },
+    "/api/v1/admin/categories/{category_id}": {
+      "delete": {
+        "operationId": "delete_category_api_v1_admin_categories__category_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "category_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Category Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/OkOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Delete Category",
+        "tags": [
+          "admin-catalogue"
+        ]
+      },
+      "put": {
+        "operationId": "update_category_api_v1_admin_categories__category_id__put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "category_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Category Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CategoryIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminCategoryOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Category",
+        "tags": [
+          "admin-catalogue"
+        ]
+      }
+    },
+    "/api/v1/admin/collections": {
+      "get": {
+        "operationId": "list_collections_api_v1_admin_collections_get",
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/AdminCollectionOut"
+                  },
+                  "title": "Response List Collections Api V1 Admin Collections Get",
+                  "type": "array"
+                }
+              }
+            },
+            "description": "Successful Response"
+          }
+        },
+        "summary": "List Collections",
+        "tags": [
+          "admin-catalogue"
+        ]
+      },
+      "post": {
+        "operationId": "create_collection_api_v1_admin_collections_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CollectionIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminCollectionOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Collection",
+        "tags": [
+          "admin-catalogue"
+        ]
+      }
+    },
+    "/api/v1/admin/collections/{collection_id}": {
+      "put": {
+        "operationId": "update_collection_api_v1_admin_collections__collection_id__put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "collection_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Collection Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CollectionIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminCollectionOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Collection",
+        "tags": [
+          "admin-catalogue"
         ]
       }
     },
@@ -6336,6 +8781,583 @@
         "summary": "Change Status",
         "tags": [
           "admin"
+        ]
+      }
+    },
+    "/api/v1/admin/products": {
+      "get": {
+        "operationId": "list_products_api_v1_admin_products_get",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "q",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 100,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Q"
+            }
+          },
+          {
+            "in": "query",
+            "name": "status",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "maxLength": 16,
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "in": "query",
+            "name": "category_id",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "format": "uuid",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Category Id"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page",
+            "required": false,
+            "schema": {
+              "default": 1,
+              "maximum": 10000,
+              "minimum": 1,
+              "title": "Page",
+              "type": "integer"
+            }
+          },
+          {
+            "in": "query",
+            "name": "page_size",
+            "required": false,
+            "schema": {
+              "default": 25,
+              "maximum": 100,
+              "minimum": 1,
+              "title": "Page Size",
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Page_ProductRowOut_"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "List Products",
+        "tags": [
+          "admin-catalogue"
+        ]
+      },
+      "post": {
+        "operationId": "create_product_api_v1_admin_products_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductCreateIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminProductOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Create Product",
+        "tags": [
+          "admin-catalogue"
+        ]
+      }
+    },
+    "/api/v1/admin/products/{product_id}": {
+      "get": {
+        "operationId": "get_product_api_v1_admin_products__product_id__get",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "product_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Product Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminProductOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Get Product",
+        "tags": [
+          "admin-catalogue"
+        ]
+      },
+      "put": {
+        "operationId": "update_product_api_v1_admin_products__product_id__put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "product_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Product Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ProductIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminProductOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Product",
+        "tags": [
+          "admin-catalogue"
+        ]
+      }
+    },
+    "/api/v1/admin/products/{product_id}/images": {
+      "post": {
+        "operationId": "upload_image_api_v1_admin_products__product_id__images_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "product_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Product Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_image_api_v1_admin_products__product_id__images_post"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminProductOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Upload Image",
+        "tags": [
+          "admin-catalogue"
+        ]
+      }
+    },
+    "/api/v1/admin/products/{product_id}/images/order": {
+      "put": {
+        "operationId": "reorder_images_api_v1_admin_products__product_id__images_order_put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "product_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Product Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageOrderIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminProductOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Reorder Images",
+        "tags": [
+          "admin-catalogue"
+        ]
+      }
+    },
+    "/api/v1/admin/products/{product_id}/images/{image_id}": {
+      "delete": {
+        "operationId": "delete_image_api_v1_admin_products__product_id__images__image_id__delete",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "product_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Product Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "image_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Image Id",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminProductOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Delete Image",
+        "tags": [
+          "admin-catalogue"
+        ]
+      },
+      "patch": {
+        "operationId": "update_image_api_v1_admin_products__product_id__images__image_id__patch",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "product_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Product Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "image_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Image Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ImageUpdateIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminProductOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Image",
+        "tags": [
+          "admin-catalogue"
+        ]
+      }
+    },
+    "/api/v1/admin/products/{product_id}/variants": {
+      "post": {
+        "operationId": "add_variant_api_v1_admin_products__product_id__variants_post",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "product_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Product Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VariantCreateIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminProductOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Add Variant",
+        "tags": [
+          "admin-catalogue"
+        ]
+      }
+    },
+    "/api/v1/admin/products/{product_id}/variants/{variant_id}": {
+      "put": {
+        "operationId": "update_variant_api_v1_admin_products__product_id__variants__variant_id__put",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "product_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Product Id",
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "variant_id",
+            "required": true,
+            "schema": {
+              "format": "uuid",
+              "title": "Variant Id",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VariantIn"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminProductOut"
+                }
+              }
+            },
+            "description": "Successful Response"
+          },
+          "422": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            },
+            "description": "Validation Error"
+          }
+        },
+        "summary": "Update Variant",
+        "tags": [
+          "admin-catalogue"
         ]
       }
     },

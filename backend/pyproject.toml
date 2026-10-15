@@ -45,7 +45,7 @@ disallow_untyped_decorators = false
 exclude = ["alembic/", "tests/"]
 
 [[tool.mypy.overrides]]
-module = ["argon2.*"]
+module = ["argon2.*", "boto3.*", "botocore.*"]
 ignore_missing_imports = true
 
 [tool.pytest.ini_options]

@@ -13,6 +13,7 @@ from contextlib import asynccontextmanager
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 
 from app.api.sitemap import router as sitemap_router
 from app.api.v1.router import api_router
@@ -28,6 +29,7 @@ from app.core.middleware import (
 )
 from app.jobs import job_loop
 from app.services.payment_gateway import make_gateway
+from app.services.storage import make_storage, media_root
 
 API_PREFIX = "/api/v1"
 logger = logging.getLogger("app")
@@ -73,6 +75,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
     app.state.engine = engine
     app.state.session_factory = make_session_factory(engine)
     app.state.payment_gateway = make_gateway(settings)
+    app.state.storage = make_storage(settings)
 
     register_exception_handlers(app)
 
@@ -96,6 +99,9 @@ def create_app(settings: Settings | None = None) -> FastAPI:
 
     app.include_router(api_router, prefix=API_PREFIX)
     app.include_router(sitemap_router)
+    if settings.storage_backend == "local":
+        # Uploaded product photos (re-encoded WebP files with random names).
+        app.mount("/media", StaticFiles(directory=media_root(settings), check_dir=False), "media")
     return app
 
 
