@@ -83,6 +83,32 @@ describe('sign in', () => {
     expect(mergedBody).toEqual({ slugs: ['om-pendant'] });
     expect(window.localStorage.getItem('anvika:wishlist:v1')).toBe('[]');
   });
+
+  it.each([
+    ['staff', ['dashboard:view', 'orders:write'], '/admin'],
+    ['customer', [], '/account'],
+  ])('sends a %s to %s after a plain sign-in', async (_kind, permissions, expected) => {
+    const user = userEvent.setup();
+    mockFetch({
+      'POST /api/v1/auth/login': {
+        body: { user: { ...USER, role: permissions.length ? 'staff' : 'customer', permissions } },
+      },
+      'POST /api/v1/wishlist/merge': { body: { ok: true, message: '' } },
+      'GET /api/v1/wishlist/slugs': { body: [] },
+      'GET /api/v1/me/addresses': { body: [] },
+      'GET /api/v1/admin/dashboard': {
+        status: 403,
+        body: { error: { code: 'FORBIDDEN', message: 'x' } },
+      },
+    });
+    const { router } = renderRoute('/login');
+    await user.type(await screen.findByLabelText('Email'), 'asha@example.com');
+    await user.type(screen.getByLabelText('Password'), 'correct horse battery');
+    await user.click(screen.getByRole('button', { name: 'Sign in' }));
+    await waitFor(() => {
+      expect(router.state.location.pathname).toBe(expected);
+    });
+  });
 });
 
 describe('registration', () => {

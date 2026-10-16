@@ -52,7 +52,16 @@ const linkCls =
 function useRedirectIfSignedIn() {
   const me = useMe();
   const [params] = useSearchParams();
-  return { me, target: safeNext(params.get('next')) };
+  return { me, target: landingPath(me.data, params.get('next')) };
+}
+
+/**
+ * Where to go after signing in: the page the visitor was heading to, otherwise the admin dashboard
+ * for staff and the account page for customers. (Cosmetic only — the backend enforces access.)
+ */
+function landingPath(user: { permissions: string[] } | null | undefined, next: string | null) {
+  const fallback = user && user.permissions.length > 0 ? '/admin' : '/account';
+  return safeNext(next, fallback);
 }
 
 export function LoginPage() {
@@ -71,9 +80,11 @@ export function LoginPage() {
 
   const onSubmit = form.handleSubmit((values) => {
     login.mutate(values, {
-      onSuccess: () => {
-        // Move the guest wishlist into the account, then continue where the shopper was going.
-        void merge().then(() => navigate(target, { replace: true }));
+      onSuccess: (data) => {
+        // Move the guest wishlist into the account, then continue where the shopper was going
+        // (staff go to the admin dashboard unless they were heading somewhere else).
+        const destination = landingPath(data.user, params.get('next'));
+        void merge().then(() => navigate(destination, { replace: true }));
       },
     });
   });

@@ -1,4 +1,4 @@
-import { Heart, Menu, Search, ShoppingBag, UserRound } from 'lucide-react';
+import { Heart, LayoutDashboard, Menu, Search, ShoppingBag, UserRound } from 'lucide-react';
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router';
 
@@ -58,15 +58,28 @@ function HeaderLogo() {
 function AccountLink() {
   const me = useMe();
   const signedIn = Boolean(me.data);
+  const isStaff = (me.data?.permissions.length ?? 0) > 0;
   return (
-    <Link
-      to={signedIn ? '/account' : '/login'}
-      className="inline-flex size-11 items-center justify-center rounded-sm hover:bg-surface-muted"
-      aria-label={signedIn ? 'My account' : 'Sign in'}
-      title={signedIn ? 'My account' : 'Sign in'}
-    >
-      <UserRound className="size-5" strokeWidth={1.5} aria-hidden="true" />
-    </Link>
+    <>
+      {isStaff && (
+        <Link
+          to="/admin"
+          className="inline-flex size-11 items-center justify-center rounded-sm hover:bg-surface-muted"
+          aria-label="Admin dashboard"
+          title="Admin dashboard"
+        >
+          <LayoutDashboard className="size-5" strokeWidth={1.5} aria-hidden="true" />
+        </Link>
+      )}
+      <Link
+        to={signedIn ? '/account' : '/login'}
+        className="inline-flex size-11 items-center justify-center rounded-sm hover:bg-surface-muted"
+        aria-label={signedIn ? 'My account' : 'Sign in'}
+        title={signedIn ? 'My account' : 'Sign in'}
+      >
+        <UserRound className="size-5" strokeWidth={1.5} aria-hidden="true" />
+      </Link>
+    </>
   );
 }
 

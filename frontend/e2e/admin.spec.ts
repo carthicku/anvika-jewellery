@@ -12,6 +12,27 @@ import { adjustStock, here, signInAsAdmin } from './helpers';
  * it was.
  */
 
+test('staff land on the dashboard after a plain sign-in and see an Admin link', async ({
+  page,
+}) => {
+  await signInAsAdmin(page, ''); // no ?next= : the normal /login page
+  await expect(page).toHaveURL(/\/admin$/);
+  await page.goto('/');
+  await expect(page.getByRole('link', { name: 'Admin dashboard' })).toBeVisible();
+});
+
+test('customers do not get an Admin link and land on their account', async ({ page }, testInfo) => {
+  await page.goto('/register');
+  await page.getByLabel(/^Full name/).fill('Plain Customer');
+  await page
+    .getByLabel(/^Email\*?$/)
+    .fill(`plain-${testInfo.project.name}-${Date.now()}@example.com`);
+  await page.getByLabel(/^Password/).fill('a long e2e passphrase');
+  await page.getByRole('button', { name: 'Create account' }).click();
+  await expect(page).toHaveURL(/\/account$/);
+  await expect(page.getByRole('link', { name: 'Admin dashboard' })).toHaveCount(0);
+});
+
 test('admin dashboard and navigation', async ({ page, isMobile }) => {
   await signInAsAdmin(page);
   await expect(page.getByRole('heading', { level: 1, name: 'Dashboard' })).toBeVisible();
