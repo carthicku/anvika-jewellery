@@ -6,6 +6,7 @@ import { useMe } from '@/api/queries/account';
 import { useCart } from '@/api/queries/cart';
 import { useCategories, usePublicSettings } from '@/api/queries/catalogue';
 import { useWishlist } from '@/api/queries/wishlist';
+import { Logo } from '@/components/brand/Logo';
 import { IconButton } from '@/components/ui/Button';
 import { DialogRoot, SheetContent } from '@/components/ui/Dialog';
 import { cn } from '@/lib/cn';
@@ -42,14 +43,14 @@ export function AnnouncementBar() {
   );
 }
 
-function Logo() {
+function HeaderLogo() {
   return (
     <Link
       to="/"
-      className="font-display text-2xl font-medium tracking-[0.22em] uppercase sm:text-[1.7rem]"
+      className="inline-flex items-center justify-self-center py-1"
       aria-label={`${env.storeName} — home`}
     >
-      {env.storeName}
+      <Logo className="w-24 min-[360px]:w-28 min-[400px]:w-32 sm:w-44 lg:w-52" />
     </Link>
   );
 }
@@ -156,7 +157,7 @@ export function SiteHeader() {
             Search
           </button>
         </div>
-        <Logo />
+        <HeaderLogo />
         <div className="flex items-center justify-end gap-0.5">
           <IconButton
             label="Search"

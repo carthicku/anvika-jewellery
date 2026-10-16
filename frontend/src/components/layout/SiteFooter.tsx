@@ -1,6 +1,7 @@
 import { Link } from 'react-router';
 
 import { useCategories, usePublicSettings } from '@/api/queries/catalogue';
+import { Logo } from '@/components/brand/Logo';
 import { env } from '@/lib/env';
 
 import { NewsletterForm } from './NewsletterForm';
@@ -56,7 +57,10 @@ export function SiteFooter() {
       <Container className="py-16 lg:py-20">
         <div className="grid gap-12 lg:grid-cols-[1.3fr_2fr]">
           <div className="max-w-sm">
-            <p className="font-display text-3xl tracking-[0.18em] uppercase">{env.storeName}</p>
+            <p>
+              <span className="sr-only">{env.storeName}</span>
+              <Logo className="w-56" />
+            </p>
             <p className="mt-4 text-sm leading-relaxed text-noir-muted">
               {s?.tagline ?? 'Fine gold jewellery'}. Every price is shown with its gold value,
               making charges and GST.

@@ -62,10 +62,17 @@ export function NecklaceHero({
       data-progress="0.000"
       className={cn(
         // One screen tall below the sticky header (--header-h is measured by RootLayout).
-        'relative isolate h-[calc(100svh-var(--header-h,4rem))] min-h-[34rem] overflow-hidden bg-noir text-noir-ink',
+        'relative isolate h-[calc(100svh-var(--header-h,4rem))] min-h-[34rem] overflow-hidden text-noir-ink',
         className,
       )}
+      style={{
+        backgroundImage: 'url(/velvet-bg.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
     >
+      {/* Dark overlay so text remains legible over the velvet texture */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-20 bg-black/40" />
       {/* Decorative: the canvas has no information that isn't in the text. */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 -z-10">
         {loadStage && (

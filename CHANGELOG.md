@@ -4,6 +4,13 @@ All notable changes to this project. Format based on [Keep a Changelog](https://
 
 ## [Unreleased]
 
+### Changed
+- Brand wordmark: header and footer now use a vector logo (`components/brand/Logo.tsx`) following
+  the reference sheet in `frontend/images/` — thin geometric lowercase "anvika" with a stacked-dots
+  "i" and "FINE JEWELLERY" tucked under "n…a". Drawn as shapes (not the image file), follows
+  `currentColor`, no font download. The work-in-progress Google Fonts links were removed (the
+  production CSP only allows self-hosted fonts).
+
 ### Added
 - Home page: scroll-scrubbed 3D hero — scattered diamonds travel along curved paths into a gold
   necklace while the hero is pinned (settings and chain links form progressively); scrolling back
