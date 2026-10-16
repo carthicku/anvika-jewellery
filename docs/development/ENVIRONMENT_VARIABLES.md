@@ -46,6 +46,7 @@
 | `MEDIA_ROOT` | | `var/media` | Local upload folder. |
 | `S3_ENDPOINT_URL`, `S3_REGION`, `S3_BUCKET`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_PUBLIC_BASE_URL` | when s3 | — | Object storage settings (**keys are secret**). |
 | `DATABASE_URL_DIRECT` / `SETUP_DB_ON_BUILD` | Vercel previews only | — | `SETUP_DB_ON_BUILD=1` lets a **preview** build run the migrations and sample seed (`backend/vercel_build.py`), using `DATABASE_URL_DIRECT` (non-pooled) if set. Ignored on production builds. |
+| `PREVIEW_ADMIN_EMAIL` / `PREVIEW_ADMIN_PASSWORD` | Vercel previews only | — | Demo admin created by the preview build (`create-preview-admin`); the password must satisfy the normal policy. Never set on Production. |
 | `CRON_SECRET` | ✅ on Vercel | empty | ≥ 16 random characters. Enables `GET /api/v1/internal/cron/run-jobs` and `/refresh-prices`, which Vercel Cron calls with `Authorization: Bearer <secret>` (Vercel adds the header itself when a project variable named `CRON_SECRET` exists). Empty = the endpoints don't exist. |
 | `VERCEL` | (set by Vercel) | — | When present the in-process job loop is skipped, and start-up requires `STORAGE_BACKEND=s3` and `TRUSTED_PROXY_COUNT=1`. Never set it yourself. |
 | `BACKGROUND_JOBS_ENABLED` | | `true` | Runs the in-process job loop (order expiry, email dispatch, price cache). Set `false` in tests and if you run `python -m app.cli run-jobs` from a scheduler instead. |

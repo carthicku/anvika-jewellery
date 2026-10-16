@@ -57,6 +57,7 @@ def test_runs_migrations_then_seed_on_an_opted_in_preview(
     assert [c[1:] for c in commands] == [
         ["-m", "alembic", "upgrade", "head"],
         ["-m", "app.cli", "seed"],
+        ["-m", "app.cli", "create-preview-admin"],
     ]
     assert Path(vercel_build.__file__).name == "vercel_build.py"
 
@@ -69,4 +70,4 @@ def test_prefers_the_direct_connection_for_schema_changes(
     monkeypatch.setenv("DATABASE_URL", "postgresql+psycopg://pooled")
     monkeypatch.setenv("DATABASE_URL_DIRECT", "postgresql+psycopg://direct")
     vercel_build.main()
-    assert used_urls == ["postgresql+psycopg://direct"] * 2
+    assert used_urls == ["postgresql+psycopg://direct"] * 3

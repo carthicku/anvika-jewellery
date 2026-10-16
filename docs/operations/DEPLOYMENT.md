@@ -162,6 +162,10 @@ payment **simulator**) using a free Neon database added from the Vercel Marketpl
   sample `seed` during the **preview** build (never on production builds; tested).
 * Preview deployments have their own URLs; on previews the API automatically accepts requests from
   the deployment's own host names (`VERCEL_URL`, `VERCEL_BRANCH_URL`) so cookies/CSRF work.
+* `PREVIEW_ADMIN_EMAIL` / `PREVIEW_ADMIN_PASSWORD` (Preview only, encrypted): the build runs
+  `python -m app.cli create-preview-admin`, which creates that admin if it doesn't exist (the normal
+  password policy still applies; refused when `APP_ENV=production`). Verified 2026-10-16: sign-in and
+  the dashboard, products, orders, inventory, gold-rate, returns and review screens all load.
 * **Never** set these on Production, and never use the simulator for real customers.
 
 ### Limits you must know about

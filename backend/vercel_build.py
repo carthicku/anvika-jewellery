@@ -7,8 +7,9 @@ catalogue without anyone running commands against it by hand. It runs only when 
   * the app is not in production mode.
 If DATABASE_URL_DIRECT is set (a non-pooled connection string) the set-up uses it instead of the
 pooled DATABASE_URL, because schema changes should not go through a transaction-mode pooler.
-It runs the same Alembic migrations and idempotent sample seed as the documented commands. Real
-stores should run migrations themselves (docs/operations/DEPLOYMENT.md §7).
+It runs the same Alembic migrations and idempotent sample seed as the documented commands, then
+creates a demo admin if PREVIEW_ADMIN_EMAIL and PREVIEW_ADMIN_PASSWORD are set (Preview
+variables). Real stores should run migrations themselves (docs/operations/DEPLOYMENT.md §7).
 """
 
 from __future__ import annotations
@@ -31,6 +32,7 @@ def main() -> int:
     for command in (
         [sys.executable, "-m", "alembic", "upgrade", "head"],
         [sys.executable, "-m", "app.cli", "seed"],
+        [sys.executable, "-m", "app.cli", "create-preview-admin"],  # no-op without the variables
     ):
         print("vercel_build: running", " ".join(command[1:]))
         result = subprocess.run(command, check=False, env=env)  # noqa: S603

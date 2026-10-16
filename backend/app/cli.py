@@ -117,7 +117,9 @@ def _user_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--name", required=True, help="Full name, in quotes if it has spaces")
 
 
-def _create_user(settings: Settings, email: str, name: str, role: str) -> int:
+def _create_user(
+    settings: Settings, email: str, name: str, role: str, password: str | None = None
+) -> int:
     from sqlalchemy import select
 
     from app.core.security import hash_password
@@ -126,7 +128,8 @@ def _create_user(settings: Settings, email: str, name: str, role: str) -> int:
     from app.services import audit
 
     address = email.strip().lower()
-    password = _prompt_password(address)
+    if password is None:
+        password = _prompt_password(address)
     if password is None:
         return 2
     with _session(settings) as db:
@@ -162,6 +165,38 @@ def _create_user(settings: Settings, email: str, name: str, role: str) -> int:
 )
 def create_admin(args: argparse.Namespace, settings: Settings) -> int:
     return _create_user(settings, args.email, args.name, "admin")
+
+
+@command(
+    "create-preview-admin",
+    "VERCEL DEMO PREVIEWS: create an admin from PREVIEW_ADMIN_EMAIL / PREVIEW_ADMIN_PASSWORD "
+    "(no-op if it exists; refused in production; the password policy still applies).",
+)
+def create_preview_admin(_args: argparse.Namespace, settings: Settings) -> int:
+    import os
+
+    from sqlalchemy import select
+
+    from app.core.security import password_problems
+    from app.models import User
+
+    if settings.is_production:
+        print("create-preview-admin is disabled in production; use create-admin.")
+        return 2
+    address = os.environ.get("PREVIEW_ADMIN_EMAIL", "").strip().lower()
+    password = os.environ.get("PREVIEW_ADMIN_PASSWORD", "")
+    if not address or not password:
+        print("PREVIEW_ADMIN_EMAIL / PREVIEW_ADMIN_PASSWORD are not set; nothing to do.")
+        return 0
+    problems = password_problems(password, address)
+    if problems:
+        print("Preview admin password rejected: " + " ".join(problems))
+        return 2
+    with _session(settings) as db:
+        if db.scalar(select(User.id).where(User.email == address)):
+            print(f"A user with email {address} already exists. Nothing changed.")
+            return 0
+    return _create_user(settings, address, "Preview Admin", "admin", password)
 
 
 @command(
