@@ -15,6 +15,10 @@ build-backend = "setuptools.build_meta"
 [tool.setuptools]
 packages = ["app"]
 
+# Vercel runs this after installing dependencies (a no-op unless SETUP_DB_ON_BUILD=1 on a preview).
+[tool.vercel.scripts]
+build = "python vercel_build.py"
+
 [tool.setuptools.dynamic]
 dependencies = { file = ["requirements.txt"] }
 

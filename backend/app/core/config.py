@@ -99,6 +99,20 @@ class Settings(BaseSettings):
         return value
 
     @model_validator(mode="after")
+    def allow_vercel_preview_origins(self) -> Settings:
+        """Every Vercel preview deployment has its own URL, so a fixed ALLOWED_ORIGINS can't list
+        it. Vercel provides the deployment's own host names (VERCEL_URL, VERCEL_BRANCH_URL); on
+        previews only, those are added so the origin check accepts requests from the preview site
+        itself (and nothing else)."""
+        if os.environ.get("VERCEL_ENV") == "preview":
+            for name in ("VERCEL_URL", "VERCEL_BRANCH_URL"):
+                host = os.environ.get(name, "").strip()
+                origin = f"https://{host}" if host else ""
+                if origin and origin not in self.allowed_origins:
+                    self.allowed_origins = [*self.allowed_origins, origin]
+        return self
+
+    @model_validator(mode="after")
     def validate_for_environment(self) -> Settings:
         if self.app_env != "production":
             if not self.secret_key.get_secret_value():

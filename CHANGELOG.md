@@ -5,6 +5,8 @@ All notable changes to this project. Format based on [Keep a Changelog](https://
 ## [Unreleased]
 
 ### Added
+- Vercel preview demo mode: previews can create their own tables and sample catalogue during the
+  build (`SETUP_DB_ON_BUILD`, preview builds only) and accept requests from their own preview URL.
 - Vercel deployment (ADR-0011): root `vercel.json` with two services (Vite frontend + FastAPI),
   security headers/CSP, SPA fallback and cron schedule; `/api/v1/internal/cron/run-jobs` and
   `/refresh-prices` endpoints protected by `CRON_SECRET`; the in-process job loop is skipped on

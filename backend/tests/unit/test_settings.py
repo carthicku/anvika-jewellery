@@ -79,3 +79,19 @@ def test_cron_secret_must_be_long_enough_when_set() -> None:
     assert make(cron_secret="a-long-enough-cron-secret").cron_secret.get_secret_value()
     with pytest.raises(ValidationError, match="CRON_SECRET"):
         make(cron_secret="short")
+
+
+def test_vercel_preview_adds_its_own_hosts_to_the_allowed_origins(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    base = make().allowed_origins
+    monkeypatch.setenv("VERCEL_URL", "shop-abc123-team.vercel.app")
+    monkeypatch.setenv("VERCEL_BRANCH_URL", "shop-git-feature-team.vercel.app")
+    monkeypatch.setenv("VERCEL_ENV", "production")
+    assert make().allowed_origins == base  # production deployments list their domain explicitly
+    monkeypatch.setenv("VERCEL_ENV", "preview")
+    assert make().allowed_origins == [
+        *base,
+        "https://shop-abc123-team.vercel.app",
+        "https://shop-git-feature-team.vercel.app",
+    ]

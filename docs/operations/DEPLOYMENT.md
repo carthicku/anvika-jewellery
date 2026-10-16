@@ -150,6 +150,20 @@ everything else to `web`, on **one domain** (cookies and CSRF need that).
    *Settings → Cron Jobs* run `run-jobs` once and read its log (`200` and the JSON counts).
 7. **Promote** to production only after the [production checklist](PRODUCTION_CHECKLIST.md).
 
+### Demo preview with a free database (no Supabase/Razorpay/SMTP yet)
+A Preview deployment can look and behave like localhost (sample catalogue, cart, checkout with the
+payment **simulator**) using a free Neon database added from the Vercel Marketplace
+(`vercel integration add neon -e preview`). Preview-only variables used for this (2026-10-16):
+`DATABASE_URL` (pooled), `DATABASE_URL_DIRECT` (non-pooled, used for the schema set-up),
+`SECRET_KEY`, `DB_POOL_SIZE=1`, `DB_MAX_OVERFLOW=0`, `DB_PREPARE_STATEMENTS=false`,
+`COOKIE_SECURE=true`, `TRUSTED_PROXY_COUNT=1`, `EMAIL_BACKEND=console`, `LOG_FORMAT=json`,
+`SETUP_DB_ON_BUILD=1`. `APP_ENV` stays unset (development), which allows the simulator.
+* `SETUP_DB_ON_BUILD=1` makes `backend/vercel_build.py` run `alembic upgrade head` and the idempotent
+  sample `seed` during the **preview** build (never on production builds; tested).
+* Preview deployments have their own URLs; on previews the API automatically accepts requests from
+  the deployment's own host names (`VERCEL_URL`, `VERCEL_BRANCH_URL`) so cookies/CSRF work.
+* **Never** set these on Production, and never use the simulator for real customers.
+
 ### Limits you must know about
 * **Cron needs the Pro plan.** `run-jobs` runs every minute (expires unpaid orders after the 30-minute
   window, reconciles payments, sends queued emails). Hobby allows daily cron only, so abandoned
@@ -177,4 +191,6 @@ everything else to `web`, on **one domain** (cookies and CSRF need that).
 | Repeated API requests via `vercel dev -L` | ⚠️ not completed: on this Windows machine the dev server's Python child kept exiting with a console-signal code (`0xC000013A`), so the API could not be exercised further through Vercel's local router. The same app is fully tested directly (312 backend tests; E2E suite) |
 | **Real Vercel preview deployment** (2026-10-16, Hobby team, no env vars): build succeeded; `/` and deep links serve the SPA; `/api/v1/health` → 200 through the `/api/*` rewrite; `/robots.txt` served by the API (indexing off by default); `/api/v1/internal/cron/run-jobs` → 404 while `CRON_SECRET` is unset; `/api/v1/products` → 500 as expected (no `DATABASE_URL`) | ✅ |
 | Preview deployments sit behind Vercel's login protection (`vercel_authentication`); open them while signed in, or use `vercel curl <url>` | ✅ |
+| **Preview with a database** (2026-10-16, Neon): build ran the migrations and seed; `/api/v1/health?deep=1` → database ok, migration `8c558fc9123c`; `/api/v1/products`, `/home`, `/sitemap.xml` → 200; a real browser run (desktop + phone) showed the necklace hero, categories, bestsellers, and added a piece to the cart on the preview origin | ✅ |
+| This development machine could not reach Neon on port 5432 (connection reset), so migrations were run by the Vercel build instead of from here | ℹ️ network on this PC |
 | Cron wiring under Services (needs `CRON_SECRET` and the Pro plan: Hobby rejects per-minute schedules — the first deploy failed on that, so previews on Hobby need daily schedules), Supabase pooler behaviour, S3 uploads, 4.5 MB limit | ⏳ needs the environment variables and Pro |
