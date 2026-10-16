@@ -36,6 +36,12 @@ owner. Keep it current. Each item states its impact and the plan.
   pre-rendering public pages is the planned improvement. Measured locally only (PERFORMANCE_REVIEW).
 * API timings with 1,000 products were measured in-process against local PostgreSQL, not on
   Supabase's production tier or over the internet.
+* **Home necklace hero (ADR-0010)**: the 3D chunk (three.js + React Three Fiber + GSAP) is
+  ≈286 kB gzip. React Three Fiber v9 imports all of three.js, so it can't be tree-shaken. It loads
+  only after the page has finished loading and is idle, so the headline is unaffected, but on
+  throttled phones running it adds main-thread work (see PERFORMANCE_REVIEW). Browsers without
+  WebGL get the dark hero with its text and no animation. The necklace is an illustration, not a
+  product.
 * No manual (human) keyboard and screen-reader pass has been recorded yet; automated keyboard and
   axe checks pass.
 * Staff accounts are created by promoting a registered account; there is no invitation email.

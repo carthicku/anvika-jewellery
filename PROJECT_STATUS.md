@@ -2,9 +2,12 @@
 
 **Last updated:** 2026-10-15
 **Current phase:** All phases complete locally — waiting on owner inputs to deploy
-**Last verified checkpoint:** Phase 8 — launch preparation (see docs/DELIVERY_REPORT.md)
-(`scripts/check.ps1` all green; 308 backend tests, 48 frontend tests, 62 E2E passed + 4 skipped by
-design on the dev server and on the production build behind Caddy; axe clean; Lighthouse recorded)
+**Last verified checkpoint:** 2026-10-16 — scroll-scrubbed 3D necklace hero on the home page
+(ADR-0010; 88 E2E passed incl. pixel-level reversal tests). Before that: Phase 8 launch
+preparation (see docs/DELIVERY_REPORT.md)
+(`scripts/check.ps1` all green; 308 backend tests, 54 frontend tests, 88 E2E passed + 6 skipped by
+design on the dev server; the production build behind Caddy last ran the suite before the hero
+(62 passed, 2026-10-15); axe clean; Lighthouse recorded)
 
 ## What exists
 * Planning documentation, ADRs 0001–0009, task tracker, `CLAUDE.md`, 11 skills.
@@ -44,6 +47,9 @@ design on the dev server and on the production build behind Caddy; axe clean; Li
   stock) → refund or complete; verified-purchase reviews with moderation (only approved reviews
   are public; rating summary and structured data use approved reviews only).
 
+* **Home hero (2026-10-16)**: scattered diamonds assemble into a gold necklace as the visitor
+  scrolls (pinned, scrubbed, exactly reversible; reduced motion = still). Prototype at
+  `/lab/necklace` in development builds.
 * **Launch preparation (Phase 8)**: `robots.txt` (indexing off until launch), operations commands
   (`verify-integrity`, `verify-rls`, `catalogue-report`, `send-test-email`), production web-server
   config (`deploy/Caddyfile`, verified locally), backend `Dockerfile` and compose file (not built —

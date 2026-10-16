@@ -152,3 +152,29 @@ to 0.96 (Lighthouse); `aria-label` on a role-less loading `div` (axe, production
 listing heading order (Lighthouse); a missing hashed asset would have been served as `index.html`
 with a one-year cache (curl against Caddy). Not run: Docker build/compose (Docker not installed),
 real Razorpay/Supabase/SMTP (no owner accounts).
+
+### 2026-10-16 — Scroll-scrubbed necklace hero (prototype → home page)
+| Suite | Command | Result |
+|-------|---------|--------|
+| Timeline unit tests | `vitest run src/features/necklace` | 6 passed: scattered at 0 / complete at 1, pure function of progress (forward then backward with reused buffers gives identical matrices), clamping, chain never shrinks while scrolling forward, curved 3D paths |
+| Prototype (`/lab/necklace`) E2E | `playwright test e2e/necklace.spec.ts -g lab/necklace` ×2 | 13 passed, 1 skipped by design, both runs (before integration) |
+| Prototype + home page E2E | `playwright test e2e/necklace.spec.ts` ×2 | 26 passed, 2 skipped by design (resize is desktop-only), both runs |
+| Full static + unit/API + build | `powershell -File scripts/check.ps1` | All checks passed (308 backend, 54 frontend unit tests) |
+| Full E2E (desktop + mobile) | `npx playwright test` | 88 passed, 6 skipped by design, 0 failed (includes axe on the new dark hero, keyboard flow, layouts at 375/768/1280) |
+
+What `e2e/necklace.spec.ts` verifies with rendered pixels (WebGL drawing buffer kept via a
+test-only `window.__NECKLACE_CAPTURE__` flag): no autoplay (no change for 1.5 s without
+scrolling); forward 0 → 0.5 → 1 then back 1 → 0.5 → 0 gives identical frames at 0.5 and 0 (mean
+pixel difference < 0.01/255) and very different frames at 0 vs 1; reversing step by step mid-scrub
+only ever decreases progress (no reset, jump or replay); the hero stays pinned exactly under the
+header for the whole range and is released after; resizing 1280 → 820 → 390 → 1440 mid-animation
+keeps progress inside 0–1, the canvas at full width, no sideways scrolling, and the piece still
+drawn; reduced motion = no pin, progress fixed at 1, finished necklace drawn, page scrolls
+normally; switching reduced motion on and off mid-scroll is handled live.
+
+Defects found on the way and fixed: stones initially faced away from the viewer (sign of the
+facing rotation); the pixel-reversal test first compared a frame captured while the scrub
+smoothing was still converging (test now waits until progress is stable; reversal then matches
+exactly); on short phones the necklace overlapped the buttons (the stage now measures where the
+copy ends and fits the piece below it; phone buttons are compact); heavy WebGL start-up and mobile
+LCP regressions (see PERFORMANCE_REVIEW 2026-10-16).

@@ -5,6 +5,10 @@ All notable changes to this project. Format based on [Keep a Changelog](https://
 ## [Unreleased]
 
 ### Added
+- Home page: scroll-scrubbed 3D hero — scattered diamonds travel along curved paths into a gold
+  necklace while the hero is pinned (settings and chain links form progressively); scrolling back
+  takes it apart along the exact same frames. Reduced motion shows the finished necklace as a
+  still. Development prototype at `/lab/necklace` (dev builds only). ADR-0010.
 - Phase 8 (launch preparation): `robots.txt` with `ALLOW_SEARCH_INDEXING` (off by default);
   operations commands `verify-integrity`, `verify-rls`, `catalogue-report [--samples]`,
   `send-test-email`; backend `Dockerfile`, `deploy/Caddyfile` (HTTPS, CSP, security headers,

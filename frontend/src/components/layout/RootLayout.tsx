@@ -16,6 +16,22 @@ export function RootLayout() {
   // StrictMode, and focus must only move on a real navigation, never on the initial load.
   const previousPath = useRef(pathname);
 
+  // Publish the sticky header's height as --header-h (used by full-screen sections such as the
+  // home hero). It changes with the breakpoint, so it is observed rather than hard-coded.
+  useEffect(() => {
+    const header = document.querySelector<HTMLElement>('body > #root header');
+    if (!header || typeof ResizeObserver === 'undefined') return;
+    const publish = () => {
+      document.documentElement.style.setProperty('--header-h', `${String(header.offsetHeight)}px`);
+    };
+    publish();
+    const observer = new ResizeObserver(publish);
+    observer.observe(header);
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
   useEffect(() => {
     if (previousPath.current === pathname) return;
     previousPath.current = pathname;

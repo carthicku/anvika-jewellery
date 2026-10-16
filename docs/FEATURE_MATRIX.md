@@ -54,6 +54,7 @@ the test listed**. Update this file whenever a feature changes state.
 | Admin | Settings (store, tax, announcement) | `/admin/settings` | 7 | ✅ | `test_tax_settings_change_prices_and_are_audited`, `test_store_details_are_validated`, `test_announcement_links_must_be_safe` |
 | Admin | Optional TOTP MFA | `/account/security` | 7 | ⬜ deferred (KNOWN_LIMITATIONS) | |
 | SEO | Metadata, canonical, OG, JSON-LD, sitemap, robots | — | 2/8 | ✅ (client-rendered; pre-rendering is future work) | JSON-LD (non-sample only; `aggregateRating` only from approved reviews), `test_sitemap_lists_public_pages`, `test_robots_blocks_everything_until_indexing_is_allowed`, private pages `noindex`; Lighthouse SEO 100 on indexable pages (PERFORMANCE_REVIEW) |
+| Storefront | Scroll-scrubbed 3D necklace hero (reversible, pinned, reduced-motion still) | `/` | 8+ | ✅ | `timeline.test.ts` (6), `e2e/necklace.spec.ts` (pixel reversal, pin, resize, reduced motion), ADR-0010 |
 | Quality | Playwright journeys J1–J12 | `frontend/e2e` | 8 | ✅ locally (dev + production build behind Caddy) | 62 E2E tests × 2 targets; journey → test map in USER_JOURNEYS.md; manual keyboard pass by a person still open |
 | Operations | Integrity/RLS/catalogue/email checks | `python -m app.cli …` | 8 | ✅ | `test_ops_cli.py` |
 | Operations | Deployment files | `backend/Dockerfile`, `deploy/` | 8 | ⚠️ Caddyfile verified locally; Docker image/compose never built (no Docker) | DEPLOYMENT.md §6 |

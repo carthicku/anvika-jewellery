@@ -44,7 +44,9 @@ npm run e2e          # starts the Vite dev server automatically; backend must al
 npm run e2e -- --ui  # interactive mode
 ```
 Specs: `smoke` (every route, no CSP violations), `browse`, `account`, `cart`, `checkout`,
-`journeys` (J6/J9 sell-out, J7 gold-rate change, J12 keyboard + 375/768/1280 px), `admin` (J8,
+`journeys` (J6/J9 sell-out, J7 gold-rate change, J12 keyboard + 375/768/1280 px), `necklace` (the
+scroll-scrubbed 3D hero: no autoplay, pinning, pixel-identical reversal, resize, reduced motion —
+on the dev-only `/lab/necklace` prototype and the home page), `admin` (J8,
 J9, J10, fulfilment, refunds, returns, reviews) and `accessibility` (axe). Shared helpers live in
 `e2e/helpers.ts`.
 

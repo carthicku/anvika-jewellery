@@ -90,3 +90,25 @@ Indexes on `(status, category_id)` and `published_at` take over as the catalogue
 ### 2026-10-15 — Bundle
 Storefront initial JS 93 kB gzip (target < 200 kB ✅). Admin, account, checkout, content and
 after-sales screens are separate chunks.
+
+### 2026-10-16 — Home page with the scroll-scrubbed 3D necklace hero (ADR-0010)
+Same environment as 2026-10-15 (production build behind Caddy, Lighthouse 12.8.2, local API).
+Bundles: storefront initial JS 93.7 kB gzip (unchanged — the hero frame and copy only); 3D chunk
+`NecklaceStage` 286 kB gzip (1.03 MB raw: three.js 570 kB, React Three Fiber 162 kB, GSAP 111 kB
+raw). R3F v9 imports all of three.js (`import * as THREE` + `extend(THREE)`), so it can't be
+tree-shaken while R3F is used.
+
+Iterations (home page, desktop / mobile):
+| Version | Desktop perf, LCP, TBT | Mobile perf, LCP, TBT | Finding |
+|---------|------------------------|-----------------------|---------|
+| Physically based materials + generated studio environment (PMREM), chunk loaded at render | 59–61, 1.3–1.4 s, 3.8 s | 34–36, 5.9–6.2 s, 10–11 s | One ≈3.7 s "unattributable" task = WebGL work (environment cube map + PBR shader compile in software GL) |
+| Matcap materials (lighting baked into a 2D-canvas texture), no environment, no lights, DPR ≤ 1.5 | 79–94, 1.1–1.2 s, 150–400 ms | 43–44, 5.6 s, 1.5–1.6 s | Mobile LCP: the 286 kB chunk competed with the headline font on slow 4G |
+| + 3D chunk loaded only after `load` and an idle moment (final) | **76–90, 0.7–0.8 s, 250–590 ms** | **60–70, 3.2–3.4 s, 0.8–1.4 s** | Remaining TBT = evaluating three.js + R3F on a 4× slowed CPU |
+
+All runs: accessibility 100, best practices 100, CLS ≤ 0.032. For comparison, the home page
+before the 3D hero (2026-10-15): desktop 94–99, mobile 77–79, LCP 3.5 s on mobile (the hero
+illustration was the LCP element; now the headline is). Lighthouse renders WebGL in software, so
+real GPUs do the drawing part faster; script evaluation cost is real on low-end phones.
+Options if mobile scores matter more than the effect: skip the 3D hero on low-end devices or
+`Save-Data`, or replace R3F with plain three.js (≈100–150 kB gzip less) — the latter conflicts
+with the requirement to use React Three Fiber.

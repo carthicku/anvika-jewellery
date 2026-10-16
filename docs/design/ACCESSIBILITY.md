@@ -43,6 +43,10 @@ Target: **WCAG 2.2 AA** where practical. Findings are recorded in
 
 ### Motion
 - [ ] `prefers-reduced-motion` respected; no auto-playing carousels; nothing flashes.
+- [x] Home necklace hero (ADR-0010): decorative canvas `aria-hidden`; headline and buttons are
+      ordinary HTML above it; motion only follows the visitor's own scrolling (no autoplay, nothing
+      flashes); reduced motion → no pinning, a still image; live switching of the setting is handled
+      (`e2e/necklace.spec.ts`).
 
 ## Testing
 * Automated: `@axe-core/playwright` scan on key pages (home, listing, product, cart, checkout,

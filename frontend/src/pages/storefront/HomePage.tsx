@@ -8,6 +8,7 @@ import { Container, PageMeta } from '@/components/layout/Page';
 import { ProductGrid } from '@/components/product/ProductCard';
 import { Button } from '@/components/ui/Button';
 import { ErrorState, Skeleton } from '@/components/ui/Feedback';
+import { NecklaceHero } from '@/features/necklace/NecklaceHero';
 import { env } from '@/lib/env';
 
 function SectionHeading({
@@ -43,42 +44,52 @@ function SectionHeading({
   );
 }
 
+/**
+ * Opening section: scattered diamonds assemble into a gold necklace as the visitor scrolls (and
+ * come apart again on the way back). The copy is ordinary HTML, so it paints first; the 3D scene
+ * loads afterwards. With "reduce motion" the finished necklace is shown still.
+ */
 function Hero() {
   return (
-    <section className="border-b border-line">
-      <Container className="grid items-center gap-10 py-10 lg:grid-cols-[1fr_1.15fr] lg:gap-16 lg:py-16">
-        <div className="order-2 max-w-xl lg:order-1">
-          <p className="eyebrow">Fine gold jewellery</p>
-          <h1 className="mt-5 font-display text-5xl leading-[1.05] font-medium tracking-tight sm:text-6xl xl:text-7xl">
+    <NecklaceHero>
+      <Container className="flex h-full flex-col justify-start pt-10 sm:pt-14 lg:justify-center lg:pt-0">
+        <div data-hero-copy="" className="max-w-xl">
+          <p className="text-xs font-medium tracking-(--tracking-eyebrow) text-noir-muted uppercase">
+            Fine gold jewellery
+          </p>
+          <h1 className="mt-4 font-display text-4xl leading-[1.05] font-medium tracking-tight sm:mt-5 sm:text-6xl xl:text-7xl">
             Gold jewellery,
             <br />
-            <em className="font-medium text-gold-deep">priced in the open</em>
+            <em className="font-medium text-gold">priced in the open</em>
           </h1>
-          <p className="mt-6 max-w-md text-base leading-relaxed text-ink-muted sm:text-lg">
+          <p className="mt-4 max-w-md text-base leading-relaxed text-noir-muted sm:mt-6 sm:text-lg">
             Every piece shows its gold value, making charges and GST separately — so you know
             exactly what you are paying for.
           </p>
-          <div className="mt-9 flex flex-wrap gap-3">
-            <Button asChild size="lg">
+          <div className="mt-5 flex flex-wrap gap-3 sm:mt-9">
+            {/* Compact on phones so the copy leaves room for the necklace below it. */}
+            <Button
+              asChild
+              size="lg"
+              className="min-h-11 bg-noir-ink px-5 text-sm text-noir hover:bg-noir-ink/90 sm:min-h-13 sm:px-8 sm:text-base"
+            >
               <Link to="/collections">Shop all jewellery</Link>
             </Button>
-            <Button asChild size="lg" variant="secondary">
-              <Link to="/gold-buying-guide">Read the buying guide</Link>
+            <Button
+              asChild
+              size="lg"
+              variant="secondary"
+              className="min-h-11 border-noir-ink/70 px-5 text-sm text-noir-ink hover:bg-noir-ink hover:text-noir sm:min-h-13 sm:px-8 sm:text-base"
+            >
+              <Link to="/gold-buying-guide">
+                <span className="sm:hidden">Buying guide</span>
+                <span className="hidden sm:inline">Read the buying guide</span>
+              </Link>
             </Button>
           </div>
         </div>
-        <div className="order-1 overflow-hidden rounded-sm bg-surface-muted lg:order-2">
-          <img
-            src="/images/placeholders/hero.svg"
-            alt="Sample illustration of a gold necklace"
-            width={1600}
-            height={1000}
-            fetchPriority="high"
-            className="aspect-4/3 h-full w-full object-cover lg:aspect-[16/11]"
-          />
-        </div>
       </Container>
-    </section>
+    </NecklaceHero>
   );
 }
 

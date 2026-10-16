@@ -84,6 +84,12 @@ No large rounded "pill" cards, no glassmorphism.
 * Durations 150–250 ms, `ease-out`. Only opacity, transform and colour transitions.
 * Image hover: slow 400 ms opacity cross-fade to the second image (desktop only).
 * `prefers-reduced-motion: reduce` disables all non-essential transitions.
+* **One exception, the home hero** (ADR-0010): on a `noir` background, scattered diamonds assemble
+  into a gold necklace as the visitor scrolls. It is never autoplayed — every frame is set by the
+  scroll position, so it stops when the visitor stops and reverses exactly when they scroll back.
+  The section is pinned for 1.6 screens. With reduced motion it is a still of the finished piece.
+  3D material colours approximate the tokens under studio light (gold `#c9a463` renders as the
+  brand gold `--color-gold`).
 
 ## 7. Voice
 Calm, precise, warm. "Crafted in 22K gold", not "AMAZING DEALS!!!". Prices are explained, never

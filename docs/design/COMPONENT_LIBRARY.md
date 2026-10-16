@@ -53,6 +53,11 @@ it contains behaviour.
 | `CheckoutSteps`, `AddressForm`, `ShippingMethodPicker`, `OrderReview`, `PaymentButton`, `SimulatedPaymentDialog` | checkout |
 | `OrderTimeline`, `OrderSummaryCard`, `AddressCard` | account |
 
+## Features (`features/`)
+| Component | Notes |
+|-----------|-------|
+| `NecklaceHero` (`features/necklace/`) | Full-height `noir` hero (one screen below the sticky header via `--header-h`) with children as the copy. Lazily loads `NecklaceStage` (three.js scene + GSAP ScrollTrigger pin/scrub). Scene = pure function of scroll progress (`timeline.ts`). Exposes `data-progress` and `data-necklace-mode` (`scroll` / `static` / `unsupported`). Prototype at `/lab/necklace` (development builds only). ADR-0010 |
+
 ## Admin (`components/admin/`)
 `DataTable` (sortable headers, pagination, empty/loading/error states), `StatCard`,
 `FormSection`, `ImageUploader` (drag-reorder with keyboard alternative: move up/down buttons),

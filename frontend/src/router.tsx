@@ -29,6 +29,17 @@ export const routes: RouteObject[] = [
     errorElement: <RouteErrorPage />,
     children: [
       { index: true, element: <HomePage /> },
+      // Development-only prototypes (tree-shaken out of production builds).
+      ...(import.meta.env.DEV
+        ? [
+            {
+              path: 'lab/necklace',
+              lazy: async () => ({
+                Component: (await import('@/pages/lab/NecklaceLab')).NecklaceLabPage,
+              }),
+            },
+          ]
+        : []),
       {
         path: 'collections',
         lazy: async () => ({
