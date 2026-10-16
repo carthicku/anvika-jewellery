@@ -1,0 +1,15 @@
+{
+  "name": "anvika-store-tools",
+  "private": true,
+  "description": "Repository-level developer tools (local PostgreSQL launcher). The apps live in frontend/ and backend/.",
+  "type": "module",
+  "engines": {
+    "node": ">=22.22.0"
+  },
+  "scripts": {
+    "db:start": "node scripts/localdb.mjs"
+  },
+  "devDependencies": {
+    "embedded-postgres": "17.10.0-beta.17"
+  }
+}
