@@ -120,8 +120,10 @@ everything else to `web`, on **one domain** (cookies and CSRF need that).
    machine: `cd backend && DATABASE_URL=<session-pooler or direct URL> .venv/Scripts/python -m alembic upgrade head`,
    then `python -m app.cli verify-rls` and create the first admin with `create-admin` (never `seed`
    on production; `catalogue-report --samples` lists sample data still to remove).
-2. **Import the GitHub repository** in Vercel → *Add New → Project*. Keep **Root Directory = repository
-   root** and choose the **Services** framework preset.
+2. **Import the GitHub repository** in Vercel → *Add New → Project*. The importer may pre-fill
+   Root Directory = `frontend` and Framework = Vite: **clear the Root Directory (repository root) and set
+   the Framework Preset to Services**, otherwise `vercel.json` is ignored and `/api` returns 404 (this
+   happened on the first preview; fixed through the project settings API).
 3. **Project → Settings → Environment Variables** (Production; use *Preview* with test keys):
 
    | Variable | Value |
@@ -173,4 +175,6 @@ everything else to `web`, on **one domain** (cookies and CSRF need that).
 | Frontend through the router: home and deep links return the SPA, security headers and CSP present | ✅ (served by Vite's dev server, not a production build) |
 | `/assets/*` caching and 404 behaviour (the SPA fallback excludes `assets/` so a missing hashed file is a real 404, never `index.html` cached for a year — the bug found in the Caddy config) | ⏳ only checkable on a deployed build; `vercel dev` serves assets from Vite's dev server |
 | Repeated API requests via `vercel dev -L` | ⚠️ not completed: on this Windows machine the dev server's Python child kept exiting with a console-signal code (`0xC000013A`), so the API could not be exercised further through Vercel's local router. The same app is fully tested directly (312 backend tests; E2E suite) |
-| Cron wiring under Services, real Vercel build, Supabase pooler behaviour, S3 uploads, 4.5 MB limit | ⏳ needs a Vercel project (first Preview deployment) |
+| **Real Vercel preview deployment** (2026-10-16, Hobby team, no env vars): build succeeded; `/` and deep links serve the SPA; `/api/v1/health` → 200 through the `/api/*` rewrite; `/robots.txt` served by the API (indexing off by default); `/api/v1/internal/cron/run-jobs` → 404 while `CRON_SECRET` is unset; `/api/v1/products` → 500 as expected (no `DATABASE_URL`) | ✅ |
+| Preview deployments sit behind Vercel's login protection (`vercel_authentication`); open them while signed in, or use `vercel curl <url>` | ✅ |
+| Cron wiring under Services (needs `CRON_SECRET` and the Pro plan: Hobby rejects per-minute schedules — the first deploy failed on that, so previews on Hobby need daily schedules), Supabase pooler behaviour, S3 uploads, 4.5 MB limit | ⏳ needs the environment variables and Pro |
