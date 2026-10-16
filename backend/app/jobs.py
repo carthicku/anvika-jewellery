@@ -9,7 +9,8 @@ from __future__ import annotations
 
 import asyncio
 import logging
-from collections.abc import Callable
+import os
+from collections.abc import Callable, Mapping
 
 from sqlalchemy.orm import Session
 from starlette.concurrency import run_in_threadpool
@@ -23,6 +24,14 @@ from app.services.payment_gateway import PaymentGateway
 logger = logging.getLogger("app.jobs")
 JOB_INTERVAL_SECONDS = 30
 PRICE_REFRESH_EVERY = 20  # runs (≈ 10 minutes)
+
+
+def job_loop_enabled(settings: Settings, environ: Mapping[str, str] | None = None) -> bool:
+    """The in-process loop runs only on a long-lived server. On Vercel (the `VERCEL` variable is
+    set) functions are frozen between requests, so Vercel Cron calls the /internal/cron endpoints
+    instead."""
+    env = os.environ if environ is None else environ
+    return settings.background_jobs_enabled and not env.get("VERCEL")
 
 
 def run_once(

@@ -4,6 +4,14 @@ All notable changes to this project. Format based on [Keep a Changelog](https://
 
 ## [Unreleased]
 
+### Added
+- Vercel deployment (ADR-0011): root `vercel.json` with two services (Vite frontend + FastAPI),
+  security headers/CSP, SPA fallback and cron schedule; `/api/v1/internal/cron/run-jobs` and
+  `/refresh-prices` endpoints protected by `CRON_SECRET`; the in-process job loop is skipped on
+  Vercel; `DB_PREPARE_STATEMENTS` for Supabase's transaction pooler; start-up checks that Vercel
+  deployments use S3 storage and one proxy hop; backend `pyproject.toml` now reads dependencies from
+  the lock file; default store name for builds without `VITE_STORE_NAME`.
+
 ### Changed
 - Brand wordmark: header and footer now use a vector logo (`components/brand/Logo.tsx`) following
   the reference sheet in `frontend/images/` — thin geometric lowercase "anvika" with a stacked-dots

@@ -61,3 +61,21 @@ def test_allowed_origins_parsed_from_comma_list() -> None:
         _env_file=None, allowed_origins="http://a.test, http://b.test/"
     )
     assert settings.allowed_origins == ["http://a.test", "http://b.test"]
+
+
+def test_vercel_needs_object_storage_and_one_proxy_hop(monkeypatch: pytest.MonkeyPatch) -> None:
+    on_vercel = {"storage_backend": "s3", "trusted_proxy_count": 1}
+    assert make(**on_vercel).storage_backend == "s3"  # fine off Vercel too
+    monkeypatch.setenv("VERCEL", "1")
+    assert make(**on_vercel).trusted_proxy_count == 1
+    with pytest.raises(ValidationError, match="STORAGE_BACKEND=s3 is required on Vercel"):
+        make(storage_backend="local", trusted_proxy_count=1)
+    with pytest.raises(ValidationError, match="TRUSTED_PROXY_COUNT must be 1 on Vercel"):
+        make(storage_backend="s3", trusted_proxy_count=0)
+
+
+def test_cron_secret_must_be_long_enough_when_set() -> None:
+    assert make(cron_secret="").cron_secret.get_secret_value() == ""
+    assert make(cron_secret="a-long-enough-cron-secret").cron_secret.get_secret_value()
+    with pytest.raises(ValidationError, match="CRON_SECRET"):
+        make(cron_secret="short")

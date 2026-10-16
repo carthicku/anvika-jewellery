@@ -27,7 +27,7 @@ from app.core.middleware import (
     RequestContextMiddleware,
     SecurityHeadersMiddleware,
 )
-from app.jobs import job_loop
+from app.jobs import job_loop, job_loop_enabled
 from app.services.payment_gateway import make_gateway
 from app.services.storage import make_storage, media_root
 
@@ -43,6 +43,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
         settings.database_url,
         pool_size=settings.db_pool_size,
         max_overflow=settings.db_max_overflow,
+        prepare_statements=settings.db_prepare_statements,
     )
 
     @asynccontextmanager
@@ -52,7 +53,7 @@ def create_app(settings: Settings | None = None) -> FastAPI:
             asyncio.create_task(
                 job_loop(app.state.session_factory, settings, app.state.payment_gateway)
             )
-            if settings.background_jobs_enabled
+            if job_loop_enabled(settings)
             else None
         )
         yield

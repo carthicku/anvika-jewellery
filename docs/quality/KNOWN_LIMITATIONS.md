@@ -28,6 +28,11 @@ owner. Keep it current. Each item states its impact and the plan.
 * Refunds are executed from Admin → Orders through the payment gateway; only the simulator and a
   mocked Razorpay API have been exercised so far.
 * S3-compatible photo storage is unit-tested with botocore's Stubber, not against a real bucket.
+* **Vercel deployment is configured but has never been deployed** (`vercel.json`, ADR-0011). Vercel
+  Services is a beta feature; photo uploads are capped at 4.5 MB by Vercel; per-minute cron (order
+  expiry, payment reconciliation, queued emails) needs the Pro plan; cron wiring under Services,
+  the Supabase pooler settings and S3 uploads are unverified until a first Preview deployment
+  (DEPLOYMENT.md §7).
 * **Docker not verified**: `backend/Dockerfile` and `deploy/docker-compose.prod.yml` have never been
   built or run (Docker is not installed on the development machine). The Caddyfile was validated
   and exercised locally with the official Caddy binary. Build and start the stack on staging first.

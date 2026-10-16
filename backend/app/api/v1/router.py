@@ -16,6 +16,7 @@ from app.api.v1.routes import (
     checkout,
     content,
     health,
+    internal,
     orders,
     payments,
     reviews,
@@ -37,3 +38,4 @@ api_router.include_router(admin_ops.router)
 api_router.include_router(admin_catalogue.router)
 api_router.include_router(admin_store.router)
 api_router.include_router(admin_aftercare.router)
+api_router.include_router(internal.router)

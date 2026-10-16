@@ -4,6 +4,19 @@ name = "anvika-backend"
 version = "0.1.0"
 description = "FastAPI backend for the gold jewellery store"
 requires-python = ">=3.11"
+# Hosts that read pyproject.toml first (Vercel) install the project; its dependencies come from the
+# same generated lock file the Docker image uses, so there is one list to maintain.
+dynamic = ["dependencies"]
+
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["app"]
+
+[tool.setuptools.dynamic]
+dependencies = { file = ["requirements.txt"] }
 
 [tool.ruff]
 line-length = 100

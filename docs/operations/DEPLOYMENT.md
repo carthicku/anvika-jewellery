@@ -4,6 +4,9 @@
 > "verified" once it has actually been executed. Do not consider the site live until the
 > production checklist is complete.
 
+> **Hosting on Vercel?** Follow [§7 Deploying on Vercel](#7-deploying-on-vercel) (ADR-0011). The rest
+> of this page describes the VM + Docker + Caddy option, whose Supabase/Razorpay/email steps also apply.
+
 ## 1. Recommended architecture (small store, low cost, same-origin cookies)
 
 ```mermaid
@@ -95,3 +98,79 @@ Then run the post-deploy checks in the [production checklist](PRODUCTION_CHECKLI
 
 The site is **not live**. Do not describe it as deployed until §6's open items are done and the
 production checklist is complete.
+
+## 7. Deploying on Vercel
+One Vercel project, two services, defined in the repository's root `vercel.json` (see
+[ADR-0011](../architecture/ADR/0011-vercel-services-deployment.md)): `web` = `frontend/` (Vite) and
+`api` = `backend/` (FastAPI, `app.main:app`). `/api/*`, `/sitemap.xml` and `/robots.txt` go to `api`,
+everything else to `web`, on **one domain** (cookies and CSRF need that).
+
+### Files that make this work
+| File | Purpose |
+|------|---------|
+| `vercel.json` | Services, routing, the `web` security headers/CSP, SPA fallback, cron schedule |
+| `backend/pyproject.toml` | Dependencies read from `backend/requirements.txt` (one pinned list for Vercel and Docker); `packages = ["app"]` |
+| `backend/.python-version` | Python 3.13 |
+| `.vercelignore` | Keeps tests, docs, e2e, local data and env files out of the upload |
+| `backend/app/api/v1/routes/internal.py` | `/api/v1/internal/cron/run-jobs` and `/refresh-prices` for Vercel Cron |
+
+### Steps
+1. **Accounts first** (same as §2): Supabase (Mumbai), S3-compatible bucket for photos (Supabase
+   Storage), SMTP provider, Razorpay **test** keys. Run the migrations against Supabase from your
+   machine: `cd backend && DATABASE_URL=<session-pooler or direct URL> .venv/Scripts/python -m alembic upgrade head`,
+   then `python -m app.cli verify-rls` and create the first admin with `create-admin` (never `seed`
+   on production; `catalogue-report --samples` lists sample data still to remove).
+2. **Import the GitHub repository** in Vercel → *Add New → Project*. Keep **Root Directory = repository
+   root** and choose the **Services** framework preset.
+3. **Project → Settings → Environment Variables** (Production; use *Preview* with test keys):
+
+   | Variable | Value |
+   |----------|-------|
+   | `APP_ENV` | `production` |
+   | `SECRET_KEY` | new random value ≥ 48 characters |
+   | `DATABASE_URL` | Supabase **transaction pooler** URI (port 6543), prefix `postgresql+psycopg://`, `?sslmode=require` |
+   | `DB_POOL_SIZE` / `DB_MAX_OVERFLOW` / `DB_PREPARE_STATEMENTS` | `1` / `0` / `false` |
+   | `PUBLIC_SITE_URL`, `ALLOWED_ORIGINS` | `https://<your domain>` (same value, no trailing slash) |
+   | `COOKIE_SECURE` / `TRUSTED_PROXY_COUNT` | `true` / `1` (start-up refuses anything else on Vercel) |
+   | `PAYMENT_PROVIDER`, `RAZORPAY_*` | `razorpay` and the keys (test keys on Preview) |
+   | `EMAIL_BACKEND`, `SMTP_*`, `EMAIL_FROM` | `smtp` and your provider's values |
+   | `STORAGE_BACKEND`, `S3_*` | `s3` and the bucket values (required on Vercel) |
+   | `CRON_SECRET` | random ≥ 16 characters (Vercel sends it to the cron endpoints automatically) |
+   | `LOG_FORMAT` | `json` |
+   | `ALLOW_SEARCH_INDEXING` | `false` until launch day |
+   | `VITE_STORE_NAME`, `VITE_SITE_URL` | public values, compiled into the site (never secrets) |
+
+4. **Razorpay webhook URL**: `https://<your domain>/api/v1/webhooks/razorpay` (see
+   PAYMENT_PROVIDER_SETUP.md).
+5. **Domain**: add the domain in Vercel and point DNS as it instructs. HTTPS is automatic.
+6. **First deploy → verify** (Preview deployment first): `/api/v1/health?deep=1`, home page, a product,
+   `/robots.txt`, a test purchase with Razorpay test keys, an admin photo upload, and in
+   *Settings → Cron Jobs* run `run-jobs` once and read its log (`200` and the JSON counts).
+7. **Promote** to production only after the [production checklist](PRODUCTION_CHECKLIST.md).
+
+### Limits you must know about
+* **Cron needs the Pro plan.** `run-jobs` runs every minute (expires unpaid orders after the 30-minute
+  window, reconciles payments, sends queued emails). Hobby allows daily cron only, so abandoned
+  checkouts would keep stock reserved for up to a day; Vercel also limits Hobby to personal,
+  non-commercial use — check their current terms before selling from a Hobby project. Alternative to
+  Vercel Cron: a GitHub Actions workflow that runs every 5 minutes and calls
+  `curl -fsS -H "Authorization: Bearer $CRON_SECRET" https://<your domain>/api/v1/internal/cron/run-jobs`.
+* **Request bodies are capped at 4.5 MB** by Vercel (the app allows 10 MB): resize product photos
+  before uploading (the server re-encodes them to WebP anyway).
+* **Cold starts**: the first request after idle time is slower.
+* **Services is a beta feature**; if its behaviour changes, the fallback is two Vercel projects with an
+  `/api` rewrite, or the VM option above.
+* **Migrations do not run automatically** on deploy (on purpose). Run `alembic upgrade head` first
+  whenever a release adds migrations, then deploy.
+* Preview deployments get their own URLs: set `PUBLIC_SITE_URL`/`ALLOWED_ORIGINS` for the Preview
+  environment to a fixed preview domain, or use the production domain only for production.
+
+### What was verified (2026-10-16)
+| Item | Status |
+|------|--------|
+| `vercel.json` accepted by Vercel CLI 64.3.1; both services detected (Vite, FastAPI) | ✅ `vercel dev -L` |
+| Backend dependencies install through `pyproject.toml` + `requirements.txt`; app starts; `/api/v1/health` answered through the `/api/*` rewrite | ✅ (the first attempt found that Vercel's pip install of `backend/` failed on package discovery — fixed in `pyproject.toml`) |
+| Frontend through the router: home and deep links return the SPA, security headers and CSP present | ✅ (served by Vite's dev server, not a production build) |
+| `/assets/*` caching and 404 behaviour (the SPA fallback excludes `assets/` so a missing hashed file is a real 404, never `index.html` cached for a year — the bug found in the Caddy config) | ⏳ only checkable on a deployed build; `vercel dev` serves assets from Vite's dev server |
+| Repeated API requests via `vercel dev -L` | ⚠️ not completed: on this Windows machine the dev server's Python child kept exiting with a console-signal code (`0xC000013A`), so the API could not be exercised further through Vercel's local router. The same app is fully tested directly (312 backend tests; E2E suite) |
+| Cron wiring under Services, real Vercel build, Supabase pooler behaviour, S3 uploads, 4.5 MB limit | ⏳ needs a Vercel project (first Preview deployment) |

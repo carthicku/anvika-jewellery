@@ -18,7 +18,8 @@
 | `SECRET_KEY` | ✅ | — | ≥ 32 random characters. Signs JWTs. Generate: `python -c "import secrets; print(secrets.token_urlsafe(48))"`. Rotating it signs everyone out. |
 | `DATABASE_URL` | ✅ | `postgresql+psycopg://postgres:postgres@127.0.0.1:54329/anvika_dev` | SQLAlchemy URL. For Supabase use the **session pooler** URI with the `postgresql+psycopg://` prefix and `?sslmode=require`. |
 | `TEST_DATABASE_URL` | tests | `postgresql+psycopg://postgres:postgres@127.0.0.1:54329/anvika_test` | Used by pytest only. **Its data is wiped by the test suite.** |
-| `DB_POOL_SIZE` / `DB_MAX_OVERFLOW` | | `5` / `5` | Connection pool sizing. Keep the total under the Supabase plan's connection limit. |
+| `DB_POOL_SIZE` / `DB_MAX_OVERFLOW` | | `5` / `5` | Connection pool sizing. Keep the total under the Supabase plan's connection limit. On Vercel use `1` / `0` (many short-lived instances). |
+| `DB_PREPARE_STATEMENTS` | | `true` | Set `false` behind a transaction-mode pooler (Supabase port 6543), which cannot keep server-side prepared statements. |
 | `PUBLIC_SITE_URL` | ✅ prod | `http://localhost:5180` | Canonical storefront URL used in emails, sitemap and links. |
 | `ALLOW_SEARCH_INDEXING` | | `false` | `true` only on the live site: `/robots.txt` then allows crawling (private areas stay disallowed) and lists the sitemap. When `false` it disallows everything, so staging copies never show up in search results. |
 | `ALLOWED_ORIGINS` | ✅ prod | `http://localhost:5180` | Comma-separated origins allowed for CORS and the CSRF Origin check. |
@@ -44,6 +45,8 @@
 | `STORAGE_BACKEND` | | `local` | `local` (files in `MEDIA_ROOT`, served at `/media`) or `s3` (S3-compatible, e.g. Supabase Storage, Cloudflare R2, AWS S3). |
 | `MEDIA_ROOT` | | `var/media` | Local upload folder. |
 | `S3_ENDPOINT_URL`, `S3_REGION`, `S3_BUCKET`, `S3_ACCESS_KEY_ID`, `S3_SECRET_ACCESS_KEY`, `S3_PUBLIC_BASE_URL` | when s3 | — | Object storage settings (**keys are secret**). |
+| `CRON_SECRET` | ✅ on Vercel | empty | ≥ 16 random characters. Enables `GET /api/v1/internal/cron/run-jobs` and `/refresh-prices`, which Vercel Cron calls with `Authorization: Bearer <secret>` (Vercel adds the header itself when a project variable named `CRON_SECRET` exists). Empty = the endpoints don't exist. |
+| `VERCEL` | (set by Vercel) | — | When present the in-process job loop is skipped, and start-up requires `STORAGE_BACKEND=s3` and `TRUSTED_PROXY_COUNT=1`. Never set it yourself. |
 | `BACKGROUND_JOBS_ENABLED` | | `true` | Runs the in-process job loop (order expiry, email dispatch, price cache). Set `false` in tests and if you run `python -m app.cli run-jobs` from a scheduler instead. |
 | `RATE_LIMIT_ENABLED` | | `true` | Disable only in specific tests. |
 | `LOG_LEVEL` | | `INFO` | Python logging level. |

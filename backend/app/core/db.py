@@ -9,7 +9,14 @@ from sqlalchemy import Engine, create_engine
 from sqlalchemy.orm import Session, sessionmaker
 
 
-def make_engine(url: str, *, pool_size: int = 5, max_overflow: int = 5) -> Engine:
+def make_engine(
+    url: str, *, pool_size: int = 5, max_overflow: int = 5, prepare_statements: bool = True
+) -> Engine:
+    connect_args: dict[str, object] = {"options": "-c timezone=UTC"}
+    if not prepare_statements:
+        connect_args["prepare_threshold"] = (
+            None  # psycopg: never use server-side prepared statements
+        )
     return create_engine(
         url,
         pool_size=pool_size,
@@ -17,7 +24,7 @@ def make_engine(url: str, *, pool_size: int = 5, max_overflow: int = 5) -> Engin
         pool_pre_ping=True,  # survive idle connections dropped by poolers/firewalls
         pool_recycle=1800,
         # The API speaks UTC; never inherit the server machine's timezone.
-        connect_args={"options": "-c timezone=UTC"},
+        connect_args=connect_args,
     )
 
 

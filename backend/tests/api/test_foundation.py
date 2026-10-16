@@ -2,9 +2,15 @@
 
 from __future__ import annotations
 
+from datetime import timedelta
+
+import pytest
 from fastapi import FastAPI
 from fastapi.testclient import TestClient
+from pydantic import SecretStr
+from sqlalchemy.orm import Session
 
+from app.core.config import Settings
 from app.core.errors import Conflict
 
 
@@ -181,3 +187,83 @@ def test_client_ip_trusts_only_the_configured_proxy_hops(app: FastAPI) -> None:
     # visitor prepends is ignored.
     assert ip("6.6.6.6, 203.0.113.9", 1) == "203.0.113.9"
     assert ip(None, 1) == "10.0.0.2"
+
+
+def _cron_headers(secret: str) -> dict[str, str]:
+    return {"Authorization": f"Bearer {secret}"}
+
+
+def test_cron_endpoints_are_off_without_a_secret_and_protected_with_one(
+    client: TestClient, app: FastAPI, settings: Settings
+) -> None:
+    url = "/api/v1/internal/cron/run-jobs"
+    assert client.get(url).status_code == 404  # no CRON_SECRET configured: they don't exist
+
+    app.state.settings = settings.model_copy(
+        update={"cron_secret": SecretStr("s3cret-s3cret-s3cret")}
+    )
+    assert client.get(url).status_code == 401
+    assert client.get(url, headers=_cron_headers("wrong")).status_code == 401
+    assert client.get(url, headers={"Authorization": "s3cret-s3cret-s3cret"}).status_code == 401
+    ok = client.get(url, headers=_cron_headers("s3cret-s3cret-s3cret"))
+    assert ok.status_code == 200 and ok.headers["cache-control"] == "no-store"
+    assert set(ok.json()) == {"checked", "paid", "expired", "review", "errors"}
+    prices = client.get(
+        "/api/v1/internal/cron/refresh-prices", headers=_cron_headers("s3cret-s3cret-s3cret")
+    )
+    assert prices.status_code == 200 and prices.json() == {"ok": True}
+    # They are not part of the public API contract.
+    assert not any("/internal/" in path for path in client.get("/api/openapi.json").json()["paths"])
+
+
+def test_cron_run_expires_an_overdue_pending_order(
+    client: TestClient, app: FastAPI, settings: Settings, db: Session
+) -> None:
+    from sqlalchemy import select, update
+
+    from app.core.time import utcnow
+    from app.models import Order
+    from tests.api.order_helpers import add_to_cart, place_order
+
+    add_to_cart(client, db, "ANV-RG-002-12")
+    reference = place_order(client).json()["order"]["reference"]
+    db.execute(
+        update(Order)
+        .where(Order.reference == reference)
+        .values(payment_expires_at=utcnow() - timedelta(minutes=5))
+    )
+    db.commit()
+    app.state.settings = settings.model_copy(
+        update={"cron_secret": SecretStr("s3cret-s3cret-s3cret")}
+    )
+    done = client.get(
+        "/api/v1/internal/cron/run-jobs", headers=_cron_headers("s3cret-s3cret-s3cret")
+    )
+    assert done.status_code == 200 and done.json()["expired"] == 1
+    assert db.scalar(select(Order.status).where(Order.reference == reference)) == "expired"
+
+
+def test_the_job_loop_is_skipped_on_vercel_and_when_disabled(settings: Settings) -> None:
+    from app.jobs import job_loop_enabled
+
+    on = settings.model_copy(update={"background_jobs_enabled": True})
+    off = settings.model_copy(update={"background_jobs_enabled": False})
+    assert job_loop_enabled(on, {}) is True
+    assert job_loop_enabled(on, {"VERCEL": "1"}) is False
+    assert job_loop_enabled(off, {}) is False
+
+
+def test_engine_can_turn_off_server_side_prepared_statements(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    from app.core import db as db_module
+
+    captured: list[dict[str, object]] = []
+    monkeypatch.setattr(
+        db_module, "create_engine", lambda url, **kwargs: captured.append(kwargs["connect_args"])
+    )
+    url = "postgresql+psycopg://u:p@127.0.0.1:5/x"
+    db_module.make_engine(url, pool_size=1, max_overflow=0, prepare_statements=False)
+    db_module.make_engine(url)
+    assert captured[0] == {"options": "-c timezone=UTC", "prepare_threshold": None}
+    assert captured[1] == {"options": "-c timezone=UTC"}

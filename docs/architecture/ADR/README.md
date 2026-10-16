@@ -15,5 +15,6 @@ When a decision changes, add a new ADR that supersedes the old one rather than r
 | [0008](0008-email-outbox.md) | Transactional email outbox | Accepted |
 | [0009](0009-frontend-stack.md) | Frontend stack and API contract generation | Accepted |
 | [0010](0010-scroll-scrubbed-3d-hero.md) | Scroll-scrubbed 3D necklace hero (three.js + R3F + GSAP) | Accepted |
+| [0011](0011-vercel-services-deployment.md) | Deploying on Vercel with Services (static SPA + FastAPI function) | Accepted (beta feature) |
 
 To add a decision, copy [`0000-template.md`](0000-template.md) and increment the number.

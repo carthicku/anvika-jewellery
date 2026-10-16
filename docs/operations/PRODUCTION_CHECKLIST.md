@@ -48,6 +48,15 @@ Tick an item only with evidence. Record the date and who verified it.
 - [ ] `pip-audit` and `npm audit --omit=dev` reviewed; no known high/critical issues unaddressed.
 - [ ] Security review items in SECURITY_REVIEW.md resolved or explicitly accepted.
 
+## If hosting on Vercel (DEPLOYMENT.md §7)
+- [ ] Vercel **Pro** plan (per-minute cron; Hobby is non-commercial and daily-cron only).
+- [ ] Preview deployment checked: health (deep), a test purchase, an admin photo upload under 4.5 MB,
+      and the `run-jobs` cron ran (Settings → Cron Jobs → Run; response `200` with counts).
+- [ ] `CRON_SECRET`, `STORAGE_BACKEND=s3`, `TRUSTED_PROXY_COUNT=1`, `DB_POOL_SIZE=1`,
+      `DB_MAX_OVERFLOW=0`, `DB_PREPARE_STATEMENTS=false` set; `alembic upgrade head` run on Supabase
+      **before** the deploy that needs it.
+- [ ] Unpaid orders really expire (place one, wait past the payment window, confirm it expired).
+
 ## Go-live
 - [ ] The first administrator was created with `create-admin`; staff accounts were given least
       privilege.

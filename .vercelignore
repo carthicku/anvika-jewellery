@@ -1,0 +1,24 @@
+# Files Vercel does not need to upload (the build runs from source).
+**/node_modules
+**/.venv
+**/__pycache__
+backend/tests
+backend/var
+backend/.env
+backend/.env.*
+!backend/.env.example
+frontend/e2e
+frontend/images
+frontend/test-results
+frontend/test-results-prod
+frontend/playwright-report
+frontend/.env
+frontend/.env.*
+!frontend/.env.example
+frontend/dist
+.localdb
+.git
+docs
+tasks
+scripts
+docker

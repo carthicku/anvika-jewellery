@@ -6,6 +6,7 @@ Every variable is documented in docs/development/ENVIRONMENT_VARIABLES.md.
 
 from __future__ import annotations
 
+import os
 import secrets
 from functools import lru_cache
 from pathlib import Path
@@ -34,6 +35,10 @@ class Settings(BaseSettings):
     test_database_url: str = "postgresql+psycopg://postgres:postgres@127.0.0.1:54329/anvika_test"
     db_pool_size: int = 5
     db_max_overflow: int = 5
+    # Set false behind a transaction-mode pooler (Supabase port 6543 / pgbouncer), which cannot
+    # keep server-side prepared statements between requests. Serverless hosts should also use a
+    # small pool (DB_POOL_SIZE=1, DB_MAX_OVERFLOW=0).
+    db_prepare_statements: bool = True
 
     public_site_url: str = "http://localhost:5180"
     # Off until the owner decides the live site may appear in search results (robots.txt).
@@ -79,6 +84,9 @@ class Settings(BaseSettings):
     s3_public_base_url: str = ""
 
     background_jobs_enabled: bool = True
+    # Secret for the scheduled-job endpoints (/api/v1/internal/cron/*, used with Vercel Cron).
+    # Empty = those endpoints are switched off.
+    cron_secret: SecretStr = SecretStr("")
     rate_limit_enabled: bool = True
     log_level: str = "INFO"
     log_format: Literal["text", "json"] = "text"
@@ -121,6 +129,16 @@ class Settings(BaseSettings):
             problems.append("ALLOWED_ORIGINS must list only https:// origins in production")
         if self.email_backend in ("file", "memory"):
             problems.append("EMAIL_BACKEND must be smtp (or console while testing) in production")
+        cron = self.cron_secret.get_secret_value()
+        if cron and len(cron) < 16:
+            problems.append("CRON_SECRET must be at least 16 characters")
+        if os.environ.get("VERCEL"):
+            # Vercel functions have a read-only disk, and every request arrives through exactly one
+            # Vercel proxy hop (needed for per-IP rate limits and audit logs to see real visitors).
+            if self.storage_backend == "local":
+                problems.append("STORAGE_BACKEND=s3 is required on Vercel (its disk is read-only)")
+            if self.trusted_proxy_count != 1:
+                problems.append("TRUSTED_PROXY_COUNT must be 1 on Vercel")
         if problems:
             raise ValueError("Unsafe production configuration: " + "; ".join(problems))
         return self

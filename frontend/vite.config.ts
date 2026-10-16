@@ -8,6 +8,9 @@ import { defineConfig, loadEnv } from 'vite';
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
   const apiTarget = env.VITE_API_PROXY_TARGET || 'http://127.0.0.1:8010';
+  // index.html uses %VITE_STORE_NAME%; without a default a host that lacks the variable (a fresh
+  // Vercel project) would ship the literal placeholder as the page title.
+  if (!env.VITE_STORE_NAME) process.env.VITE_STORE_NAME = 'Anvika';
 
   return {
     plugins: [react(), tailwindcss()],
